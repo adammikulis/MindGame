@@ -15,9 +15,17 @@ run/main_scene="res://addons/mind_game/MindGameEditorInterface.tscn"
 config/features=PackedStringArray("4.3", "C#", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+MindGame="*res://addons/mind_game/MindGameModel.cs"
+
 [dotnet]
 
 project/assembly_name="MindGame"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/mind_game/plugin.cfg")
 
 [rendering]
 

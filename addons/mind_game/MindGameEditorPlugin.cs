@@ -9,21 +9,19 @@ using LLama.Sampling;
 [Tool]
 public partial class MindGameEditorPlugin : EditorPlugin
 {
-    private const string MindGameAutoload = "mg";
+    private const string AutoloadName = "MindGame";
+    private const string pathToScript = @"res://addons/mind_game/MindGameModel.cs";
 
     private Control editorInterface;
     private Button loadModelButton, unloadModelButton;
     private RichTextLabel modelOutputRichTextLabel;
-    private LineEdit modelInputLineEdit;
+    private LineEdit promptLineEdit;
     private FileDialog loadModelFileDialog;
-
-    public MindGameModel mg;
 
     public string modelPath;
     public override void _EnterTree()
     {
-        AddAutoloadSingleton(MindGameAutoload, "res://addons/mind_game/MindGameModel.cs");
-        mg = GetNode<MindGameModel>("/root/MindGameModel");
+        AddAutoloadSingleton(AutoloadName, pathToScript);
 
         PackedScene mindGameInterfaceScene = (PackedScene)GD.Load("res://addons/mind_game/MindGameEditorInterface.tscn");
         editorInterface = mindGameInterfaceScene.Instantiate<Control>();
@@ -32,24 +30,42 @@ public partial class MindGameEditorPlugin : EditorPlugin
         loadModelButton = editorInterface.GetNode<Button>("%LoadModelButton");
         unloadModelButton = editorInterface.GetNode<Button>("%UnloadModelButton");
         modelOutputRichTextLabel = editorInterface.GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
-        modelInputLineEdit = editorInterface.GetNode<LineEdit>("%ModelInputLineEdit");
+        promptLineEdit = editorInterface.GetNode<LineEdit>("%PromptLineEdit");
         loadModelFileDialog = editorInterface.GetNode<FileDialog>("%LoadModelFileDialog");
 
         loadModelButton.Pressed += OnLoadModelButtonPressed;
+        unloadModelButton.Pressed += OnUnloadModelButtonPressed;
         loadModelFileDialog.FileSelected += OnModelSelected;
+        promptLineEdit.TextSubmitted += OnPromptSubmitted;
+        //MindGameModel.Instance.ModelOutput += OnModelOutput;
 
-        // base._EnterTree(); // Autofilled by VS, may not be needed
-        base._Ready();
+    }
+
+    private void OnModelOutput(string output)
+    {
+        GD.Print(output);
+    }
+
+    private void OnUnloadModelButtonPressed()
+    {
+        //MindGameModel.Instance.UnloadModel();
+
     }
 
     private void OnLoadModelButtonPressed()
     {
+        
         loadModelFileDialog.PopupCentered();
+    }
+
+    private async void OnPromptSubmitted(string prompt)
+    {
+        //await MindGameModel.Instance.InferAsync(prompt);
     }
 
     private void OnModelSelected(string modelPath)
     {
-        mg.LoadModel(modelPath);
+       // MindGameModel.Instance.LoadModel(modelPath);
     }
 
     public override void _Ready()
@@ -66,7 +82,12 @@ public partial class MindGameEditorPlugin : EditorPlugin
 
     public override void _ExitTree()
     {
-        RemoveAutoloadSingleton(MindGameAutoload);
+        loadModelButton.Pressed -= OnLoadModelButtonPressed;
+        unloadModelButton.Pressed -= OnUnloadModelButtonPressed;
+        loadModelFileDialog.FileSelected -= OnModelSelected;
+        promptLineEdit.TextSubmitted -= OnPromptSubmitted;
+
+        RemoveAutoloadSingleton(AutoloadName);
         RemoveControlFromBottomPanel(editorInterface);
         editorInterface.QueueFree();
 

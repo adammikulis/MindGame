@@ -39,20 +39,41 @@ auto_translate_mode = 1
 layout_mode = 2
 text = "Unload Model"
 
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DebugRichTextLabel" type="RichTextLabel" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "(debug text)"
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ModelOutputRichTextLabel" type="RichTextLabel" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer2"]
-unique_name_in_owner = true
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ModelOutputRichTextLabel" type="RichTextLabel" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer2/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 text = "(Model Output Here)"
 
-[node name="ModelInputLineEdit" type="LineEdit" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer2"]
-unique_name_in_owner = true
+[node name="ScrollContainer2" type="ScrollContainer" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PromptLineEdit" type="LineEdit" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer2/ScrollContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Enter prompt here"
 clear_button_enabled = true

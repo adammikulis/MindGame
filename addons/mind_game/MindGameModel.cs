@@ -2,15 +2,31 @@ using Godot;
 using LLama;
 using LLama.Common;
 using System;
-using static System.Net.Mime.MediaTypeNames;
+using System.Threading.Tasks;
 
-public partial class MindGameModel : Node
+public partial class MindGameModel : Node, IDisposable
 {
     [Signal]
-    public delegate void ModelOutputEventHandler(string output);
+    public delegate void ModelOutputEventHandler(string text);
 
+    public LLamaWeights weights;
+    public LLamaContext context;
+    public LLamaEmbedder embedder;
     public InteractiveExecutor executor;
-    public ChatSession chatSession;
+    public ChatSession session;
+
+    private static MindGameModel _instance;
+    public static MindGameModel Instance => _instance;
+
+    public override void _EnterTree()
+    {
+        if(_instance != null)
+        {
+            this.QueueFree();
+        }
+        _instance = this;
+    }
+
 
     public void LoadModel(string modelPath)
     {
@@ -22,18 +38,35 @@ public partial class MindGameModel : Node
             EmbeddingMode = true
         };
 
-        using var weights = LLamaWeights.LoadFromFile(parameters);
-        using var context = weights.CreateContext(parameters);
-
+        weights = LLamaWeights.LoadFromFile(parameters);
+        context = weights.CreateContext(parameters);
+        embedder = new LLamaEmbedder(weights, parameters);
         executor = new InteractiveExecutor(context);
-        chatSession = new ChatSession(executor);
+        session = new ChatSession(executor);
+
+        GD.Print("Model loaded!");
     }
 
-    private async void InferAsync(string prompt)
+    public void UnloadModel()
     {
-        await foreach (var text in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.6f, AntiPrompts = [ "\n\n" ]}))
+        weights.Dispose();
+        context.Dispose();
+        embedder.Dispose();
+    }
+
+    public async Task InferAsync(string prompt)
+    {
+        await Task.Run(async () =>
         {
-            EmitSignal(nameof(ModelOutputEventHandler), text);
-        }
+            await foreach (var output in session.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = new[] { "\n\n" } }))
+            {
+                CallDeferred(nameof(DeferredEmitNewOutput), output);
+            }
+        });
+    }
+
+    public void DeferredEmitNewOutput(string output)
+    {
+        EmitSignal(nameof(ModelOutput), output);
     }
 }
