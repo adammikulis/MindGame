@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://dtsyxmjtwi6u0"]
+
+[node name="MindGameEditorInterface" type="Control"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="LoadModelButton" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load Model"
+
+[node name="UnloadModelButton" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Unload Model"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ModelOutputRichTextLabel" type="RichTextLabel" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+text = "(Model Output Here)"
+
+[node name="ModelInputLineEdit" type="LineEdit" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Enter prompt here"
+clear_button_enabled = true
+
+[node name="LoadModelFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "Open a File"
+initial_position = 2
+size = Vector2i(400, 600)
+min_size = Vector2i(400, 600)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+use_native_dialog = true
