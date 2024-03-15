@@ -5,12 +5,24 @@ using System.Threading.Tasks;
 using LLama.Common;
 using LLama.Native;
 using LLama.Sampling;
+using LLama;
 
 [Tool]
-public partial class MindGameEditorPlugin : EditorPlugin
+public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
 {
-    private const string AutoloadName = "MindGame";
-    private const string pathToScript = @"res://addons/mind_game/MindGameModel.cs";
+
+    [Signal]
+    public delegate void ModelOutputEventHandler(string text);
+
+    public LLamaWeights weights;
+    public LLamaContext context;
+    public LLamaEmbedder embedder;
+    public InteractiveExecutor executor;
+    public ChatSession session;
+
+
+    //private const string AutoloadName = "MindGameModel";
+    //private const string pathToScript = @"res://addons/mind_game/MindGameModel.cs";
 
     private Control editorInterface;
     private Button loadModelButton, unloadModelButton;
@@ -18,11 +30,12 @@ public partial class MindGameEditorPlugin : EditorPlugin
     private LineEdit promptLineEdit;
     private FileDialog loadModelFileDialog;
 
+
     public string modelPath;
     public override void _EnterTree()
     {
-        AddAutoloadSingleton(AutoloadName, pathToScript);
-
+        //AddAutoloadSingleton(AutoloadName, pathToScript);
+        
         PackedScene mindGameInterfaceScene = (PackedScene)GD.Load("res://addons/mind_game/MindGameEditorInterface.tscn");
         editorInterface = mindGameInterfaceScene.Instantiate<Control>();
         AddControlToBottomPanel(editorInterface, "Mind Game");
@@ -37,36 +50,84 @@ public partial class MindGameEditorPlugin : EditorPlugin
         unloadModelButton.Pressed += OnUnloadModelButtonPressed;
         loadModelFileDialog.FileSelected += OnModelSelected;
         promptLineEdit.TextSubmitted += OnPromptSubmitted;
-        //MindGameModel.Instance.ModelOutput += OnModelOutput;
+
+        
+        ModelOutput += OnModelOutput;
 
     }
 
     private void OnModelOutput(string output)
     {
-        GD.Print(output);
+        modelOutputRichTextLabel.Text += output;
     }
 
     private void OnUnloadModelButtonPressed()
     {
-        //MindGameModel.Instance.UnloadModel();
+        UnloadModel();
 
     }
 
     private void OnLoadModelButtonPressed()
     {
-        
         loadModelFileDialog.PopupCentered();
     }
 
     private async void OnPromptSubmitted(string prompt)
     {
-        //await MindGameModel.Instance.InferAsync(prompt);
+        InferAsync(prompt);
     }
 
     private void OnModelSelected(string modelPath)
     {
-       // MindGameModel.Instance.LoadModel(modelPath);
+       LoadModel(modelPath);
     }
+
+    public void LoadModel(string modelPath)
+    {
+        var parameters = new ModelParams(modelPath)
+        {
+            ContextSize = 4096,
+            Seed = 0,
+            GpuLayerCount = 33,
+            EmbeddingMode = true
+        };
+
+        weights = LLamaWeights.LoadFromFile(parameters);
+        context = weights.CreateContext(parameters);
+        embedder = new LLamaEmbedder(weights, parameters);
+        executor = new InteractiveExecutor(context);
+        session = new ChatSession(executor);
+
+        GD.Print("Model loaded!");
+    }
+
+    public void UnloadModel()
+    {
+        weights.Dispose();
+        context.Dispose();
+        embedder.Dispose();
+    }
+
+    public async Task InferAsync(string prompt)
+    {
+        promptLineEdit.Text = "";
+        modelOutputRichTextLabel.Text = $"Prompt: {prompt}\n\nResponse:\n";
+        await Task.Run(async () =>
+        {
+            await foreach (var output in session.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = new[] { "\n\n" } }))
+            {
+                CallDeferred(nameof(DeferredEmitNewOutput), output);
+            }
+        });
+    }
+
+    public void DeferredEmitNewOutput(string output)
+    {
+        EmitSignal(nameof(ModelOutput), output);
+    }
+
+
+
 
     public override void _Ready()
     {
@@ -82,14 +143,14 @@ public partial class MindGameEditorPlugin : EditorPlugin
 
     public override void _ExitTree()
     {
-        loadModelButton.Pressed -= OnLoadModelButtonPressed;
-        unloadModelButton.Pressed -= OnUnloadModelButtonPressed;
-        loadModelFileDialog.FileSelected -= OnModelSelected;
-        promptLineEdit.TextSubmitted -= OnPromptSubmitted;
+        //loadModelButton.Pressed -= OnLoadModelButtonPressed;
+        //unloadModelButton.Pressed -= OnUnloadModelButtonPressed;
+        //loadModelFileDialog.FileSelected -= OnModelSelected;
+        //promptLineEdit.TextSubmitted -= OnPromptSubmitted;
 
-        RemoveAutoloadSingleton(AutoloadName);
+        //RemoveAutoloadSingleton(AutoloadName);
         RemoveControlFromBottomPanel(editorInterface);
-        editorInterface.QueueFree();
+        // editorInterface.QueueFree();
 
     }
 }
