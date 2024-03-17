@@ -6,6 +6,7 @@ Download/install .NET8: https://dotnet.microsoft.com/en-us/download
 Load a .gguf file of the llama, mistral, mixtral, or phi families to get going!
 
 Recommended model download: https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/tree/main
+
 Smaller model for those with less VRAM: https://huggingface.co/TheBloke/phi-2-GGUF/tree/main
 
 The lower quantization (q), the smaller the model is to run but at the cost of accuracy. Mistral-7B Q4_K_M is a great middle-ground for those with 8GB of VRAM. The absolute smallest model (phi-2.Q2_K.gguf) can run on 4GB of VRAM.
