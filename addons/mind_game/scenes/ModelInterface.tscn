@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://kw6vf1mpgqun"]
+
+[node name="Model" type="HBoxContainer"]
+auto_translate_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+text = "Choose Number of Model Layers to Offload to GPU"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="GpuLayerCountHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 33.0
+value = 16.0
+tick_count = 32
+ticks_on_borders = true
+
+[node name="GpuLayerCountLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "0"
+
+[node name="LoadModelButton" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Load Model"
+
+[node name="UnloadModelButton" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Unload Model"
+
+[node name="LoadModelFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+auto_translate_mode = 1
+title = "Open a File"
+initial_position = 2
+size = Vector2i(400, 600)
+min_size = Vector2i(400, 600)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+use_native_dialog = true
