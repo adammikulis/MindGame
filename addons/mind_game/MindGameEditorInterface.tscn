@@ -26,7 +26,8 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="DebugScrollContainer" type="ScrollContainer" parent="MarginContainer/PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(300, 0)
+visible = false
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -39,7 +40,7 @@ text = "(debug text)"
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-current_tab = 2
+current_tab = 1
 
 [node name="Chat Manager" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer"]
 visible = false
@@ -72,11 +73,36 @@ placeholder_text = "Enter prompt here"
 clear_button_enabled = true
 
 [node name="Model Manager" type="HBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Model Manager"]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GpuLayerCountTitleLabel" type="Label" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Model Manager/VBoxContainer"]
+layout_mode = 2
+text = "Choose Number of Model Layers to Offload to GPU"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Model Manager/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="GpuLayerCountLabel" type="Label" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Model Manager/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="GpuLayerCountHSlider" type="HSlider" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Model Manager/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 33.0
+value = 16.0
+tick_count = 32
+ticks_on_borders = true
 
 [node name="LoadModelButton" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Model Manager/VBoxContainer"]
 unique_name_in_owner = true
@@ -102,6 +128,7 @@ use_native_dialog = true
 
 [node name="Download Manager" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer"]
 auto_translate_mode = 1
+visible = false
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download Manager"]
@@ -212,10 +239,12 @@ popup/item_9/text = "Q8_0"
 popup/item_9/id = 9
 
 [node name="ChooseDownloadLocationButton" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download Manager"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Choose Download Location"
 
 [node name="DownloadModelButton" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download Manager"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 disabled = true
@@ -226,7 +255,10 @@ layout_mode = 2
 
 [node name="DownloadModelFileDialog" type="FileDialog" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download Manager"]
 unique_name_in_owner = true
-title = "Open a Directory"
+title = "Choose Folder for Model Download"
+initial_position = 2
+size = Vector2i(400, 600)
+min_size = Vector2i(400, 600)
 ok_button_text = "Select Current Folder"
 file_mode = 2
 access = 2

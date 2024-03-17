@@ -20,15 +20,18 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
     public InteractiveExecutor executor;
     public ChatSession session;
 
-
+    // Autoload isn't able to be located for some reason, commenting out for now
     //private const string AutoloadName = "MindGameModel";
     //private const string pathToScript = @"res://addons/mind_game/MindGameModel.cs";
 
+    private string downloadModelDirectoryPath;
+
     private Control editorInterface;
-    private Button loadModelButton, unloadModelButton;
+    private Button chooseDownloadLocationButton, downloadModelButton, loadModelButton, unloadModelButton;
     private RichTextLabel modelOutputRichTextLabel;
     private LineEdit promptLineEdit;
-    private FileDialog loadModelFileDialog;
+    private FileDialog downloadModelFileDialog, loadModelFileDialog;
+    private HSlider 
 
 
     public string modelPath;
@@ -40,20 +43,44 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
         editorInterface = mindGameInterfaceScene.Instantiate<Control>();
         AddControlToBottomPanel(editorInterface, "Mind Game");
 
+        chooseDownloadLocationButton = editorInterface.GetNode<Button>("%ChooseDownloadLocationButton");
+        downloadModelButton = editorInterface.GetNode<Button>("%DownloadModelButton");
         loadModelButton = editorInterface.GetNode<Button>("%LoadModelButton");
         unloadModelButton = editorInterface.GetNode<Button>("%UnloadModelButton");
         modelOutputRichTextLabel = editorInterface.GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
         promptLineEdit = editorInterface.GetNode<LineEdit>("%PromptLineEdit");
         loadModelFileDialog = editorInterface.GetNode<FileDialog>("%LoadModelFileDialog");
 
+        chooseDownloadLocationButton.Pressed += OnChooseDownloadLocationButtonPressed;
+        downloadModelButton.Pressed += OnDownloadModelButtonPressed;
         loadModelButton.Pressed += OnLoadModelButtonPressed;
         unloadModelButton.Pressed += OnUnloadModelButtonPressed;
+
+        downloadModelFileDialog.DirSelected += OnDownloadModelDirectorySelected;
         loadModelFileDialog.FileSelected += OnModelSelected;
+
+
         promptLineEdit.TextSubmitted += OnPromptSubmitted;
 
         
         ModelOutput += OnModelOutput;
 
+    }
+
+    private void OnDownloadModelDirectorySelected(string dir)
+    {
+        downloadModelDirectoryPath = dir;
+        downloadModelButton.Disabled = false;
+    }
+
+    private void OnDownloadModelButtonPressed()
+    {
+        // Need to add HTTP request here
+    }
+
+    private void OnChooseDownloadLocationButtonPressed()
+    {
+        downloadModelFileDialog.PopupCentered();
     }
 
     private void OnModelOutput(string output)
