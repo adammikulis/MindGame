@@ -1,26 +1,38 @@
-[gd_scene format=3 uid="uid://kw6vf1mpgqun"]
+[gd_scene load_steps=2 format=3 uid="uid://dve4ynjuwr2cm"]
 
-[node name="Model" type="HBoxContainer"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/ModelInterface.cs" id="1_cwjy2"]
+
+[node name="Model" type="Control"]
 auto_translate_mode = 1
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_cwjy2")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="ModelHBoxContainer" type="HBoxContainer" parent="."]
+auto_translate_mode = 1
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 31.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ModelHBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer"]
+[node name="GpuLayerCountTitleLabel" type="Label" parent="ModelHBoxContainer/VBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 text = "Choose Number of Model Layers to Offload to GPU"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ModelHBoxContainer/VBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="GpuLayerCountHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer"]
+[node name="GpuLayerCountHSlider" type="HSlider" parent="ModelHBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(300, 0)
@@ -31,25 +43,25 @@ value = 16.0
 tick_count = 32
 ticks_on_borders = true
 
-[node name="GpuLayerCountLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="GpuLayerCountLabel" type="Label" parent="ModelHBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 text = "0"
 
-[node name="LoadModelButton" type="Button" parent="VBoxContainer"]
+[node name="LoadModelButton" type="Button" parent="ModelHBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 text = "Load Model"
 
-[node name="UnloadModelButton" type="Button" parent="VBoxContainer"]
+[node name="UnloadModelButton" type="Button" parent="ModelHBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 text = "Unload Model"
 
-[node name="LoadModelFileDialog" type="FileDialog" parent="."]
+[node name="LoadModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 title = "Open a File"

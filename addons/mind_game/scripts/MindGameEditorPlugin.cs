@@ -14,26 +14,21 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
     [Signal]
     public delegate void ModelOutputEventHandler(string text);
 
-    public LLamaWeights weights;
-    public LLamaContext context;
-    public LLamaEmbedder embedder;
-    public InteractiveExecutor executor;
-    public ChatSession session;
-
     // Autoload isn't able to be located for some reason, commenting out for now
     //private const string AutoloadName = "MindGameModel";
     //private const string pathToScript = @"res://addons/mind_game/MindGameModel.cs";
+    private LLamaEmbedder embedder;
+    private ChatSession chatSession;
 
     private string downloadModelDirectoryPath;
-    private int gpuLayerCount;
-
     private Control editorInterface;
-    private Button chooseDownloadLocationButton, downloadModelButton, loadModelButton, unloadModelButton;
-    private Label gpuLayerCountLabel;
+    private Button chooseDownloadLocationButton, downloadModelButton;
     private RichTextLabel modelOutputRichTextLabel;
     private LineEdit promptLineEdit;
-    private FileDialog downloadModelFileDialog, loadModelFileDialog;
-    private HSlider gpuLayerCountHSlider;
+    private FileDialog downloadModelFileDialog;
+
+    private ModelInterface model;
+    
 
     public string modelPath;
     public override void _EnterTree()
@@ -41,50 +36,60 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
         // Singleton removed for now
         // AddAutoloadSingleton(AutoloadName, pathToScript);
         
-        PackedScene mindGameInterfaceScene = (PackedScene)GD.Load("res://addons/mind_game/MindGameEditorInterface.tscn");
+        PackedScene mindGameInterfaceScene = (PackedScene)GD.Load("res://addons/mind_game/scenes/MindGameEditorInterface.tscn");
         editorInterface = mindGameInterfaceScene.Instantiate<Control>();
         AddControlToBottomPanel(editorInterface, "Mind Game");
+
+        
 
         // Button nodes
         chooseDownloadLocationButton = editorInterface.GetNode<Button>("%ChooseDownloadLocationButton");
         downloadModelButton = editorInterface.GetNode<Button>("%DownloadModelButton");
-        loadModelButton = editorInterface.GetNode<Button>("%LoadModelButton");
-        unloadModelButton = editorInterface.GetNode<Button>("%UnloadModelButton");
-
-        // Label nodes
-        gpuLayerCountLabel = editorInterface.GetNode<Label>("%GpuLayerCountLabel");
-        modelOutputRichTextLabel = editorInterface.GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
         
+        // Label nodes
+        modelOutputRichTextLabel = editorInterface.GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
         promptLineEdit = editorInterface.GetNode<LineEdit>("%PromptLineEdit");
-        gpuLayerCountHSlider = editorInterface.GetNode<HSlider>("%GpuLayerCountHSlider");
         
         // File dialog nodes
-        loadModelFileDialog = editorInterface.GetNode<FileDialog>("%LoadModelFileDialog");
         downloadModelFileDialog = editorInterface.GetNode<FileDialog>("%DownloadModelFileDialog");
 
         // Button signals
         chooseDownloadLocationButton.Pressed += OnChooseDownloadLocationButtonPressed;
         downloadModelButton.Pressed += OnDownloadModelButtonPressed;
-        loadModelButton.Pressed += OnLoadModelButtonPressed;
-        unloadModelButton.Pressed += OnUnloadModelButtonPressed;
+        
 
         // File dialog signals
         downloadModelFileDialog.DirSelected += OnDownloadModelDirectorySelected;
-        loadModelFileDialog.FileSelected += OnModelSelected;
-
-        gpuLayerCountHSlider.ValueChanged += OnGpuLayerCountHSliderValueChanged;
+        
         promptLineEdit.TextSubmitted += OnPromptSubmitted;
         ModelOutput += OnModelOutput;
 
-        gpuLayerCount = (int)gpuLayerCountHSlider.Value;
-        gpuLayerCountLabel.Text = gpuLayerCount.ToString();
+        
 
     }
 
-    private void OnGpuLayerCountHSliderValueChanged(double value)
+    private void OnEmbedderStatusUpdated(bool isModelEmbedderActive)
     {
-        gpuLayerCount = (int)gpuLayerCountHSlider.Value;
-        gpuLayerCountLabel.Text = gpuLayerCount.ToString();
+        if (isModelEmbedderActive)
+        {
+            embedder = model.GetLLamaEmbedder();
+        }
+        else
+        {
+            embedder = null;
+        }
+    }
+
+    private void OnChatSessionStatusUpdated(bool isChatSessionActive)
+    {
+        if (isChatSessionActive)
+        {
+            chatSession = model.GetChatSession();
+        }
+        else
+        {
+            chatSession = null;
+        }
     }
 
     private void OnDownloadModelDirectorySelected(string dir)
@@ -108,64 +113,25 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
         modelOutputRichTextLabel.Text += output;
     }
 
-    private void OnUnloadModelButtonPressed()
-    {
-        UnloadModel();
-
-    }
-
-    private void OnLoadModelButtonPressed()
-    {
-        loadModelFileDialog.PopupCentered();
-    }
-
     private async void OnPromptSubmitted(string prompt)
     {
-        InferAsync(prompt);
-    }
-
-    private void OnModelSelected(string modelPath)
-    {
-       LoadModel(modelPath);
-    }
-
-    public void LoadModel(string modelPath)
-    {
-        var parameters = new ModelParams(modelPath)
-        {
-            ContextSize = 4096,
-            Seed = 0,
-            GpuLayerCount = 33,
-            EmbeddingMode = true
-        };
-
-        weights = LLamaWeights.LoadFromFile(parameters);
-        context = weights.CreateContext(parameters);
-        embedder = new LLamaEmbedder(weights, parameters);
-        executor = new InteractiveExecutor(context);
-        session = new ChatSession(executor);
-
-        GD.Print("Model loaded!");
-    }
-
-    public void UnloadModel()
-    {
-        weights.Dispose();
-        context.Dispose();
-        embedder.Dispose();
+        await InferAsync(prompt);
     }
 
     public async Task InferAsync(string prompt)
     {
-        promptLineEdit.Text = "";
-        modelOutputRichTextLabel.Text = $"Prompt: {prompt}\n\nResponse:\n";
-        await Task.Run(async () =>
+        if (chatSession != null)
         {
-            await foreach (var output in session.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = new[] { "\n\n", "User:" } }))
+            promptLineEdit.Text = "";
+            modelOutputRichTextLabel.Text = $"Prompt: {prompt}\n\nResponse:\n";
+            await Task.Run(async () =>
             {
-                CallDeferred(nameof(DeferredEmitNewOutput), output);
-            }
-        });
+                await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = new[] { "\n\n", "User:" } }))
+                {
+                    CallDeferred(nameof(DeferredEmitNewOutput), output);
+                }
+            });
+        }
     }
 
     public void DeferredEmitNewOutput(string output)
@@ -178,7 +144,12 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
 
     public override void _Ready()
     {
-        
+        Control modelNode = editorInterface.GetNode<Control>("%Model") as ModelInterface;
+        model = modelNode as ModelInterface;
+
+        model.ChatSessionStatus += OnChatSessionStatusUpdated;
+        model.EmbedderStatus += OnEmbedderStatusUpdated;
+
     }
 
 

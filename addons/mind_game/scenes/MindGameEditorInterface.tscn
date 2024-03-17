@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dtsyxmjtwi6u0"]
 
-[ext_resource type="PackedScene" uid="uid://kw6vf1mpgqun" path="res://addons/mind_game/scenes/ModelInterface.tscn" id="1_cwmgi"]
+[ext_resource type="PackedScene" uid="uid://dve4ynjuwr2cm" path="res://addons/mind_game/scenes/ModelInterface.tscn" id="1_cwmgi"]
 
 [node name="MindGameEditorInterface" type="Control"]
 custom_minimum_size = Vector2(0, 300)
@@ -13,7 +13,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,52 +21,41 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="DebugScrollContainer" type="ScrollContainer" parent="MarginContainer/PanelContainer/HBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="DebugRichTextLabel" type="RichTextLabel" parent="MarginContainer/PanelContainer/HBoxContainer/DebugScrollContainer"]
+[node name="TabContainer" type="TabContainer" parent="PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "(debug text)"
+current_tab = 1
 
-[node name="TabContainer" type="TabContainer" parent="MarginContainer/PanelContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-current_tab = 0
-
-[node name="Chat" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer"]
+[node name="Chat" type="Control" parent="PanelContainer/TabContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
+
+[node name="ChatHBoxContainer" type="VBoxContainer" parent="PanelContainer/TabContainer/Chat"]
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 31.0
 size_flags_horizontal = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Chat"]
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/TabContainer/Chat/ChatHBoxContainer"]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ModelOutputRichTextLabel" type="RichTextLabel" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Chat/ScrollContainer"]
+[node name="ModelOutputRichTextLabel" type="RichTextLabel" parent="PanelContainer/TabContainer/Chat/ChatHBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "(Model Output Here)"
 
-[node name="ScrollContainer2" type="ScrollContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Chat"]
+[node name="ScrollContainer2" type="ScrollContainer" parent="PanelContainer/TabContainer/Chat/ChatHBoxContainer"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PromptLineEdit" type="LineEdit" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Chat/ScrollContainer2"]
+[node name="PromptLineEdit" type="LineEdit" parent="PanelContainer/TabContainer/Chat/ChatHBoxContainer/ScrollContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -74,32 +63,37 @@ size_flags_vertical = 3
 placeholder_text = "Enter prompt here"
 clear_button_enabled = true
 
-[node name="Model" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer" instance=ExtResource("1_cwmgi")]
+[node name="Model" parent="PanelContainer/TabContainer" instance=ExtResource("1_cwmgi")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Download" type="Control" parent="PanelContainer/TabContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Download" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer"]
-unique_name_in_owner = true
+[node name="Download" type="VBoxContainer" parent="PanelContainer/TabContainer/Download"]
 auto_translate_mode = 1
-visible = false
 layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 31.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/TabContainer/Download/Download"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ModelTypeVBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer"]
+[node name="ModelTypeVBoxContainer" type="VBoxContainer" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ChooseModelTypeLabel" type="Label" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer/ModelTypeVBoxContainer"]
+[node name="ChooseModelTypeLabel" type="Label" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer/ModelTypeVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 text = "Choose Model Type"
 
-[node name="ModelTypeOptionButton" type="OptionButton" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer/ModelTypeVBoxContainer"]
+[node name="ModelTypeOptionButton" type="OptionButton" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer/ModelTypeVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
@@ -115,17 +109,17 @@ popup/item_3/id = 3
 popup/item_4/text = "phi"
 popup/item_4/id = 4
 
-[node name="ModelSizeVBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer"]
+[node name="ModelSizeVBoxContainer" type="VBoxContainer" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ChooseModelTypeLabel" type="Label" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer/ModelSizeVBoxContainer"]
+[node name="ChooseModelTypeLabel" type="Label" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer/ModelSizeVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 text = "Choose Model Size"
 
-[node name="ModelSizeOptionButton" type="OptionButton" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer/ModelSizeVBoxContainer"]
+[node name="ModelSizeOptionButton" type="OptionButton" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer/ModelSizeVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
@@ -139,17 +133,17 @@ popup/item_2/id = 2
 popup/item_3/text = "70B"
 popup/item_3/id = 3
 
-[node name="ModelSubTypeVBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer"]
+[node name="ModelSubTypeVBoxContainer" type="VBoxContainer" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ChooseModelTypeLabel" type="Label" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer/ModelSubTypeVBoxContainer"]
+[node name="ChooseModelTypeLabel" type="Label" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer/ModelSubTypeVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 text = "Choose Sub-Type"
 
-[node name="ModelTypeOptionButton" type="OptionButton" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer/ModelSubTypeVBoxContainer"]
+[node name="ModelTypeOptionButton" type="OptionButton" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer/ModelSubTypeVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
@@ -159,15 +153,15 @@ popup/item_0/id = 0
 popup/item_1/text = "instruct"
 popup/item_1/id = 1
 
-[node name="QuantizationVBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer"]
+[node name="QuantizationVBoxContainer" type="VBoxContainer" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ChooseQuantizationLabel" type="Label" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer/QuantizationVBoxContainer"]
+[node name="ChooseQuantizationLabel" type="Label" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer/QuantizationVBoxContainer"]
 layout_mode = 2
 text = "Choose Quantization"
 
-[node name="QuantizationOptionButton" type="OptionButton" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download/HBoxContainer/QuantizationVBoxContainer"]
+[node name="QuantizationOptionButton" type="OptionButton" parent="PanelContainer/TabContainer/Download/Download/HBoxContainer/QuantizationVBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 item_count = 10
@@ -192,22 +186,22 @@ popup/item_8/id = 8
 popup/item_9/text = "Q8_0"
 popup/item_9/id = 9
 
-[node name="ChooseDownloadLocationButton" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download"]
+[node name="ChooseDownloadLocationButton" type="Button" parent="PanelContainer/TabContainer/Download/Download"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Choose Download Location"
 
-[node name="DownloadModelButton" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download"]
+[node name="DownloadModelButton" type="Button" parent="PanelContainer/TabContainer/Download/Download"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 disabled = true
 text = "Download Model"
 
-[node name="DownloadProgressBar" type="ProgressBar" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download"]
+[node name="DownloadProgressBar" type="ProgressBar" parent="PanelContainer/TabContainer/Download/Download"]
 layout_mode = 2
 
-[node name="DownloadModelFileDialog" type="FileDialog" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download"]
+[node name="DownloadModelFileDialog" type="FileDialog" parent="PanelContainer/TabContainer/Download/Download"]
 unique_name_in_owner = true
 title = "Open a Directory"
 initial_position = 2
