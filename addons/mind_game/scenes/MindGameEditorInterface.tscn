@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dtsyxmjtwi6u0"]
+[gd_scene load_steps=3 format=3 uid="uid://dtsyxmjtwi6u0"]
 
 [ext_resource type="PackedScene" uid="uid://dve4ynjuwr2cm" path="res://addons/mind_game/scenes/ModelInterface.tscn" id="1_cwmgi"]
+[ext_resource type="PackedScene" uid="uid://b4b5fh23okx7s" path="res://addons/mind_game/scenes/HelpInterface.tscn" id="2_c3rd0"]
 
 [node name="MindGameEditorInterface" type="Control"]
 custom_minimum_size = Vector2(0, 300)
@@ -24,11 +25,10 @@ grow_vertical = 2
 [node name="TabContainer" type="TabContainer" parent="PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-current_tab = 1
+current_tab = 0
 
 [node name="Chat" type="Control" parent="PanelContainer/TabContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 
 [node name="ChatHBoxContainer" type="VBoxContainer" parent="PanelContainer/TabContainer/Chat"]
@@ -60,11 +60,13 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-placeholder_text = "Enter prompt here"
+placeholder_text = "Load model first to chat"
+editable = false
 clear_button_enabled = true
 
 [node name="Model" parent="PanelContainer/TabContainer" instance=ExtResource("1_cwmgi")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="Download" type="Control" parent="PanelContainer/TabContainer"]
@@ -211,3 +213,7 @@ ok_button_text = "Select Current Folder"
 file_mode = 2
 access = 2
 use_native_dialog = true
+
+[node name="Help" parent="PanelContainer/TabContainer" instance=ExtResource("2_c3rd0")]
+visible = false
+layout_mode = 2

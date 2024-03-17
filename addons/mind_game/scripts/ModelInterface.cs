@@ -105,4 +105,12 @@ public partial class ModelInterface : Control, IDisposable
     {
         return embedder;
     }
+
+    public override void _ExitTree()
+    {
+        loadModelButton.Pressed -= OnLoadModelButtonPressed;
+        unloadModelButton.Pressed -= OnUnloadModelButtonPressed;
+        loadModelFileDialog.FileSelected -= OnModelSelected;
+        gpuLayerCountHSlider.ValueChanged -= OnGpuLayerCountHSliderValueChanged;
+    }
 }

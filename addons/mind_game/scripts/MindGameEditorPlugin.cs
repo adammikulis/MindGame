@@ -50,21 +50,15 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
         modelOutputRichTextLabel = editorInterface.GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
         promptLineEdit = editorInterface.GetNode<LineEdit>("%PromptLineEdit");
         
-        // File dialog nodes
+        // File dialog node
         downloadModelFileDialog = editorInterface.GetNode<FileDialog>("%DownloadModelFileDialog");
 
-        // Button signals
+        // Signals
         chooseDownloadLocationButton.Pressed += OnChooseDownloadLocationButtonPressed;
         downloadModelButton.Pressed += OnDownloadModelButtonPressed;
-        
-
-        // File dialog signals
         downloadModelFileDialog.DirSelected += OnDownloadModelDirectorySelected;
-        
         promptLineEdit.TextSubmitted += OnPromptSubmitted;
         ModelOutput += OnModelOutput;
-
-        
 
     }
 
@@ -85,10 +79,14 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
         if (isChatSessionActive)
         {
             chatSession = model.GetChatSession();
+            promptLineEdit.Editable = true;
+            promptLineEdit.PlaceholderText = "Enter prompt here";
         }
         else
         {
             chatSession = null;
+            promptLineEdit.Editable = false;
+            promptLineEdit.PlaceholderText = "Load model first to chat";
         }
     }
 
@@ -161,14 +159,15 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
 
     public override void _ExitTree()
     {
-        //loadModelButton.Pressed -= OnLoadModelButtonPressed;
-        //unloadModelButton.Pressed -= OnUnloadModelButtonPressed;
-        //loadModelFileDialog.FileSelected -= OnModelSelected;
-        //promptLineEdit.TextSubmitted -= OnPromptSubmitted;
+        chooseDownloadLocationButton.Pressed -= OnChooseDownloadLocationButtonPressed;
+        downloadModelButton.Pressed -= OnDownloadModelButtonPressed;
+        downloadModelFileDialog.DirSelected -= OnDownloadModelDirectorySelected;
+        promptLineEdit.TextSubmitted -= OnPromptSubmitted;
+        ModelOutput -= OnModelOutput;
 
         //RemoveAutoloadSingleton(AutoloadName);
         RemoveControlFromBottomPanel(editorInterface);
-        // editorInterface.QueueFree();
+        editorInterface.QueueFree();
 
     }
 }

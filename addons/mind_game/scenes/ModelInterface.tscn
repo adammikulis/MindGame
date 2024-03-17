@@ -47,7 +47,7 @@ ticks_on_borders = true
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "0"
+text = "16"
 
 [node name="LoadModelButton" type="Button" parent="ModelHBoxContainer/VBoxContainer"]
 unique_name_in_owner = true

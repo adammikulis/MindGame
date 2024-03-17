@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://b4b5fh23okx7s"]
+
+[node name="Help" type="Control"]
+auto_translate_mode = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "This is a Godot plugin that allows you to run a language model on your local hardware. It currently only runs in-editor, but the plan is to allow model access from anywhere in your game via a singleton. Download a .gguf model from somewhere like here to get started: https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/tree/main
+
+The Download Manager is currently a nonfunctioning shell and will be completed soon."
