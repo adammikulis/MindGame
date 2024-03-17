@@ -1,8 +1,9 @@
-This is a plugin for the Godot game engine that allows the user to load and run a local Large Language Model (LLM) in-engine. Open the .NET version of Godot 4.3 dev5, click Project > Project Settings > Plugins > Enabled (Mind Game)
+This is a plugin for the Godot game engine that allows the user to load and run a local Large Language Model (LLM) in-engine using the [LLamaSharp](https://github.com/SciSharp/LLamaSharp) (v0.10.0) C# library. Open the .NET version of Godot 4.3 dev5, click Project > Project Settings > Plugins > Enabled (Mind Game)
 
 Download Godot 4.3 dev5 (.NET version) here: https://godotengine.org/article/dev-snapshot-godot-4-3-dev-5/
 Download/install .NET8: https://dotnet.microsoft.com/en-us/download
-Currently you have to manually add the LLamaSharp and LLamaSharp.Backend.Cuda12 Nuget packages, use Visual Studio Community for this or a visual NuGet Manager extension for VS Code
+
+Currently you have to manually add the [LLamaSharp](https://www.nuget.org/packages/LLamaSharp) and [Cuda12 backend](https://www.nuget.org/packages/LLamaSharp.Backend.Cuda12) or [Cpu backend](https://www.nuget.org/packages/LLamaSharp.Backend.Cpu) Nuget packages, use Visual Studio Community for this or a visual NuGet Manager extension for VS Code
 
 Load a .gguf file of the llama, mistral, mixtral, or phi families to get going!
 
