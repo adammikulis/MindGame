@@ -89,11 +89,6 @@ size_flags_horizontal = 0
 size_flags_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="GpuLayerCountLabel" type="Label" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Model Manager/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "0"
-
 [node name="GpuLayerCountHSlider" type="HSlider" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Model Manager/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
@@ -103,6 +98,11 @@ max_value = 33.0
 value = 16.0
 tick_count = 32
 ticks_on_borders = true
+
+[node name="GpuLayerCountLabel" type="Label" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Model Manager/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
 
 [node name="LoadModelButton" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Model Manager/VBoxContainer"]
 unique_name_in_owner = true
@@ -255,7 +255,7 @@ layout_mode = 2
 
 [node name="DownloadModelFileDialog" type="FileDialog" parent="MarginContainer/PanelContainer/HBoxContainer/TabContainer/Download Manager"]
 unique_name_in_owner = true
-title = "Choose Folder for Model Download"
+title = "Open a Directory"
 initial_position = 2
 size = Vector2i(400, 600)
 min_size = Vector2i(400, 600)

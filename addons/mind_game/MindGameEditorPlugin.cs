@@ -25,46 +25,66 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
     //private const string pathToScript = @"res://addons/mind_game/MindGameModel.cs";
 
     private string downloadModelDirectoryPath;
+    private int gpuLayerCount;
 
     private Control editorInterface;
     private Button chooseDownloadLocationButton, downloadModelButton, loadModelButton, unloadModelButton;
+    private Label gpuLayerCountLabel;
     private RichTextLabel modelOutputRichTextLabel;
     private LineEdit promptLineEdit;
     private FileDialog downloadModelFileDialog, loadModelFileDialog;
-    private HSlider 
-
+    private HSlider gpuLayerCountHSlider;
 
     public string modelPath;
     public override void _EnterTree()
     {
-        //AddAutoloadSingleton(AutoloadName, pathToScript);
+        // Singleton removed for now
+        // AddAutoloadSingleton(AutoloadName, pathToScript);
         
         PackedScene mindGameInterfaceScene = (PackedScene)GD.Load("res://addons/mind_game/MindGameEditorInterface.tscn");
         editorInterface = mindGameInterfaceScene.Instantiate<Control>();
         AddControlToBottomPanel(editorInterface, "Mind Game");
 
+        // Button nodes
         chooseDownloadLocationButton = editorInterface.GetNode<Button>("%ChooseDownloadLocationButton");
         downloadModelButton = editorInterface.GetNode<Button>("%DownloadModelButton");
         loadModelButton = editorInterface.GetNode<Button>("%LoadModelButton");
         unloadModelButton = editorInterface.GetNode<Button>("%UnloadModelButton");
-        modelOutputRichTextLabel = editorInterface.GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
-        promptLineEdit = editorInterface.GetNode<LineEdit>("%PromptLineEdit");
-        loadModelFileDialog = editorInterface.GetNode<FileDialog>("%LoadModelFileDialog");
 
+        // Label nodes
+        gpuLayerCountLabel = editorInterface.GetNode<Label>("%GpuLayerCountLabel");
+        modelOutputRichTextLabel = editorInterface.GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
+        
+        promptLineEdit = editorInterface.GetNode<LineEdit>("%PromptLineEdit");
+        gpuLayerCountHSlider = editorInterface.GetNode<HSlider>("%GpuLayerCountHSlider");
+        
+        // File dialog nodes
+        loadModelFileDialog = editorInterface.GetNode<FileDialog>("%LoadModelFileDialog");
+        downloadModelFileDialog = editorInterface.GetNode<FileDialog>("%DownloadModelFileDialog");
+
+        // Button signals
         chooseDownloadLocationButton.Pressed += OnChooseDownloadLocationButtonPressed;
         downloadModelButton.Pressed += OnDownloadModelButtonPressed;
         loadModelButton.Pressed += OnLoadModelButtonPressed;
         unloadModelButton.Pressed += OnUnloadModelButtonPressed;
 
+        // File dialog signals
         downloadModelFileDialog.DirSelected += OnDownloadModelDirectorySelected;
         loadModelFileDialog.FileSelected += OnModelSelected;
 
-
+        gpuLayerCountHSlider.ValueChanged += OnGpuLayerCountHSliderValueChanged;
         promptLineEdit.TextSubmitted += OnPromptSubmitted;
-
-        
         ModelOutput += OnModelOutput;
 
+        gpuLayerCount = (int)gpuLayerCountHSlider.Value;
+        gpuLayerCountLabel.Text = gpuLayerCount.ToString();
+
+    }
+
+    private void OnGpuLayerCountHSliderValueChanged(double value)
+    {
+        gpuLayerCount = (int)gpuLayerCountHSlider.Value;
+        gpuLayerCountLabel.Text = gpuLayerCount.ToString();
     }
 
     private void OnDownloadModelDirectorySelected(string dir)
@@ -141,7 +161,7 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
         modelOutputRichTextLabel.Text = $"Prompt: {prompt}\n\nResponse:\n";
         await Task.Run(async () =>
         {
-            await foreach (var output in session.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = new[] { "\n\n" } }))
+            await foreach (var output in session.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = new[] { "\n\n", "User:" } }))
             {
                 CallDeferred(nameof(DeferredEmitNewOutput), output);
             }
