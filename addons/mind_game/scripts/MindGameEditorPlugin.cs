@@ -14,9 +14,8 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
     [Signal]
     public delegate void ModelOutputEventHandler(string text);
 
-    // Autoload isn't able to be located for some reason, commenting out for now
-    //private const string AutoloadName = "MindGameModel";
-    //private const string pathToScript = @"res://addons/mind_game/MindGameModel.cs";
+    //private const string AutoloadName = "model";
+    //private const string pathToScript = @"res://addons/mind_game/scripts/MindGameModel.cs";
     private LLamaEmbedder embedder;
     private ChatSession chatSession;
 
@@ -27,7 +26,7 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
     private LineEdit promptLineEdit;
     private FileDialog downloadModelFileDialog;
 
-    private ModelInterface model;
+    public ModelInterface model;
     
 
     public string modelPath;

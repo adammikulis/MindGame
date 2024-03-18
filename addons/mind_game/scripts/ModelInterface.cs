@@ -12,36 +12,26 @@ public partial class ModelInterface : Control, IDisposable
     [Signal]
     public delegate void EmbedderStatusEventHandler(bool isModelEmbedderActive);
 
-    private int gpuLayerCount;
+    // UI elements
     private Button loadModelButton, unloadModelButton;
     private Label gpuLayerCountLabel;
     private FileDialog loadModelFileDialog;
     private HSlider gpuLayerCountHSlider;
 
+    // Model params
+    private int gpuLayerCount;
+    
+    // Model vars
     private LLamaWeights weights;
     private LLamaContext context;
-    public LLamaEmbedder embedder;
+    private LLamaEmbedder embedder;
     private InteractiveExecutor executor;
     private ChatSession chatSession;
 
+    public string test;
+
     public override void _EnterTree()
     {
-        loadModelButton = GetNode<Button>("%LoadModelButton");
-        unloadModelButton = GetNode<Button>("%UnloadModelButton");
-
-        gpuLayerCountLabel = GetNode<Label>("%GpuLayerCountLabel");
-        gpuLayerCountHSlider = GetNode<HSlider>("%GpuLayerCountHSlider");
-
-        loadModelFileDialog = GetNode<FileDialog>("%LoadModelFileDialog");
-
-        loadModelButton.Pressed += OnLoadModelButtonPressed;
-        unloadModelButton.Pressed += OnUnloadModelButtonPressed;
-
-        loadModelFileDialog.FileSelected += OnModelSelected;
-
-        gpuLayerCountHSlider.ValueChanged += OnGpuLayerCountHSliderValueChanged;
-        gpuLayerCount = (int)gpuLayerCountHSlider.Value;
-        gpuLayerCountLabel.Text = gpuLayerCount.ToString();
 
     }
 
@@ -63,6 +53,12 @@ public partial class ModelInterface : Control, IDisposable
 
     public void LoadModel(string modelPath)
     {
+        if (weights != null)
+        {
+            UnloadModel();
+        }
+        
+        
         var parameters = new ModelParams(modelPath)
         {
             ContextSize = 4096,
@@ -104,6 +100,23 @@ public partial class ModelInterface : Control, IDisposable
     public LLamaEmbedder GetLLamaEmbedder()
     {
         return embedder;
+    }
+
+    public override void _Ready()
+    {
+        loadModelButton = GetNode<Button>("%LoadModelButton");
+        unloadModelButton = GetNode<Button>("%UnloadModelButton");
+        gpuLayerCountLabel = GetNode<Label>("%GpuLayerCountLabel");
+        gpuLayerCountHSlider = GetNode<HSlider>("%GpuLayerCountHSlider");
+        loadModelFileDialog = GetNode<FileDialog>("%LoadModelFileDialog");
+
+        loadModelButton.Pressed += OnLoadModelButtonPressed;
+        unloadModelButton.Pressed += OnUnloadModelButtonPressed;
+        loadModelFileDialog.FileSelected += OnModelSelected;
+        gpuLayerCountHSlider.ValueChanged += OnGpuLayerCountHSliderValueChanged;
+
+        gpuLayerCount = (int)gpuLayerCountHSlider.Value;
+        gpuLayerCountLabel.Text = gpuLayerCount.ToString();
     }
 
     public override void _ExitTree()

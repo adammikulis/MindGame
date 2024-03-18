@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://cvjvwql4bp2p0"]
+
+[node name="Chat" type="Control"]
+auto_translate_mode = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChatVBoxContainer" type="VBoxContainer" parent="."]
+auto_translate_mode = 1
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 31.0
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ChatVBoxContainer"]
+auto_translate_mode = 1
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ModelOutputRichTextLabel" type="RichTextLabel" parent="ChatVBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "(Model Output Here)"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ChatVBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="ChatVBoxContainer/HBoxContainer"]
+auto_translate_mode = 1
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PromptLineEdit" type="LineEdit" parent="ChatVBoxContainer/HBoxContainer/ScrollContainer2"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "Load model first to chat"
+editable = false
+clear_button_enabled = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ChatVBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="SaveChatSessionButton" type="Button" parent="ChatVBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Save Chat Session"
+
+[node name="LoadChatSessionButton" type="Button" parent="ChatVBoxContainer/HBoxContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+text = "Load Chat Session"
