@@ -1,3 +1,4 @@
+#if TOOLS
 using Godot;
 using LLama.Common;
 using LLama;
@@ -7,10 +8,10 @@ using static System.Collections.Specialized.BitVector32;
 [Tool]
 public partial class ModelInterface : Control, IDisposable
 {
-    [Signal]
-    public delegate void ChatSessionStatusEventHandler(bool isChatSessionActive);
-    [Signal]
-    public delegate void EmbedderStatusEventHandler(bool isModelEmbedderActive);
+    public delegate void ContextEventHandler(LLamaContext context);
+    public event ContextEventHandler ContextAvailable;
+    public delegate void EmbedderEventHandler(LLamaEmbedder embedder);
+    public event EmbedderEventHandler EmbedderAvailable;
 
     // UI elements
     private Button loadModelButton, unloadModelButton;
@@ -25,14 +26,24 @@ public partial class ModelInterface : Control, IDisposable
     private LLamaWeights weights;
     private LLamaContext context;
     private LLamaEmbedder embedder;
-    private InteractiveExecutor executor;
-    private ChatSession chatSession;
 
     public string test;
 
     public override void _EnterTree()
     {
+        loadModelButton = GetNode<Button>("%LoadModelButton");
+        unloadModelButton = GetNode<Button>("%UnloadModelButton");
+        gpuLayerCountLabel = GetNode<Label>("%GpuLayerCountLabel");
+        gpuLayerCountHSlider = GetNode<HSlider>("%GpuLayerCountHSlider");
+        loadModelFileDialog = GetNode<FileDialog>("%LoadModelFileDialog");
 
+        loadModelButton.Pressed += OnLoadModelButtonPressed;
+        unloadModelButton.Pressed += OnUnloadModelButtonPressed;
+        loadModelFileDialog.FileSelected += OnModelSelected;
+        gpuLayerCountHSlider.ValueChanged += OnGpuLayerCountHSliderValueChanged;
+
+        gpuLayerCount = (int)gpuLayerCountHSlider.Value;
+        gpuLayerCountLabel.Text = gpuLayerCount.ToString();
     }
 
     private void OnGpuLayerCountHSliderValueChanged(double value)
@@ -70,11 +81,9 @@ public partial class ModelInterface : Control, IDisposable
         weights = LLamaWeights.LoadFromFile(parameters);
         context = weights.CreateContext(parameters);
         embedder = new LLamaEmbedder(weights, parameters);
-        executor = new InteractiveExecutor(context);
-        chatSession = new ChatSession(executor);
-
-        EmitSignal(nameof(ChatSessionStatus), true);
-        EmitSignal(nameof(EmbedderStatus), true);
+        
+        ContextAvailable?.Invoke(context);
+        EmbedderAvailable?.Invoke(embedder);
     }
 
     public void UnloadModel()
@@ -82,19 +91,11 @@ public partial class ModelInterface : Control, IDisposable
         weights.Dispose();
         context.Dispose();
         embedder.Dispose();
-
-        EmitSignal(nameof(ChatSessionStatus), false);
-        EmitSignal(nameof(EmbedderStatus), false);
     }
 
     private void OnUnloadModelButtonPressed()
     {
         UnloadModel();
-    }
-
-    public ChatSession GetChatSession()
-    {
-        return chatSession;
     }
 
     public LLamaEmbedder GetLLamaEmbedder()
@@ -104,19 +105,7 @@ public partial class ModelInterface : Control, IDisposable
 
     public override void _Ready()
     {
-        loadModelButton = GetNode<Button>("%LoadModelButton");
-        unloadModelButton = GetNode<Button>("%UnloadModelButton");
-        gpuLayerCountLabel = GetNode<Label>("%GpuLayerCountLabel");
-        gpuLayerCountHSlider = GetNode<HSlider>("%GpuLayerCountHSlider");
-        loadModelFileDialog = GetNode<FileDialog>("%LoadModelFileDialog");
-
-        loadModelButton.Pressed += OnLoadModelButtonPressed;
-        unloadModelButton.Pressed += OnUnloadModelButtonPressed;
-        loadModelFileDialog.FileSelected += OnModelSelected;
-        gpuLayerCountHSlider.ValueChanged += OnGpuLayerCountHSliderValueChanged;
-
-        gpuLayerCount = (int)gpuLayerCountHSlider.Value;
-        gpuLayerCountLabel.Text = gpuLayerCount.ToString();
+        
     }
 
     public override void _ExitTree()
@@ -127,3 +116,4 @@ public partial class ModelInterface : Control, IDisposable
         gpuLayerCountHSlider.ValueChanged -= OnGpuLayerCountHSliderValueChanged;
     }
 }
+#endif

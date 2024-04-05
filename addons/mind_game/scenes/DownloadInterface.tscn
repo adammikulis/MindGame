@@ -1,10 +1,13 @@
-[gd_scene format=3 uid="uid://bfsbafgtupfnb"]
+[gd_scene load_steps=2 format=3 uid="uid://bfsbafgtupfnb"]
+
+[ext_resource type="Script" path="res://addons/mind_game/scripts/DownloadInterface.cs" id="1_c6nr5"]
 
 [node name="Download" type="Control"]
 auto_translate_mode = 1
 visible = false
 layout_mode = 3
 anchors_preset = 0
+script = ExtResource("1_c6nr5")
 
 [node name="Download" type="VBoxContainer" parent="."]
 auto_translate_mode = 1
