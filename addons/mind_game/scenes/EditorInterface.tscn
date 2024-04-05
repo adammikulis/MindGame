@@ -29,15 +29,16 @@ grow_vertical = 2
 [node name="TabContainer" type="TabContainer" parent="PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-current_tab = 0
+current_tab = 1
+drag_to_rearrange_enabled = true
 
 [node name="Chat" parent="PanelContainer/TabContainer" instance=ExtResource("1_vdu7h")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="Model" parent="PanelContainer/TabContainer" instance=ExtResource("1_cwmgi")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 
 [node name="Download" parent="PanelContainer/TabContainer" instance=ExtResource("4_obiwc")]

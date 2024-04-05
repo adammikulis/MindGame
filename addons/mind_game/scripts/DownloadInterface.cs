@@ -2,15 +2,25 @@
 using Godot;
 using System;
 
+[Tool]
 public partial class DownloadInterface : Control
 {
     private string downloadModelDirectoryPath;
     private Button chooseDownloadLocationButton, downloadModelButton;
+    private OptionButton modelTypeOptionButton, modelSizeOptionButton, modelSubTypeOptionButton, quantizationOptionButton;
     private FileDialog downloadModelFileDialog;
 
+    private const string theBlokeBaseUrl = "https://huggingface.co/TheBloke/";
+    private const string fileExtension = ".gguf";
 
     public override void _Ready()
     {
+        modelTypeOptionButton = GetNode<OptionButton>("%ModelTypeOptionButton");
+        modelSubTypeOptionButton = GetNode<OptionButton>("%ModelSubTypeOptionButton");
+        modelSizeOptionButton = GetNode<OptionButton>("%ModelSizeOptionButton");
+        quantizationOptionButton = GetNode<OptionButton>("%QuantizationOptionButton");
+
+
         chooseDownloadLocationButton = GetNode<Button>("%ChooseDownloadLocationButton");
         downloadModelButton = GetNode<Button>("%DownloadModelButton");
 

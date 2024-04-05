@@ -4,7 +4,6 @@
 
 [node name="Download" type="Control"]
 auto_translate_mode = 1
-visible = false
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_c6nr5")
@@ -32,6 +31,7 @@ layout_mode = 2
 text = "Choose Model Type"
 
 [node name="ModelTypeOptionButton" type="OptionButton" parent="Download/HBoxContainer/ModelTypeVBoxContainer"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
@@ -47,6 +47,27 @@ popup/item_3/id = 3
 popup/item_4/text = "phi"
 popup/item_4/id = 4
 
+[node name="ModelSubTypeVBoxContainer" type="VBoxContainer" parent="Download/HBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ChooseModelTypeLabel" type="Label" parent="Download/HBoxContainer/ModelSubTypeVBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+text = "Choose Sub-Type"
+
+[node name="ModelSubTypeOptionButton" type="OptionButton" parent="Download/HBoxContainer/ModelSubTypeVBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 2
+popup/item_0/text = "base"
+popup/item_0/id = 0
+popup/item_1/text = "instruct"
+popup/item_1/id = 1
+
 [node name="ModelSizeVBoxContainer" type="VBoxContainer" parent="Download/HBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
@@ -58,6 +79,7 @@ layout_mode = 2
 text = "Choose Model Size"
 
 [node name="ModelSizeOptionButton" type="OptionButton" parent="Download/HBoxContainer/ModelSizeVBoxContainer"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
@@ -71,26 +93,6 @@ popup/item_2/id = 2
 popup/item_3/text = "70B"
 popup/item_3/id = 3
 
-[node name="ModelSubTypeVBoxContainer" type="VBoxContainer" parent="Download/HBoxContainer"]
-auto_translate_mode = 1
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="ChooseModelTypeLabel" type="Label" parent="Download/HBoxContainer/ModelSubTypeVBoxContainer"]
-auto_translate_mode = 1
-layout_mode = 2
-text = "Choose Sub-Type"
-
-[node name="ModelTypeOptionButton" type="OptionButton" parent="Download/HBoxContainer/ModelSubTypeVBoxContainer"]
-auto_translate_mode = 1
-layout_mode = 2
-size_flags_horizontal = 3
-item_count = 2
-popup/item_0/text = "base"
-popup/item_0/id = 0
-popup/item_1/text = "instruct"
-popup/item_1/id = 1
-
 [node name="QuantizationVBoxContainer" type="VBoxContainer" parent="Download/HBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
@@ -102,6 +104,7 @@ layout_mode = 2
 text = "Choose Quantization"
 
 [node name="QuantizationOptionButton" type="OptionButton" parent="Download/HBoxContainer/QuantizationVBoxContainer"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
@@ -155,3 +158,5 @@ ok_button_text = "Select Current Folder"
 file_mode = 2
 access = 2
 use_native_dialog = true
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]

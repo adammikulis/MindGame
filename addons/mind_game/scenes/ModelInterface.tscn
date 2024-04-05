@@ -23,7 +23,7 @@ size_flags_horizontal = 3
 [node name="GpuLayerCountTitleLabel" type="Label" parent="ModelHBoxContainer/VBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
-text = "Choose Number of Model Layers to Offload to GPU"
+text = "Choose Number of Model Layers to Load to GPU"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ModelHBoxContainer/VBoxContainer"]
 auto_translate_mode = 1
@@ -35,11 +35,11 @@ theme_override_constants/separation = 10
 [node name="GpuLayerCountHSlider" type="HSlider" parent="ModelHBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
-custom_minimum_size = Vector2(300, 0)
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 33.0
-value = 16.0
+value = 33.0
 tick_count = 32
 ticks_on_borders = true
 
@@ -47,7 +47,7 @@ ticks_on_borders = true
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "16"
+text = "33"
 
 [node name="LoadModelButton" type="Button" parent="ModelHBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
