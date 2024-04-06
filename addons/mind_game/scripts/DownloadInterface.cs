@@ -1,53 +1,129 @@
 #if TOOLS
 using Godot;
 using System;
+using System.Reflection;
 
 [Tool]
 public partial class DownloadInterface : Control
 {
     private string downloadModelDirectoryPath;
     private Button chooseDownloadLocationButton, downloadModelButton;
-    private OptionButton modelTypeOptionButton, modelSizeOptionButton, modelSubTypeOptionButton, quantizationOptionButton;
+    private OptionButton modelTypeOptionButton, modelSizeOptionButton, modelSubTypeOptionButton, modelQuantizationOptionButton, modelVersionOptionButton;
     private FileDialog downloadModelFileDialog;
+    private HttpRequest httpRequest;
+    private Label downloadUrlLabel;
 
     private const string theBlokeBaseUrl = "https://huggingface.co/TheBloke/";
-    private const string fileExtension = ".gguf";
+    private const string fileExtension = "gguf";
+    private string modelType, modelSubType, modelSize, modelQuantization, modelVersion, fullDownloadUrl;
 
     public override void _Ready()
     {
         modelTypeOptionButton = GetNode<OptionButton>("%ModelTypeOptionButton");
         modelSubTypeOptionButton = GetNode<OptionButton>("%ModelSubTypeOptionButton");
+        modelVersionOptionButton = GetNode<OptionButton>("%ModelVersionOptionButton");
         modelSizeOptionButton = GetNode<OptionButton>("%ModelSizeOptionButton");
-        quantizationOptionButton = GetNode<OptionButton>("%QuantizationOptionButton");
+        modelQuantizationOptionButton = GetNode<OptionButton>("%ModelQuantizationOptionButton");
 
 
         chooseDownloadLocationButton = GetNode<Button>("%ChooseDownloadLocationButton");
         downloadModelButton = GetNode<Button>("%DownloadModelButton");
+        downloadUrlLabel = GetNode<Label>("%DownloadUrlLabel");
 
         downloadModelFileDialog = GetNode<FileDialog>("%DownloadModelFileDialog");
+        httpRequest = GetNode<HttpRequest>("%HTTPRequest");
 
         // Signals
         chooseDownloadLocationButton.Pressed += OnChooseDownloadLocationButtonPressed;
         downloadModelButton.Pressed += OnDownloadModelButtonPressed;
         downloadModelFileDialog.DirSelected += OnDownloadModelDirectorySelected;
 
+        modelTypeOptionButton.ItemSelected += OnModelTypeSelected;
+        modelSubTypeOptionButton.ItemSelected += OnModelSubTypeSelected;
+        modelVersionOptionButton.ItemSelected += OnModelVersionSelected;
+        modelSizeOptionButton.ItemSelected += OnModelSizeSelected;
+        modelQuantizationOptionButton.ItemSelected += OnModelQuantizationSelected;
 
+        httpRequest.RequestCompleted += OnRequestCompleted;
+
+    }
+
+
+    private void OnModelVersionSelected(long index)
+    {
+        modelVersion = modelVersionOptionButton.GetItemText((int)index);
+    }
+
+    private void OnRequestCompleted(long result, long responseCode, string[] headers, byte[] body)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnModelQuantizationSelected(long index)
+    {
+        modelQuantization = modelQuantizationOptionButton.GetItemText((int)index);
+        CheckCanDownloadModel();
+    }
+
+    private void OnModelSizeSelected(long index)
+    {
+        modelSize = modelSizeOptionButton.GetItemText((int)index);
+        CheckCanDownloadModel();
+    }
+
+    private void OnModelSubTypeSelected(long index)
+    {
+        modelSubType = modelSubTypeOptionButton.GetItemText((int)index);
+        CheckCanDownloadModel();
+    }
+
+    private void OnModelTypeSelected(long index)
+    {
+        modelType = modelTypeOptionButton.GetItemText((int)index);
+        CheckCanDownloadModel();
     }
 
     private void OnDownloadModelDirectorySelected(string dir)
     {
         downloadModelDirectoryPath = dir;
-        downloadModelButton.Disabled = false;
+        CheckCanDownloadModel();
     }
 
     private void OnDownloadModelButtonPressed()
     {
-        // Need to add HTTP request here
+        // Sample URL: https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf
+
+        fullDownloadUrl = $"{theBlokeBaseUrl}" +
+                  $"{char.ToUpper(modelType[0])}{modelType.Substring(1)}-" +
+                  $"{modelSize.ToUpper()}-" +
+                  $"{modelSubType}-" +
+                  $"{modelVersion}-" +
+                  $"{fileExtension.ToUpper()}/resolve/main/" +
+                  $"{modelType}-{modelSize}-{modelSubType}-{modelVersion}.{modelQuantization}.{fileExtension}";
+
+        downloadUrlLabel.Text = $"{fullDownloadUrl}";
+        httpRequest.Request(fullDownloadUrl);
+
+
     }
 
     private void OnChooseDownloadLocationButtonPressed()
     {
         downloadModelFileDialog.PopupCentered();
+        
+    }
+
+    private void CheckCanDownloadModel()
+    {
+        if (downloadModelDirectoryPath != null && modelType != null && modelSubType != null && modelSize != null && modelQuantization != null)
+        {
+            downloadModelButton.Disabled = false;
+
+        }
+        else
+        {
+            downloadModelButton.Disabled = true;
+        }
     }
 
     public override void _ExitTree()
@@ -55,6 +131,14 @@ public partial class DownloadInterface : Control
         chooseDownloadLocationButton.Pressed -= OnChooseDownloadLocationButtonPressed;
         downloadModelButton.Pressed -= OnDownloadModelButtonPressed;
         downloadModelFileDialog.DirSelected -= OnDownloadModelDirectorySelected;
+
+        modelTypeOptionButton.ItemSelected -= OnModelTypeSelected;
+        modelSubTypeOptionButton.ItemSelected -= OnModelSubTypeSelected;
+        modelVersionOptionButton.ItemSelected -= OnModelVersionSelected;
+        modelSizeOptionButton.ItemSelected -= OnModelSizeSelected;
+        modelQuantizationOptionButton.ItemSelected -= OnModelQuantizationSelected;
+
+        httpRequest.RequestCompleted -= OnRequestCompleted;
     }
 
 }
