@@ -182,6 +182,7 @@ layout_mode = 2
 text = "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf"
 
 [node name="DownloadProgressBar" type="ProgressBar" parent="Download"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 
