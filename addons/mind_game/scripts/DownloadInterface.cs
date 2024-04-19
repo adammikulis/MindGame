@@ -15,9 +15,9 @@ public partial class DownloadInterface : Control
 
     private HttpClient httpClient;
 
-    private const string theBlokeBaseUrl = "https://huggingface.co/TheBloke/";
+    private const string hugginFaceBaseUrl = "https://huggingface.co/";
     private const string fileExtension = "gguf";
-    private string downloadModelDirectoryPath, modelType, modelSubType, modelSize, modelQuantization, modelVersion, fullDownloadUrl;
+    private string downloadModelDirectoryPath, modelType, modelSubType, modelSize, modelQuantization, fullDownloadUrl;
 
     public override void _Ready()
     {
@@ -25,7 +25,6 @@ public partial class DownloadInterface : Control
 
         modelTypeOptionButton = GetNode<OptionButton>("%ModelTypeOptionButton");
         modelSubTypeOptionButton = GetNode<OptionButton>("%ModelSubTypeOptionButton");
-        modelVersionOptionButton = GetNode<OptionButton>("%ModelVersionOptionButton");
         modelSizeOptionButton = GetNode<OptionButton>("%ModelSizeOptionButton");
         modelQuantizationOptionButton = GetNode<OptionButton>("%ModelQuantizationOptionButton");
 
@@ -44,18 +43,12 @@ public partial class DownloadInterface : Control
 
         modelTypeOptionButton.ItemSelected += OnModelTypeSelected;
         modelSubTypeOptionButton.ItemSelected += OnModelSubTypeSelected;
-        modelVersionOptionButton.ItemSelected += OnModelVersionSelected;
         modelSizeOptionButton.ItemSelected += OnModelSizeSelected;
         modelQuantizationOptionButton.ItemSelected += OnModelQuantizationSelected;
 
 
     }
 
-
-    private void OnModelVersionSelected(long index)
-    {
-        modelVersion = modelVersionOptionButton.GetItemText((int)index);
-    }
 
     private void OnRequestCompleted(long result, long responseCode, string[] headers, byte[] body)
     {
@@ -96,15 +89,15 @@ public partial class DownloadInterface : Control
     {
         // Sample URL: https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf
 
-        fullDownloadUrl = $"{theBlokeBaseUrl}" +
-                  $"{char.ToUpper(modelType[0])}{modelType.Substring(1)}-" +
-                  $"{modelSize.ToUpper()}-" +
-                  $"{modelSubType}-" +
-                  $"{modelVersion}-" +
-                  $"{fileExtension.ToUpper()}/resolve/main/" +
-                  $"{modelType}-{modelSize}-{modelSubType}-{modelVersion}.{modelQuantization}.{fileExtension}";
+        //fullDownloadUrl = $"{huggingFaceBaseUrl}" +
+        //          $"{char.ToUpper(modelType[0])}{modelType.Substring(1)}-" +
+        //          $"{modelSize.ToUpper()}-" +
+        //          $"{modelSubType}-" +
+        //          $"{modelVersion}-" +
+        //          $"{fileExtension.ToUpper()}/resolve/main/" +
+        //          $"{modelType}-{modelSize}-{modelSubType}-{modelVersion}.{modelQuantization}.{fileExtension}";
 
-        downloadUrlLabel.Text = $"{fullDownloadUrl}";
+        //downloadUrlLabel.Text = $"{fullDownloadUrl}";
         
         // Need to add download logic here
     }
@@ -138,7 +131,6 @@ public partial class DownloadInterface : Control
 
         modelTypeOptionButton.ItemSelected -= OnModelTypeSelected;
         modelSubTypeOptionButton.ItemSelected -= OnModelSubTypeSelected;
-        modelVersionOptionButton.ItemSelected -= OnModelVersionSelected;
         modelSizeOptionButton.ItemSelected -= OnModelSizeSelected;
         modelQuantizationOptionButton.ItemSelected -= OnModelQuantizationSelected;
 
