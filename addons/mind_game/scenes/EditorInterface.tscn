@@ -52,10 +52,11 @@ size_flags_horizontal = 3
 
 [node name="TabContainer" type="TabContainer" parent="HBoxContainer/MainPanelContainer"]
 layout_mode = 2
-current_tab = 0
+current_tab = 2
 
 [node name="Chat" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("1_vdu7h")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="Image" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("3_06vqc")]
@@ -64,7 +65,6 @@ layout_mode = 2
 
 [node name="Models" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("1_cwmgi")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 
 [node name="Download" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("4_obiwc")]

@@ -29,16 +29,17 @@ public partial class ModelInterface : Control, IDisposable
 
     public override void _EnterTree()
     {
+        
+    }
+
+    public override void _Ready()
+    {
         loadChatModelButton = GetNode<Button>("%LoadChatModelButton");
         unloadChatModelButton = GetNode<Button>("%UnloadChatModelButton");
         gpuLayerCountLabel = GetNode<Label>("%GpuLayerCountLabel");
         gpuLayerCountHSlider = GetNode<HSlider>("%GpuLayerCountHSlider");
         loadChatModelFileDialog = GetNode<FileDialog>("%LoadChatModelFileDialog");
 
-    }
-
-    public override void _Ready()
-    {
         loadChatModelButton.Pressed += OnLoadChatModelButtonPressed;
         unloadChatModelButton.Pressed += OnUnloadChatModelButtonPressed;
         loadChatModelFileDialog.FileSelected += OnModelSelected;
@@ -91,9 +92,10 @@ public partial class ModelInterface : Control, IDisposable
 
     public void UnloadChatModel()
     {
-        weights.Dispose();
-        context.Dispose();
-        embedder.Dispose();
+        if (weights != null) { weights.Dispose(); }
+
+        if (context != null) { context.Dispose(); }
+        if (embedder != null) { embedder.Dispose(); }
     }
 
     private void OnUnloadChatModelButtonPressed()

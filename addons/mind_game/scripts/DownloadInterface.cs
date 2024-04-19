@@ -19,8 +19,11 @@ public partial class DownloadInterface : Control
     private const string fileExtension = "gguf";
     private string downloadModelDirectoryPath, modelType, modelSubType, modelSize, modelQuantization, fullDownloadUrl;
 
-    public override void _EnterTree()
+    public override void _Ready()
     {
+        chooseDownloadLocationButton = GetNode<Button>("%ChooseDownloadLocationButton");
+        downloadModelButton = GetNode<Button>("%DownloadModelButton");
+
         modelTypeOptionButton = GetNode<OptionButton>("%ModelTypeOptionButton");
         modelSubTypeOptionButton = GetNode<OptionButton>("%ModelSubTypeOptionButton");
         modelSizeOptionButton = GetNode<OptionButton>("%ModelSizeOptionButton");
@@ -28,19 +31,10 @@ public partial class DownloadInterface : Control
 
         downloadProgressBar = GetNode<ProgressBar>("%DownloadProgressBar");
 
-        chooseDownloadLocationButton = GetNode<Button>("%ChooseDownloadLocationButton");
-        downloadModelButton = GetNode<Button>("%DownloadModelButton");
+        
         downloadUrlLabel = GetNode<Label>("%DownloadUrlLabel");
 
         downloadModelFileDialog = GetNode<FileDialog>("%DownloadModelFileDialog");
-    }
-
-
-
-    public override void _Ready()
-    {
-        httpClient = new HttpClient();
-
 
         // Signals
         chooseDownloadLocationButton.Pressed += OnChooseDownloadLocationButtonPressed;
@@ -51,6 +45,8 @@ public partial class DownloadInterface : Control
         modelSubTypeOptionButton.ItemSelected += OnModelSubTypeSelected;
         modelSizeOptionButton.ItemSelected += OnModelSizeSelected;
         modelQuantizationOptionButton.ItemSelected += OnModelQuantizationSelected;
+
+        httpClient = new HttpClient();
 
     }
 
