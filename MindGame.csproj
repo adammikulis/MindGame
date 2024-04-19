@@ -1,4 +1,4 @@
-<Project Sdk="Godot.NET.Sdk/4.3.0-dev.5">
+﻿<Project Sdk="Godot.NET.Sdk/4.3.0-dev.5">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net8.0</TargetFramework>
@@ -6,7 +6,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LLamaSharp" Version="0.10.0" />
-    <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.10.0" />
+    <PackageReference Include="LLamaSharp" Version="0.11.2" />
+    <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.11.2" />
   </ItemGroup>
 </Project>
