@@ -35,7 +35,7 @@ public partial class EditorInterface : Control
 
     public override void _Ready()
     {
-        Control modelNode = GetNode<Control>("%Model");
+        Control modelNode = GetNode<Control>("%Models");
         modelInterface = modelNode as ModelInterface;
 
         Control chatNode = GetNode<Control>("%Chat");

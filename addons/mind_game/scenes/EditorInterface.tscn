@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dtsyxmjtwi6u0"]
+[gd_scene load_steps=7 format=3 uid="uid://dtsyxmjtwi6u0"]
 
 [ext_resource type="PackedScene" uid="uid://dve4ynjuwr2cm" path="res://addons/mind_game/scenes/ModelInterface.tscn" id="1_cwmgi"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/EditorInterface.cs" id="1_jbfvo"]
 [ext_resource type="PackedScene" uid="uid://cvjvwql4bp2p0" path="res://addons/mind_game/scenes/ChatInterface.tscn" id="1_vdu7h"]
 [ext_resource type="PackedScene" uid="uid://b4b5fh23okx7s" path="res://addons/mind_game/scenes/HelpInterface.tscn" id="2_c3rd0"]
+[ext_resource type="PackedScene" uid="uid://bkvym55tpn7wu" path="res://addons/mind_game/scenes/ImageInterface.tscn" id="3_06vqc"]
 [ext_resource type="PackedScene" uid="uid://bfsbafgtupfnb" path="res://addons/mind_game/scenes/DownloadInterface.tscn" id="4_obiwc"]
 
 [node name="EditorInterface" type="Control"]
@@ -26,10 +27,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
 [node name="DebugPanelContainer" type="PanelContainer" parent="HBoxContainer"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/DebugPanelContainer"]
 layout_mode = 2
@@ -39,6 +42,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+text = "(debug)"
 scroll_following = true
 
 [node name="MainPanelContainer" type="PanelContainer" parent="HBoxContainer"]
@@ -50,46 +54,24 @@ size_flags_horizontal = 3
 layout_mode = 2
 current_tab = 0
 
-[node name="Chat" type="TabContainer" parent="HBoxContainer/MainPanelContainer/TabContainer"]
+[node name="Chat" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("1_vdu7h")]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-current_tab = 1
-drag_to_rearrange_enabled = true
 
-[node name="Chat" parent="HBoxContainer/MainPanelContainer/TabContainer/Chat" instance=ExtResource("1_vdu7h")]
+[node name="Image" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("3_06vqc")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Models" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("1_cwmgi")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Model" parent="HBoxContainer/MainPanelContainer/TabContainer/Chat" instance=ExtResource("1_cwmgi")]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="Download" parent="HBoxContainer/MainPanelContainer/TabContainer/Chat" instance=ExtResource("4_obiwc")]
+[node name="Download" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("4_obiwc")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Help" parent="HBoxContainer/MainPanelContainer/TabContainer/Chat" instance=ExtResource("2_c3rd0")]
-visible = false
-layout_mode = 2
-
-[node name="Image" type="TabContainer" parent="HBoxContainer/MainPanelContainer/TabContainer"]
-visible = false
-layout_mode = 2
-current_tab = 0
-
-[node name="Generate" type="Control" parent="HBoxContainer/MainPanelContainer/TabContainer/Image"]
-layout_mode = 2
-
-[node name="Model" type="Control" parent="HBoxContainer/MainPanelContainer/TabContainer/Image"]
-visible = false
-layout_mode = 2
-
-[node name="Download" type="Control" parent="HBoxContainer/MainPanelContainer/TabContainer/Image"]
-visible = false
-layout_mode = 2
-
-[node name="Help" type="Control" parent="HBoxContainer/MainPanelContainer/TabContainer/Image"]
+[node name="Help" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("2_c3rd0")]
 visible = false
 layout_mode = 2

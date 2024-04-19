@@ -5,34 +5,48 @@
 [node name="Model" type="Control"]
 auto_translate_mode = 1
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_cwjy2")
 
 [node name="ModelHBoxContainer" type="HBoxContainer" parent="."]
 auto_translate_mode = 1
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 31.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ModelHBoxContainer"]
+[node name="ChatModelVBoxContainer" type="VBoxContainer" parent="ModelHBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 8
 
-[node name="GpuLayerCountTitleLabel" type="Label" parent="ModelHBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Chat Model"
+horizontal_alignment = 1
+
+[node name="GpuLayerCountTitleLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
+size_flags_vertical = 8
 text = "Choose Number of Model Layers to Load to GPU"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ModelHBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 0
-size_flags_vertical = 2
+size_flags_vertical = 8
 theme_override_constants/separation = 10
 
-[node name="GpuLayerCountHSlider" type="HSlider" parent="ModelHBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="GpuLayerCountHSlider" type="HSlider" parent="ModelHBoxContainer/ChatModelVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
@@ -43,25 +57,63 @@ value = 33.0
 tick_count = 32
 ticks_on_borders = true
 
-[node name="GpuLayerCountLabel" type="Label" parent="ModelHBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="GpuLayerCountLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 text = "33"
 
-[node name="LoadModelButton" type="Button" parent="ModelHBoxContainer/VBoxContainer"]
+[node name="LoadChatModelButton" type="Button" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "Load Model"
+size_flags_vertical = 8
+text = "Load Chat Model"
 
-[node name="UnloadModelButton" type="Button" parent="ModelHBoxContainer/VBoxContainer"]
+[node name="UnloadChatModelButton" type="Button" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "Unload Model"
+size_flags_vertical = 8
+text = "Unload Chat Model"
 
-[node name="LoadModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
+[node name="ImageModelVBoxContainer" type="VBoxContainer" parent="ModelHBoxContainer"]
+auto_translate_mode = 1
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+
+[node name="Label" type="Label" parent="ModelHBoxContainer/ImageModelVBoxContainer"]
+layout_mode = 2
+text = "Image Model"
+horizontal_alignment = 1
+
+[node name="LoadImageModelButton" type="Button" parent="ModelHBoxContainer/ImageModelVBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Load Image Model"
+
+[node name="UnloadImageModelButton" type="Button" parent="ModelHBoxContainer/ImageModelVBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Unload Image Model"
+
+[node name="LoadChatModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+title = "Open a File"
+initial_position = 2
+size = Vector2i(400, 600)
+min_size = Vector2i(400, 600)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+use_native_dialog = true
+
+[node name="LoadImageModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 title = "Open a File"

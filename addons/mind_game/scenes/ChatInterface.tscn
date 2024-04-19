@@ -12,39 +12,42 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3a2uk")
 
-[node name="ChatVBoxContainer" type="VBoxContainer" parent="."]
-auto_translate_mode = 1
-layout_mode = 2
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="ChatVBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="ChatVBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/ChatVBoxContainer"]
 auto_translate_mode = 1
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ModelOutputRichTextLabel" type="RichTextLabel" parent="ChatVBoxContainer/ScrollContainer"]
+[node name="ModelOutputRichTextLabel" type="RichTextLabel" parent="HBoxContainer/ChatVBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "(Model Output Here)"
+scroll_following = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ChatVBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ScrollContainer2" type="ScrollContainer" parent="ChatVBoxContainer/HBoxContainer"]
+[node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/ChatVBoxContainer"]
 auto_translate_mode = 1
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PromptLineEdit" type="LineEdit" parent="ChatVBoxContainer/HBoxContainer/ScrollContainer2"]
+[node name="PromptLineEdit" type="LineEdit" parent="HBoxContainer/ChatVBoxContainer/ScrollContainer2"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
@@ -54,18 +57,20 @@ placeholder_text = "Load model first to chat"
 editable = false
 clear_button_enabled = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ChatVBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
 
-[node name="New Chat Session" type="Button" parent="ChatVBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="New Chat Session" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "New Chat Session"
 
-[node name="SaveChatSessionButton" type="Button" parent="ChatVBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="SaveChatSessionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Save Chat Session"
 
-[node name="LoadChatSessionButton" type="Button" parent="ChatVBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="LoadChatSessionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 text = "Load Chat Session"
