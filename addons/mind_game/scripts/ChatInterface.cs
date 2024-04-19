@@ -65,7 +65,7 @@ public partial class ChatInterface : Control
             modelOutputRichTextLabel.Text = $"Prompt: {prompt}\n\nResponse:\n";
             await Task.Run(async () =>
             {
-                await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = new[] { "\n\n" } }))
+                await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = new[] { "\n\n", "User:", "User: ", "::", "\r\n" } }))
                 {
                     CallDeferred(nameof(DeferredEmitNewOutput), output);
                 }
