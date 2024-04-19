@@ -19,6 +19,8 @@ public partial class ChatInterface : Control
     private RichTextLabel modelOutputRichTextLabel;
     private LineEdit promptLineEdit;
 
+    private string[] antiPrompts;
+
 
     
 
@@ -29,6 +31,8 @@ public partial class ChatInterface : Control
 
         promptLineEdit.TextSubmitted += OnPromptSubmitted;
         ModelOutput += OnModelOutput;
+
+        antiPrompts = ["<|eot_id|>", "\n\n", "User:"];
 
     }
 
@@ -65,9 +69,22 @@ public partial class ChatInterface : Control
             modelOutputRichTextLabel.Text += "\n" + prompt + "\n";
             await Task.Run(async () =>
             {
-                await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = new[] { "<|eot_id|>", "\n\n", "User:" } }))
+                await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = antiPrompts }))
                 {
-                    CallDeferred(nameof(DeferredEmitNewOutput), output);
+                    bool isAntiPrompt = false;
+                    foreach (var antiPrompt in antiPrompts)
+                    {
+                        if (output.Contains(antiPrompt))
+                        {
+                            isAntiPrompt = true;
+                            break;
+                        }
+                    }
+
+                    if (!isAntiPrompt)
+                    {
+                        CallDeferred(nameof(DeferredEmitNewOutput), output);
+                    }
                 }
             });
         }

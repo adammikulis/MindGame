@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 project/assembly_name="MindGame"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/mind_game/plugin.cfg")
+
 [rendering]
 
 renderer/rendering_method="mobile"
