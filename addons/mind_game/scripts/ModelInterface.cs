@@ -14,37 +14,40 @@ public partial class ModelInterface : Control, IDisposable
     public event EmbedderEventHandler EmbedderAvailable;
 
     // UI elements
-    private Button loadModelButton, unloadModelButton;
+    private Button loadChatModelButton, unloadChatModelButton;
     private Label gpuLayerCountLabel;
-    private FileDialog loadModelFileDialog;
+    private FileDialog loadChatModelFileDialog;
     private HSlider gpuLayerCountHSlider;
 
     // Model params
     private int gpuLayerCount;
-    
+
     // Model vars
     private LLamaWeights weights;
     private LLamaContext context;
     private LLamaEmbedder embedder;
 
-    public string test;
-
     public override void _EnterTree()
     {
-        loadModelButton = GetNode<Button>("%LoadModelButton");
-        unloadModelButton = GetNode<Button>("%UnloadModelButton");
+        loadChatModelButton = GetNode<Button>("%LoadChatModelButton");
+        unloadChatModelButton = GetNode<Button>("%UnloadChatModelButton");
         gpuLayerCountLabel = GetNode<Label>("%GpuLayerCountLabel");
         gpuLayerCountHSlider = GetNode<HSlider>("%GpuLayerCountHSlider");
-        loadModelFileDialog = GetNode<FileDialog>("%LoadModelFileDialog");
+        loadChatModelFileDialog = GetNode<FileDialog>("%LoadChatModelFileDialog");
 
-        loadModelButton.Pressed += OnLoadModelButtonPressed;
-        unloadModelButton.Pressed += OnUnloadModelButtonPressed;
-        loadModelFileDialog.FileSelected += OnModelSelected;
+    }
+
+    public override void _Ready()
+    {
+        loadChatModelButton.Pressed += OnLoadChatModelButtonPressed;
+        unloadChatModelButton.Pressed += OnUnloadChatModelButtonPressed;
+        loadChatModelFileDialog.FileSelected += OnModelSelected;
         gpuLayerCountHSlider.ValueChanged += OnGpuLayerCountHSliderValueChanged;
 
         gpuLayerCount = (int)gpuLayerCountHSlider.Value;
         gpuLayerCountLabel.Text = gpuLayerCount.ToString();
     }
+
 
     private void OnGpuLayerCountHSliderValueChanged(double value)
     {
@@ -52,21 +55,21 @@ public partial class ModelInterface : Control, IDisposable
         gpuLayerCountLabel.Text = gpuLayerCount.ToString();
     }
 
-    private void OnLoadModelButtonPressed()
+    private void OnLoadChatModelButtonPressed()
     {
-        loadModelFileDialog.PopupCentered();
+        loadChatModelFileDialog.PopupCentered();
     }
 
     private void OnModelSelected(string modelPath)
     {
-        LoadModel(modelPath);
+        LoadChatModel(modelPath);
     }
 
-    public void LoadModel(string modelPath)
+    public void LoadChatModel(string modelPath)
     {
         if (weights != null)
         {
-            UnloadModel();
+            UnloadChatModel();
         }
         
         
@@ -86,16 +89,16 @@ public partial class ModelInterface : Control, IDisposable
         EmbedderAvailable?.Invoke(embedder);
     }
 
-    public void UnloadModel()
+    public void UnloadChatModel()
     {
         weights.Dispose();
         context.Dispose();
         embedder.Dispose();
     }
 
-    private void OnUnloadModelButtonPressed()
+    private void OnUnloadChatModelButtonPressed()
     {
-        UnloadModel();
+        UnloadChatModel();
     }
 
     public LLamaEmbedder GetLLamaEmbedder()
@@ -103,16 +106,11 @@ public partial class ModelInterface : Control, IDisposable
         return embedder;
     }
 
-    public override void _Ready()
-    {
-        
-    }
-
     public override void _ExitTree()
     {
-        loadModelButton.Pressed -= OnLoadModelButtonPressed;
-        unloadModelButton.Pressed -= OnUnloadModelButtonPressed;
-        loadModelFileDialog.FileSelected -= OnModelSelected;
+        loadChatModelButton.Pressed -= OnLoadChatModelButtonPressed;
+        unloadChatModelButton.Pressed -= OnUnloadChatModelButtonPressed;
+        loadChatModelFileDialog.FileSelected -= OnModelSelected;
         gpuLayerCountHSlider.ValueChanged -= OnGpuLayerCountHSliderValueChanged;
     }
 }
