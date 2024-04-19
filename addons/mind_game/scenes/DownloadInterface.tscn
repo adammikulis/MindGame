@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://bfsbafgtupfnb"]
+[gd_scene load_steps=5 format=3 uid="uid://bfsbafgtupfnb"]
 
 [ext_resource type="Script" path="res://addons/mind_game/scripts/DownloadInterface.cs" id="1_c6nr5"]
+[ext_resource type="Texture2D" uid="uid://4kp0jitsjyvc" path="res://addons/mind_game/assets/meta_logo_64x64.png" id="2_e6pxs"]
+[ext_resource type="Texture2D" uid="uid://decnomn6rr1q6" path="res://addons/mind_game/assets/mistal_ai_logo_64x64.png" id="3_si1vu"]
+[ext_resource type="Texture2D" uid="uid://bcjvlw6ab5etn" path="res://addons/mind_game/assets/microsoft_logo_64x64.jpg" id="4_n3wns"]
 
 [node name="Download" type="Control"]
 auto_translate_mode = 1
@@ -35,21 +38,26 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
-item_count = 5
+item_count = 6
 popup/item_0/text = "codellama"
+popup/item_0/icon = ExtResource("2_e6pxs")
 popup/item_0/id = 0
 popup/item_0/disabled = true
-popup/item_1/text = "llama"
+popup/item_1/text = "llama2"
+popup/item_1/icon = ExtResource("2_e6pxs")
 popup/item_1/id = 1
-popup/item_1/disabled = true
-popup/item_2/text = "mistral"
-popup/item_2/id = 2
-popup/item_3/text = "mixtral"
-popup/item_3/id = 3
-popup/item_3/disabled = true
-popup/item_4/text = "phi"
-popup/item_4/id = 4
-popup/item_4/disabled = true
+popup/item_2/text = "llama3"
+popup/item_2/icon = ExtResource("2_e6pxs")
+popup/item_2/id = 5
+popup/item_3/text = "mistral"
+popup/item_3/icon = ExtResource("3_si1vu")
+popup/item_3/id = 2
+popup/item_4/text = "mixtral"
+popup/item_4/icon = ExtResource("3_si1vu")
+popup/item_4/id = 3
+popup/item_5/text = "phi"
+popup/item_5/icon = ExtResource("4_n3wns")
+popup/item_5/id = 4
 
 [node name="ModelSubTypeVBoxContainer" type="VBoxContainer" parent="Download/HBoxContainer"]
 auto_translate_mode = 1
@@ -176,10 +184,7 @@ text = "Download Model"
 [node name="DownloadUrlLabel" type="Label" parent="Download"]
 unique_name_in_owner = true
 layout_mode = 2
-
-[node name="SampleUrlLabel" type="Label" parent="Download"]
-layout_mode = 2
-text = "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf"
+text = "<download url>"
 
 [node name="DownloadProgressBar" type="ProgressBar" parent="Download"]
 unique_name_in_owner = true

@@ -130,8 +130,6 @@ public partial class DownloadInterface : Control
 
   
 
-
-
     public override void _ExitTree()
     {
         chooseDownloadLocationButton.Pressed -= OnChooseDownloadLocationButtonPressed;
