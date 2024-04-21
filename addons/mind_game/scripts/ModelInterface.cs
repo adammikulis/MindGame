@@ -9,22 +9,26 @@ using static System.Collections.Specialized.BitVector32;
 public partial class ModelInterface : Control, IDisposable
 {
     public delegate void ContextEventHandler(LLamaContext context);
-    public event ContextEventHandler ContextAvailable;
+    public event ContextEventHandler ChatContextAvailable;
     public delegate void EmbedderEventHandler(LLamaEmbedder embedder);
     public event EmbedderEventHandler EmbedderAvailable;
 
     // UI elements
-    private Button loadChatModelButton, unloadChatModelButton;
-    private Label gpuLayerCountLabel;
+    private Button loadChatModelButton, unloadChatModelButton, loadEmbedderModelButton, unloadEmbedderModelButton;
+    private Label modelGpuLayerCountLabel;
     private FileDialog loadChatModelFileDialog;
-    private HSlider gpuLayerCountHSlider;
+    private HSlider modelGpuLayerCountHSlider;
 
-    // Model params
-    private int gpuLayerCount;
+    // Chat model params
+    private int chatGpuLayerCount;
+    private uint chatContextSize;
 
-    // Model vars
-    private LLamaWeights weights;
-    private LLamaContext context;
+    // Chat model vars
+    private LLamaWeights chatWeights;
+    private LLamaContext chatContext;
+
+    // Embedder model vars
+    private LLamaWeights embedderWeights;
     private LLamaEmbedder embedder;
 
     public override void _EnterTree()
@@ -36,24 +40,24 @@ public partial class ModelInterface : Control, IDisposable
     {
         loadChatModelButton = GetNode<Button>("%LoadChatModelButton");
         unloadChatModelButton = GetNode<Button>("%UnloadChatModelButton");
-        gpuLayerCountLabel = GetNode<Label>("%GpuLayerCountLabel");
-        gpuLayerCountHSlider = GetNode<HSlider>("%GpuLayerCountHSlider");
+        modelGpuLayerCountLabel = GetNode<Label>("%GpuLayerCountLabel");
+        modelGpuLayerCountHSlider = GetNode<HSlider>("%GpuLayerCountHSlider");
         loadChatModelFileDialog = GetNode<FileDialog>("%LoadChatModelFileDialog");
 
         loadChatModelButton.Pressed += OnLoadChatModelButtonPressed;
         unloadChatModelButton.Pressed += OnUnloadChatModelButtonPressed;
         loadChatModelFileDialog.FileSelected += OnModelSelected;
-        gpuLayerCountHSlider.ValueChanged += OnGpuLayerCountHSliderValueChanged;
+        modelGpuLayerCountHSlider.ValueChanged += OnModelGpuLayerCountHSliderValueChanged;
 
-        gpuLayerCount = (int)gpuLayerCountHSlider.Value;
-        gpuLayerCountLabel.Text = gpuLayerCount.ToString();
+        chatGpuLayerCount = (int)modelGpuLayerCountHSlider.Value;
+        modelGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
     }
 
 
-    private void OnGpuLayerCountHSliderValueChanged(double value)
+    private void OnModelGpuLayerCountHSliderValueChanged(double value)
     {
-        gpuLayerCount = (int)gpuLayerCountHSlider.Value;
-        gpuLayerCountLabel.Text = gpuLayerCount.ToString();
+        chatGpuLayerCount = (int)modelGpuLayerCountHSlider.Value;
+        modelGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
     }
 
     private void OnLoadChatModelButtonPressed()
@@ -66,9 +70,41 @@ public partial class ModelInterface : Control, IDisposable
         LoadChatModel(modelPath);
     }
 
+    public void LoadEmbeddingModel(string modelPath)
+    {
+
+        if (embedderWeights != null)
+        {
+            UnloadEmbedderModel();
+        }
+
+        var parameters = new ModelParams(modelPath)
+        {
+            ContextSize = chatContextSize,
+            Seed = 0,
+            GpuLayerCount = chatGpuLayerCount,
+            EmbeddingMode = true
+        };
+
+
+        embedderWeights = LLamaWeights.LoadFromFile(parameters);
+        embedder = new LLamaEmbedder(embedderWeights, parameters);
+
+        EmbedderAvailable?.Invoke(embedder);
+
+    }
+
+    public void UnloadEmbedderModel()
+    {
+
+        if (embedderWeights != null) { embedderWeights.Dispose(); }
+        if (embedder != null) { embedder.Dispose(); }
+
+    }
+
     public void LoadChatModel(string modelPath)
     {
-        if (weights != null)
+        if (chatWeights != null)
         {
             UnloadChatModel();
         }
@@ -76,25 +112,25 @@ public partial class ModelInterface : Control, IDisposable
         
         var parameters = new ModelParams(modelPath)
         {
-            ContextSize = 4096,
+            ContextSize = chatContextSize,
             Seed = 0,
-            GpuLayerCount = gpuLayerCount,
-            EmbeddingMode = true
+            GpuLayerCount = chatGpuLayerCount,
+            EmbeddingMode = false
         };
 
-        weights = LLamaWeights.LoadFromFile(parameters);
-        context = weights.CreateContext(parameters);
-        embedder = new LLamaEmbedder(weights, parameters);
+        chatWeights = LLamaWeights.LoadFromFile(parameters);
+        chatContext = chatWeights.CreateContext(parameters);
+        embedder = new LLamaEmbedder(chatWeights, parameters);
         
-        ContextAvailable?.Invoke(context);
-        EmbedderAvailable?.Invoke(embedder);
+        ChatContextAvailable?.Invoke(chatContext);
+        
     }
 
     public void UnloadChatModel()
     {
-        if (weights != null) { weights.Dispose(); }
+        if (chatWeights != null) { chatWeights.Dispose(); }
 
-        if (context != null) { context.Dispose(); }
+        if (chatContext != null) { chatContext.Dispose(); }
         if (embedder != null) { embedder.Dispose(); }
     }
 
@@ -113,7 +149,7 @@ public partial class ModelInterface : Control, IDisposable
         loadChatModelButton.Pressed -= OnLoadChatModelButtonPressed;
         unloadChatModelButton.Pressed -= OnUnloadChatModelButtonPressed;
         loadChatModelFileDialog.FileSelected -= OnModelSelected;
-        gpuLayerCountHSlider.ValueChanged -= OnGpuLayerCountHSliderValueChanged;
+        modelGpuLayerCountHSlider.ValueChanged -= OnModelGpuLayerCountHSliderValueChanged;
     }
 }
 #endif

@@ -43,7 +43,7 @@ public partial class EditorInterface : Control
 
         if (modelInterface != null && chatInterface != null)
         {
-            modelInterface.ContextAvailable += OnContextAvailable;
+            modelInterface.ChatContextAvailable += OnContextAvailable;
             modelInterface.EmbedderAvailable += OnEmbedderAvailable;
         }
         else
