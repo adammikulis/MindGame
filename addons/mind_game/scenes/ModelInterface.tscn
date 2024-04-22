@@ -63,17 +63,46 @@ auto_translate_mode = 1
 layout_mode = 2
 text = "33"
 
-[node name="LoadChatModelButton" type="Button" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
+layout_mode = 2
+
+[node name="ChooseClipModelButton" type="Button" parent="ModelHBoxContainer/ChatModelVBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Choose Clip Model (.gguf) (optional)"
+
+[node name="UseClipModelCheckBox" type="CheckBox" parent="ModelHBoxContainer/ChatModelVBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Use Clip Model (Image Analysis)"
+
+[node name="ChooseChatModelButton" type="Button" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Load Chat Model (.gguf)"
+text = "Choose Chat Model (.gguf)"
 
-[node name="UnloadChatModelButton" type="Button" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LoadChatModelButton" type="Button" parent="ModelHBoxContainer/ChatModelVBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+text = "Load Chat Model"
+
+[node name="UnloadChatModelButton" type="Button" parent="ModelHBoxContainer/ChatModelVBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 8
 text = "Unload Chat Model"
 
@@ -90,38 +119,16 @@ text = "Embedding Model (BERT)"
 horizontal_alignment = 1
 
 [node name="LoadEmbeddingModelButton" type="Button" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 text = "Load Embedding Model (.gguf)"
 
 [node name="UnloadEmbeddingModelButton" type="Button" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 text = "Unload Embedding Model"
-
-[node name="ImageModelVBoxContainer" type="VBoxContainer" parent="ModelHBoxContainer"]
-auto_translate_mode = 1
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 8
-
-[node name="Label" type="Label" parent="ModelHBoxContainer/ImageModelVBoxContainer"]
-layout_mode = 2
-text = "LLaVa Model (mmproj)
-"
-horizontal_alignment = 1
-
-[node name="LoadLLaVaModelButton" type="Button" parent="ModelHBoxContainer/ImageModelVBoxContainer"]
-unique_name_in_owner = true
-auto_translate_mode = 1
-layout_mode = 2
-text = "Load LLaVa Model (.gguf)"
-
-[node name="UnloadLLaVaModelButton" type="Button" parent="ModelHBoxContainer/ImageModelVBoxContainer"]
-unique_name_in_owner = true
-auto_translate_mode = 1
-layout_mode = 2
-text = "Unload Image Model"
 
 [node name="LoadChatModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
 unique_name_in_owner = true
@@ -135,7 +142,19 @@ file_mode = 0
 access = 2
 use_native_dialog = true
 
-[node name="LoadImageModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
+[node name="LoadClipModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+title = "Open a File"
+initial_position = 2
+size = Vector2i(400, 600)
+min_size = Vector2i(400, 600)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+use_native_dialog = true
+
+[node name="LoadEmbeddingModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 title = "Open a File"
