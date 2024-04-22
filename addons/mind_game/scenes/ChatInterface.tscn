@@ -76,6 +76,12 @@ Image"
 layout_mode = 2
 size_flags_vertical = 8
 
+[node name="MaxTokensLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MaxTokensHSlider" type="HSlider" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
 [node name="New Chat Session" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "New Chat Session"

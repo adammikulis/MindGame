@@ -4,6 +4,7 @@ using LLama;
 using LLama.Common;
 using System;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 [Tool]
 public partial class ChatInterface : Control
@@ -32,7 +33,7 @@ public partial class ChatInterface : Control
         promptLineEdit.TextSubmitted += OnPromptSubmitted;
         ModelOutput += OnModelOutput;
 
-        antiPrompts = ["<|eot_id|>", "\n\n", "User:"];
+        antiPrompts = ["<|eot_id|>", "\nUser:", "\nUSER:"];
 
     }
 
