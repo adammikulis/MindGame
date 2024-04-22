@@ -16,13 +16,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "This is a Godot plugin that allows you to run a language model on your local hardware (can do hybrid CPU/GPU inference). It currently only runs in-editor, but the plan is to allow model access from anywhere in your game via a singleton. D
+text = "This is a Godot plugin that allows you to run a language model on your local hardware (can do hybrid CPU/GPU inference). It currently only runs in-editor, but the plan is to allow model access from anywhere in your game via a singleton.
 
-Download a .gguf model from somewhere like here to get started: 
+Download a chat model from somewhere like here to get started: 
 https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/tree/main
-
-or
-
+OR
 https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/tree/main
 
-The Download Manager is currently a nonfunctioning shell which will be completed for release."
+Download the LLaVa mmproj file here to process images: 
+https://hf-mirror.com/jartine/llava-v1.5-7B-GGUF/blob/main/llava-v1.5-7b-mmproj-Q4_0.gguf
+
+Download a BERT model to use for embeddings:
+https://huggingface.co/leliuga/all-MiniLM-L6-v2-GGUF/tree/main
+
+
+The Download Manager is currently a nonfunctioning shell which will be completed for release. All models are .gguf files, the Q is quantization (higher gives better results but uses more resources)"
