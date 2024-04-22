@@ -62,6 +62,7 @@ clear_button_enabled = true
 [node name="UploadViewportButton" type="Button" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+disabled = true
 text = "Upload
 Viewport"
 
@@ -69,6 +70,7 @@ Viewport"
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
+disabled = true
 text = "Upload
 Image"
 
@@ -84,15 +86,18 @@ layout_mode = 2
 
 [node name="New Chat Session" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "New Chat Session"
 
 [node name="SaveChatSessionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "Save Chat Session"
 
 [node name="LoadChatSessionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
+disabled = true
 text = "Load Chat Session"
 
 [node name="UploadImageFileDialog" type="FileDialog" parent="."]
