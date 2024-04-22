@@ -68,7 +68,7 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Load Chat Model"
+text = "Load Chat Model (.gguf)"
 
 [node name="UnloadChatModelButton" type="Button" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 unique_name_in_owner = true
@@ -77,25 +77,47 @@ layout_mode = 2
 size_flags_vertical = 8
 text = "Unload Chat Model"
 
+[node name="EmbeddingModelVBoxContainer" type="VBoxContainer" parent="ModelHBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+
+[node name="Label" type="Label" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+text = "Embedding Model (BERT)"
+horizontal_alignment = 1
+
+[node name="LoadEmbeddingModelButton" type="Button" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+text = "Load Embedding Model (.gguf)"
+
+[node name="UnloadEmbeddingModelButton" type="Button" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+text = "Unload Embedding Model"
+
 [node name="ImageModelVBoxContainer" type="VBoxContainer" parent="ModelHBoxContainer"]
 auto_translate_mode = 1
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 
 [node name="Label" type="Label" parent="ModelHBoxContainer/ImageModelVBoxContainer"]
 layout_mode = 2
-text = "Image Model"
+text = "LLaVa Model (mmproj)
+"
 horizontal_alignment = 1
 
-[node name="LoadImageModelButton" type="Button" parent="ModelHBoxContainer/ImageModelVBoxContainer"]
+[node name="LoadLLaVaModelButton" type="Button" parent="ModelHBoxContainer/ImageModelVBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "Load Image Model"
+text = "Load LLaVa Model (.gguf)"
 
-[node name="UnloadImageModelButton" type="Button" parent="ModelHBoxContainer/ImageModelVBoxContainer"]
+[node name="UnloadLLaVaModelButton" type="Button" parent="ModelHBoxContainer/ImageModelVBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
