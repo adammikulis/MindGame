@@ -16,11 +16,12 @@ Smaller model for those with less VRAM: https://huggingface.co/TheBloke/phi-2-GG
 The lower quantization (q), the smaller the model is to run but at the cost of accuracy. Mistral-7B Q4_K_M is a great middle-ground for those with 8GB of VRAM. The absolute smallest model (phi-2.Q2_K.gguf) can run on 4GB of VRAM.
 
 Future steps:
-- automatically include and reference LLamaSharp nuget packages
-- make Download Manager functional
-- make singleton functional to be able to access model in-game
-- transition to BatchedExecutor and add conversation forking/rewinding
-- add network graph generation
-- add project script crawling
-- expose LLamaSharp methods like quantization
-- integrate Kernel Memory for document ingestion
+- Implement LLaVa support (including viewport analysis)
+- Automatically include and reference LLamaSharp nuget packages
+- Make Download Manager functional
+- Make a singleton to be able to access currently loaded model in-game
+- Transition to BatchedExecutor and add conversation forking/rewinding
+- Add network graph generation
+- Add project script crawling
+- Expose LLamaSharp methods like quantization
+- Integrate Kernel Memory for document ingestion

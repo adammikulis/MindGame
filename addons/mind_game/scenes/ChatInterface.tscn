@@ -40,13 +40,16 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_following = true
 
-[node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/ChatVBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ChatVBoxContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer"]
 auto_translate_mode = 1
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PromptLineEdit" type="LineEdit" parent="HBoxContainer/ChatVBoxContainer/ScrollContainer2"]
+[node name="PromptLineEdit" type="LineEdit" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer/ScrollContainer2"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
@@ -56,9 +59,21 @@ placeholder_text = "Load model first to chat"
 editable = false
 clear_button_enabled = true
 
+[node name="UploadViewportButton" type="Button" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Upload
+Viewport"
+
+[node name="UploadImageButton" type="Button" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Upload
+Image"
+
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 8
 
 [node name="New Chat Session" type="Button" parent="HBoxContainer/VBoxContainer"]
@@ -73,3 +88,6 @@ text = "Save Chat Session"
 auto_translate_mode = 1
 layout_mode = 2
 text = "Load Chat Session"
+
+[node name="UploadImageFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
