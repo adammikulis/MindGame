@@ -14,10 +14,10 @@ public partial class ModelInterface : Control, IDisposable
     public event EmbedderEventHandler EmbedderAvailable;
 
     // UI elements
-    private Button chooseChatModelButton, loadChatModelButton, unloadChatModelButton, loadEmbeddingModelButton, unloadEmbeddingModelButton, chooseClipModelButton, unloadClipModelButton;
+    private Button selectChatModelButton, loadChatModelButton, unloadChatModelButton, selectEmbeddingModelButton, loadEmbeddingModelButton, unloadEmbeddingModelButton, selectClipModelButton;
     private CheckBox useClipModelCheckBox;
     private Label modelGpuLayerCountLabel;
-    private FileDialog chooseChatModelFileDialog, chooseClipModelFileDialog, loadEmbeddingModelFileDialog;
+    private FileDialog selectChatModelFileDialog, selectClipModelFileDialog, loadEmbeddingModelFileDialog;
     private HSlider modelGpuLayerCountHSlider;
 
     // Chat model params
@@ -27,9 +27,12 @@ public partial class ModelInterface : Control, IDisposable
     // Chat model vars
     private LLamaWeights chatWeights;
     private LLamaContext chatContext;
+    private string chatModelPath = null;
 
     // Clip (LLaVa) model vars
     private LLavaWeights clipWeights;
+    private bool useClipModel = false;
+    private string clipModelPath = null;
 
     // Embedder model vars
     private LLamaWeights embedderWeights;
@@ -44,63 +47,60 @@ public partial class ModelInterface : Control, IDisposable
     public override void _Ready()
     {
         // Chat model vars
-        chooseChatModelButton = GetNode<Button>("%LoadChatModelButton");
+        selectChatModelButton = GetNode<Button>("%SelectChatModelButton");
         loadChatModelButton = GetNode<Button>("%LoadChatModelButton");
         unloadChatModelButton = GetNode<Button>("%UnloadChatModelButton");
-        modelGpuLayerCountLabel = GetNode<Label>("%GpuLayerCountLabel");
-        modelGpuLayerCountHSlider = GetNode<HSlider>("%GpuLayerCountHSlider");
-        chooseChatModelFileDialog = GetNode<FileDialog>("%LoadChatModelFileDialog");
+        modelGpuLayerCountLabel = GetNode<Label>("%ModelGpuLayerCountLabel");
+        modelGpuLayerCountHSlider = GetNode<HSlider>("%ModelGpuLayerCountHSlider");
+        selectChatModelFileDialog = GetNode<FileDialog>("%SelectChatModelFileDialog");
 
         // Clip model vars
-        chooseClipModelButton = GetNode<Button>("%ChooseClipModelButton");
+        selectClipModelButton = GetNode<Button>("%SelectClipModelButton");
         useClipModelCheckBox = GetNode<CheckBox>("%UseClipModelCheckBox");
-        chooseClipModelFileDialog = GetNode<FileDialog>("%LoadClipModelFileDialog");
+        selectClipModelFileDialog = GetNode<FileDialog>("%SelectClipModelFileDialog");
 
 
         // Embedder model vars
+        selectEmbeddingModelButton = GetNode<Button>("%SelectEmbeddingModelButton");
         loadEmbeddingModelButton = GetNode<Button>("%LoadEmbeddingModelButton");
         unloadEmbeddingModelButton = GetNode<Button>("%UnloadEmbeddingModelButton");
         loadEmbeddingModelFileDialog = GetNode<FileDialog>("%LoadEmbeddingModelFileDialog");
 
 
         // Chat signals
-        chooseChatModelButton.Pressed += OnChooseChatModelButtonPressed;
+        selectChatModelButton.Pressed += OnSelectChatModelButtonPressed;
         unloadChatModelButton.Pressed += OnUnloadChatModelButtonPressed;
-        chooseChatModelFileDialog.FileSelected += OnChatModelSelected;
+        loadChatModelButton.Pressed += OnLoadChatModelButtonPressed;
+        selectChatModelFileDialog.FileSelected += OnChatModelSelected;
         modelGpuLayerCountHSlider.ValueChanged += OnModelGpuLayerCountHSliderValueChanged;
 
         // Embedder signals
 
 
         // Clip signals
-        chooseClipModelButton.Pressed += OnChooseClipModelButtonPressed;
-        chooseClipModelFileDialog.FileSelected += OnClipModelSelected;
+        selectClipModelButton.Pressed += OnSelectClipModelButtonPressed;
+        selectClipModelFileDialog.FileSelected += OnClipModelSelected;
 
 
         chatGpuLayerCount = (int)modelGpuLayerCountHSlider.Value;
         modelGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
     }
 
+    private void OnLoadChatModelButtonPressed()
+    {
+        LoadChatModel();
+    }
+
     private void OnClipModelSelected(string path)
     {
-
         useClipModelCheckBox.Disabled = false;
         useClipModelCheckBox.ToggleMode = true;
+        clipModelPath = path;
     }
 
-    private void LoadClipModel(string path)
+    private void OnSelectClipModelButtonPressed()
     {
-        throw new NotImplementedException();
-    }
-
-    private void OnUnloadClipModelButtonPressed()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void OnChooseClipModelButtonPressed()
-    {
-        chooseClipModelFileDialog.PopupCentered();
+        selectClipModelFileDialog.PopupCentered();
     }
 
     private void OnModelGpuLayerCountHSliderValueChanged(double value)
@@ -109,14 +109,15 @@ public partial class ModelInterface : Control, IDisposable
         modelGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
     }
 
-    private void OnChooseChatModelButtonPressed()
+    private void OnSelectChatModelButtonPressed()
     {
-        chooseChatModelFileDialog.PopupCentered();
+        selectChatModelFileDialog.PopupCentered();
     }
 
     private void OnChatModelSelected(string modelPath)
     {
-        LoadChatModel(modelPath);
+        loadChatModelButton.Disabled = false;
+        chatModelPath = modelPath;
     }
 
     public void LoadEmbeddingModel(string modelPath)
@@ -151,7 +152,7 @@ public partial class ModelInterface : Control, IDisposable
 
     }
 
-    public void LoadChatModel(string modelPath)
+    public void LoadChatModel()
     {
         if (chatWeights != null)
         {
@@ -159,20 +160,24 @@ public partial class ModelInterface : Control, IDisposable
         }
         
         
-        var parameters = new ModelParams(modelPath)
+        var parameters = new ModelParams(chatModelPath)
         {
             ContextSize = chatContextSize,
             Seed = 0,
             GpuLayerCount = chatGpuLayerCount,
-            EmbeddingMode = false
+            EmbeddingMode = false // Change this if you want to use the chat model instead of BERT for embeddings
         };
 
         chatWeights = LLamaWeights.LoadFromFile(parameters);
         chatContext = chatWeights.CreateContext(parameters);
-        embedder = new LLamaEmbedder(chatWeights, parameters);
-        
         ChatContextAvailable?.Invoke(chatContext);
-        
+
+        // Uncomment to use model as embedder instead of BERT
+        // embedder = new LLamaEmbedder(chatWeights, parameters);
+        // EmbedderAvailable?.Invoke(embedder);
+
+
+
     }
 
     public void UnloadChatModel()
@@ -195,9 +200,9 @@ public partial class ModelInterface : Control, IDisposable
 
     public override void _ExitTree()
     {
-        chooseChatModelButton.Pressed -= OnChooseChatModelButtonPressed;
+        selectChatModelButton.Pressed -= OnSelectChatModelButtonPressed;
         unloadChatModelButton.Pressed -= OnUnloadChatModelButtonPressed;
-        chooseChatModelFileDialog.FileSelected -= OnChatModelSelected;
+        selectChatModelFileDialog.FileSelected -= OnChatModelSelected;
         modelGpuLayerCountHSlider.ValueChanged -= OnModelGpuLayerCountHSliderValueChanged;
     }
 }
