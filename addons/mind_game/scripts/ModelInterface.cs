@@ -18,7 +18,7 @@ public partial class ModelInterface : Control, IDisposable
     private Button selectChatModelButton, loadChatModelButton, unloadChatModelButton, selectEmbeddingModelButton, loadEmbeddingModelButton, unloadEmbeddingModelButton, selectClipModelButton;
     private CheckBox useClipModelCheckBox;
     private Label modelGpuLayerCountLabel;
-    private FileDialog selectChatModelFileDialog, selectClipModelFileDialog, loadEmbeddingModelFileDialog;
+    private FileDialog selectChatModelFileDialog, selectClipModelFileDialog, selectEmbeddingModelFileDialog;
     private HSlider modelGpuLayerCountHSlider;
 
     // Chat model params
@@ -68,7 +68,7 @@ public partial class ModelInterface : Control, IDisposable
         selectEmbeddingModelButton = GetNode<Button>("%SelectEmbeddingModelButton");
         loadEmbeddingModelButton = GetNode<Button>("%LoadEmbeddingModelButton");
         unloadEmbeddingModelButton = GetNode<Button>("%UnloadEmbeddingModelButton");
-        loadEmbeddingModelFileDialog = GetNode<FileDialog>("%LoadEmbeddingModelFileDialog");
+        selectEmbeddingModelFileDialog = GetNode<FileDialog>("%SelectEmbeddingModelFileDialog");
 
 
         // Chat signals
