@@ -15,24 +15,6 @@ public partial class EditorInterface : Control
 
     }
 
-    private void OnEmbedderAvailable(LLamaEmbedder embedder)
-    {
-        chatInterface.SetEmbedder(embedder);
-    }
-
-    private void OnContextAvailable(LLamaContext context)
-    {
-        if (chatInterface != null)
-        {
-            chatInterface.InitializeExecutor(context);
-            chatInterface.InitializeChatSession();
-        }
-        else
-        {
-            GD.PrintErr("chatInterface is null in EditorInterface");
-        }
-    }
-
     public override void _Ready()
     {
         Control modelNode = GetNode<Control>("%Models");
@@ -43,7 +25,7 @@ public partial class EditorInterface : Control
 
         if (modelInterface != null && chatInterface != null)
         {
-            modelInterface.ChatContextAvailable += OnContextAvailable;
+            modelInterface.ExecutorAvailable += OnExecutorAvailable;
             modelInterface.EmbedderAvailable += OnEmbedderAvailable;
         }
         else
@@ -58,6 +40,20 @@ public partial class EditorInterface : Control
             }
         }
     }
+
+
+    private void OnEmbedderAvailable(LLamaEmbedder embedder)
+    {
+        chatInterface.SetEmbedder(embedder);
+    }
+
+    private void OnExecutorAvailable(InteractiveExecutor executor)
+    {
+        chatInterface.SetExecutor(executor);
+        chatInterface.InitializeChatSession();
+    }
+
+    
 
     public override void _ExitTree()
     {

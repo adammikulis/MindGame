@@ -109,15 +109,17 @@ public partial class ChatInterface : Control
         GD.Print("Chat session initialized!");
     }
 
-    public void InitializeExecutor(LLamaContext context)
-    {
-        executor = new InteractiveExecutor(context);
 
+    public void SetExecutor(InteractiveExecutor executor)
+    {
+        this.executor = executor;
     }
 
 
     public void SetEmbedder(LLamaEmbedder embedder)
-    { this.embedder = embedder; }
+    { 
+        this.embedder = embedder; 
+    }
 
 
     public override void _ExitTree()

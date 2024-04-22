@@ -8,10 +8,11 @@ using static System.Collections.Specialized.BitVector32;
 [Tool]
 public partial class ModelInterface : Control, IDisposable
 {
-    public delegate void ContextEventHandler(LLamaContext context);
-    public event ContextEventHandler ChatContextAvailable;
+    
     public delegate void EmbedderEventHandler(LLamaEmbedder embedder);
     public event EmbedderEventHandler EmbedderAvailable;
+    public delegate void ExecutorEventHandler(InteractiveExecutor executor);
+    public event ExecutorEventHandler ExecutorAvailable;
 
     // UI elements
     private Button selectChatModelButton, loadChatModelButton, unloadChatModelButton, selectEmbeddingModelButton, loadEmbeddingModelButton, unloadEmbeddingModelButton, selectClipModelButton;
@@ -37,6 +38,9 @@ public partial class ModelInterface : Control, IDisposable
     // Embedder model vars
     private LLamaWeights embedderWeights;
     private LLamaEmbedder embedder;
+
+    // Executor
+    private InteractiveExecutor executor;
 
 
     public override void _EnterTree()
@@ -170,7 +174,19 @@ public partial class ModelInterface : Control, IDisposable
 
         chatWeights = LLamaWeights.LoadFromFile(parameters);
         chatContext = chatWeights.CreateContext(parameters);
-        ChatContextAvailable?.Invoke(chatContext);
+
+        if (useClipModel && clipModelPath != null)
+        {
+            clipWeights = LLavaWeights.LoadFromFile(clipModelPath);
+            executor = new InteractiveExecutor(chatContext, clipWeights);
+        }
+        else
+        {
+            executor = new InteractiveExecutor(chatContext);
+        }
+
+
+        ExecutorAvailable?.Invoke(executor);
 
         // Uncomment to use model as embedder instead of BERT
         // embedder = new LLamaEmbedder(chatWeights, parameters);
