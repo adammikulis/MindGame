@@ -174,7 +174,6 @@ public partial class ModelInterface : Control, IDisposable
             EmbeddingMode = true
         };
 
-
         embedderWeights = LLamaWeights.LoadFromFile(parameters);
         embedder = new LLamaEmbedder(embedderWeights, parameters);
 
@@ -202,17 +201,13 @@ public partial class ModelInterface : Control, IDisposable
             ContextSize = chatContextSize,
             Seed = 0,
             GpuLayerCount = chatGpuLayerCount,
-            EmbeddingMode = false // Change this if you want to use the chat model instead of BERT for embeddings (not recommended)
+            EmbeddingMode = false
         };
 
         chatWeights = LLamaWeights.LoadFromFile(parameters);
         chatContext = chatWeights.CreateContext(parameters);
         bool executorInitialized = InitializeExecutor();
         if (executorInitialized) { unloadChatModelButton.Disabled = false; }
-
-        // Uncomment to use model as embedder instead of BERT
-        // embedder = new LLamaEmbedder(chatWeights, parameters);
-        // EmbedderAvailable?.Invoke(embedder);
 
     }
 
@@ -237,10 +232,10 @@ public partial class ModelInterface : Control, IDisposable
     public void UnloadChatModel()
     {
         if (chatWeights != null) { chatWeights.Dispose(); }
-
         if (chatContext != null) { chatContext.Dispose(); }
         if (embedder != null) { embedder.Dispose(); }
         if (executor != null) { executor = null; }
+        
         unloadChatModelButton.Disabled = true;
     }
 
