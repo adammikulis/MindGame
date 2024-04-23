@@ -61,10 +61,15 @@ placeholder_text = "Load model first to chat"
 editable = false
 clear_button_enabled = true
 
+[node name="ClearOutputButton" type="Button" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Clear
+Output"
+
 [node name="UploadViewportButton" type="Button" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-disabled = true
 text = "Upload
 Viewport"
 
