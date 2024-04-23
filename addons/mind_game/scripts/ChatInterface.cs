@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 
 [Tool]
 public partial class ChatInterface : Control
 {
     [Signal]
-    public delegate void ModelOutputEventHandler(string text);
+    public delegate void ModelOutputReceivedEventHandler(string text);
 
-    private Button uploadImageButton, uploadViewportButton, loadChatSessionButton, newChatSessionButton, saveChatSession;
+    private Button clearOutputButton, uploadImageButton, uploadViewportButton, loadChatSessionButton, newChatSessionButton, saveChatSession;
     private FileDialog uploadImageFileDialog;
 
     private LLamaEmbedder embedder;
@@ -28,20 +29,20 @@ public partial class ChatInterface : Control
     private LineEdit promptLineEdit;
 
     private string[] antiPrompts;
-    private string[] imagePaths;
-
-
 
 
     public override void _Ready()
     {
+        clearOutputButton = GetNode<Button>("%ClearOutputButton");
         uploadImageButton = GetNode<Button>("%UploadImageButton");
         uploadImageFileDialog = GetNode<FileDialog>("%UploadImageFileDialog");
         modelOutputRichTextLabel = GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
         promptLineEdit = GetNode<LineEdit>("%PromptLineEdit");
 
+
+        clearOutputButton.Pressed += OnClearOutputPressed;
         promptLineEdit.TextSubmitted += OnPromptSubmitted;
-        ModelOutput += OnModelOutput;
+        ModelOutputReceived += OnModelOutputReceived;
         uploadImageButton.Pressed += OnUploadImagePressed;
         uploadImageFileDialog.FilesSelected += OnImageFilePathsSelected;
 
@@ -49,12 +50,15 @@ public partial class ChatInterface : Control
 
     }
 
+    private void OnClearOutputPressed()
+    {
+        modelOutputRichTextLabel.Text = "";
+    }
+
     private async void OnImageFilePathsSelected(string[] paths)
     {
-        foreach (var imagePath in paths)
-        {
-            executor.ImagePaths.Add(imagePath);
-        }
+        executor.ImagePaths.Clear();
+        executor.ImagePaths.AddRange(paths);
     }
 
     private void OnUploadImagePressed()
@@ -77,7 +81,7 @@ public partial class ChatInterface : Control
         }
     }
 
-    private void OnModelOutput(string output)
+    private void OnModelOutputReceived(string output)
     {
         modelOutputRichTextLabel.Text += output;
     }
@@ -118,7 +122,7 @@ public partial class ChatInterface : Control
 
     public void DeferredEmitNewOutput(string output)
     {
-        EmitSignal(nameof(ModelOutput), output);
+        EmitSignal(nameof(ModelOutputReceived), output);
     }
 
 
@@ -150,7 +154,7 @@ public partial class ChatInterface : Control
     public override void _ExitTree()
     {
         promptLineEdit.TextSubmitted -= OnPromptSubmitted;
-        ModelOutput -= OnModelOutput;
+        ModelOutputReceived -= OnModelOutputReceived;
 
     }
 }
