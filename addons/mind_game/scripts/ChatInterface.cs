@@ -31,7 +31,7 @@ public partial class ChatInterface : Control
     private string[] imagePaths;
 
 
-    
+
 
     public override void _Ready()
     {
@@ -142,8 +142,8 @@ public partial class ChatInterface : Control
 
 
     public void SetEmbedder(LLamaEmbedder embedder)
-    { 
-        this.embedder = embedder; 
+    {
+        this.embedder = embedder;
     }
 
 

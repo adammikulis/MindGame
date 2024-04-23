@@ -43,6 +43,7 @@ scroll_following = true
 selection_enabled = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ChatVBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 
 [node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer"]
