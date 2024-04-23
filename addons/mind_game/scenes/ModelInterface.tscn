@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dve4ynjuwr2cm"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/ModelInterface.cs" id="1_cwjy2"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/ModelInterface.cs" id="1_cwjy2"]
 
 [node name="Models" type="Control"]
 auto_translate_mode = 1
@@ -61,6 +61,7 @@ ticks_on_borders = true
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
+text = "4096"
 
 [node name="GpuLayerCountTitleLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 auto_translate_mode = 1

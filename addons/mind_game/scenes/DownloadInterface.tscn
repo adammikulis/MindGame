@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bfsbafgtupfnb"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/DownloadInterface.cs" id="1_c6nr5"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/DownloadInterface.cs" id="1_c6nr5"]
 [ext_resource type="Texture2D" uid="uid://4kp0jitsjyvc" path="res://addons/mind_game/assets/meta_logo_64x64.png" id="2_e6pxs"]
 [ext_resource type="Texture2D" uid="uid://decnomn6rr1q6" path="res://addons/mind_game/assets/mistal_ai_logo_64x64.png" id="3_si1vu"]
 [ext_resource type="Texture2D" uid="uid://bcjvlw6ab5etn" path="res://addons/mind_game/assets/microsoft_logo_64x64.jpg" id="4_n3wns"]

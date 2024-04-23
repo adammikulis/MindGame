@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://b1f3j4mcph3yq"]
+[gd_scene load_steps=2 format=3 uid="uid://b1f3j4mcph3yq"]
+
+[ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/DatabaseInterface.cs" id="1_uve10"]
 
 [node name="Databases" type="Control"]
 auto_translate_mode = 1
@@ -8,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_uve10")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1

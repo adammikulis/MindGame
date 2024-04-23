@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cvjvwql4bp2p0"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/ChatInterface.cs" id="1_3a2uk"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/ChatInterface.cs" id="1_3a2uk"]
 
 [node name="Chat" type="Control"]
 auto_translate_mode = 1

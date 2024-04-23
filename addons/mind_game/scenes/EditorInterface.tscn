@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dtsyxmjtwi6u0"]
 
 [ext_resource type="PackedScene" uid="uid://dve4ynjuwr2cm" path="res://addons/mind_game/scenes/ModelInterface.tscn" id="1_cwmgi"]
-[ext_resource type="Script" path="res://addons/mind_game/scripts/EditorInterface.cs" id="1_jbfvo"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/EditorInterface.cs" id="1_jbfvo"]
 [ext_resource type="PackedScene" uid="uid://cvjvwql4bp2p0" path="res://addons/mind_game/scenes/ChatInterface.tscn" id="1_vdu7h"]
 [ext_resource type="PackedScene" uid="uid://b4b5fh23okx7s" path="res://addons/mind_game/scenes/HelpInterface.tscn" id="2_c3rd0"]
 [ext_resource type="PackedScene" uid="uid://b1f3j4mcph3yq" path="res://addons/mind_game/scenes/DatabaseInterface.tscn" id="4_8yjck"]
@@ -65,6 +65,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Databases" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("4_8yjck")]
+visible = false
 layout_mode = 2
 
 [node name="Download" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("4_obiwc")]
