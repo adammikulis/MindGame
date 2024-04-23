@@ -17,12 +17,13 @@ public partial class ModelInterface : Control, IDisposable
     // UI elements
     private Button selectChatModelButton, loadChatModelButton, unloadChatModelButton, selectEmbeddingModelButton, loadEmbeddingModelButton, unloadEmbeddingModelButton, selectClipModelButton;
     private CheckBox useClipModelCheckBox;
-    private Label modelGpuLayerCountLabel;
+    private Label chatContextSizeLabel, modelGpuLayerCountLabel;
     private FileDialog selectChatModelFileDialog, selectClipModelFileDialog, selectEmbeddingModelFileDialog;
-    private HSlider modelGpuLayerCountHSlider;
+    private HSlider chatContextSizeHSlider, modelGpuLayerCountHSlider;
 
     // Chat model params
     private int chatGpuLayerCount;
+    private double chatContextSizeSliderValue;
     private uint chatContextSize;
 
     // Chat model vars
@@ -51,11 +52,16 @@ public partial class ModelInterface : Control, IDisposable
     public override void _Ready()
     {
         // Chat model vars
+        chatContextSizeHSlider = GetNode<HSlider>("%ChatContextSizeHSlider");
+        chatContextSizeLabel = GetNode<Label>("%ChatContextSizeLabel");
+
+        modelGpuLayerCountLabel = GetNode<Label>("%ModelGpuLayerCountLabel");
+        modelGpuLayerCountHSlider = GetNode<HSlider>("%ModelGpuLayerCountHSlider");
+
         selectChatModelButton = GetNode<Button>("%SelectChatModelButton");
         loadChatModelButton = GetNode<Button>("%LoadChatModelButton");
         unloadChatModelButton = GetNode<Button>("%UnloadChatModelButton");
-        modelGpuLayerCountLabel = GetNode<Label>("%ModelGpuLayerCountLabel");
-        modelGpuLayerCountHSlider = GetNode<HSlider>("%ModelGpuLayerCountHSlider");
+        
         selectChatModelFileDialog = GetNode<FileDialog>("%SelectChatModelFileDialog");
 
         // Clip model vars
@@ -72,11 +78,15 @@ public partial class ModelInterface : Control, IDisposable
 
 
         // Chat signals
+        chatContextSizeHSlider.ValueChanged += OnChatContextSizeHSliderValueChanged;
+        modelGpuLayerCountHSlider.ValueChanged += OnModelGpuLayerCountHSliderValueChanged;
+
         selectChatModelButton.Pressed += OnSelectChatModelButtonPressed;
         unloadChatModelButton.Pressed += OnUnloadChatModelButtonPressed;
         loadChatModelButton.Pressed += OnLoadChatModelButtonPressed;
+
         selectChatModelFileDialog.FileSelected += OnChatModelSelected;
-        modelGpuLayerCountHSlider.ValueChanged += OnModelGpuLayerCountHSliderValueChanged;
+        
 
         // Embedder signals
 
@@ -86,8 +96,32 @@ public partial class ModelInterface : Control, IDisposable
         selectClipModelFileDialog.FileSelected += OnClipModelSelected;
 
 
+
+        // Param value initialization
         chatGpuLayerCount = (int)modelGpuLayerCountHSlider.Value;
         modelGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
+
+        chatContextSizeSliderValue = chatContextSizeHSlider.Value;
+        chatContextSize = getContextSize(chatContextSizeSliderValue);
+        chatContextSizeLabel.Text = chatContextSize.ToString();
+
+    }
+
+    private uint getContextSize(double value)
+    {
+        double min_exponent = 5;
+        if (value == 0) return 0;
+        else
+        {
+            return (uint)Math.Pow(2, value + min_exponent);
+        }
+    }
+
+    private void OnChatContextSizeHSliderValueChanged(double value)
+    {
+        chatContextSizeSliderValue = chatContextSizeHSlider.Value;
+        chatContextSize = getContextSize(chatContextSizeSliderValue);
+        chatContextSizeLabel.Text = chatContextSize.ToString();
     }
 
     private void OnLoadChatModelButtonPressed()
@@ -168,7 +202,7 @@ public partial class ModelInterface : Control, IDisposable
             ContextSize = chatContextSize,
             Seed = 0,
             GpuLayerCount = chatGpuLayerCount,
-            EmbeddingMode = false // Change this if you want to use the chat model instead of BERT for embeddings
+            EmbeddingMode = false // Change this if you want to use the chat model instead of BERT for embeddings (not recommended)
         };
 
         chatWeights = LLamaWeights.LoadFromFile(parameters);

@@ -33,11 +33,40 @@ size_flags_vertical = 0
 text = "Chat and Clip (LLaVa) Models"
 horizontal_alignment = 1
 
+[node name="Label2" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_vertical = 0
+text = "Context Size:"
+
+[node name="ContextSizeHBoxContainer" type="HBoxContainer" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/separation = 10
+
+[node name="ChatContextSizeHSlider" type="HSlider" parent="ModelHBoxContainer/ChatModelVBoxContainer/ContextSizeHBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 15.0
+value = 7.0
+tick_count = 16
+ticks_on_borders = true
+
+[node name="ChatContextSizeLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer/ContextSizeHBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+
 [node name="GpuLayerCountTitleLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Choose Number of Model Layers to Load to GPU"
+text = "Number of Model Layers to Load to GPU:"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 auto_translate_mode = 1
