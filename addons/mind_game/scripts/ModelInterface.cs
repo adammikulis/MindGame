@@ -26,21 +26,21 @@ public partial class ModelInterface : Control, IDisposable
     private uint chatContextSize;
 
     // Chat model vars
-    private LLamaWeights chatWeights;
-    private LLamaContext chatContext;
+    private LLamaWeights chatWeights = null;
+    private LLamaContext chatContext = null;
     private string chatModelPath = null;
 
     // Clip (LLaVa) model vars
-    private LLavaWeights clipWeights;
-    private bool useClipModel = false;
+    private LLavaWeights clipWeights = null;
     private string clipModelPath = null;
+    private bool usingClipModel = false;
 
     // Embedder model vars
-    private LLamaWeights embedderWeights;
-    private LLamaEmbedder embedder;
+    private LLamaWeights embedderWeights = null;
+    private LLamaEmbedder embedder = null;
 
     // Executor
-    private InteractiveExecutor executor;
+    private InteractiveExecutor executor = null;
 
 
     public override void _EnterTree()
@@ -162,8 +162,7 @@ public partial class ModelInterface : Control, IDisposable
         {
             UnloadChatModel();
         }
-        
-        
+
         var parameters = new ModelParams(chatModelPath)
         {
             ContextSize = chatContextSize,
@@ -174,26 +173,31 @@ public partial class ModelInterface : Control, IDisposable
 
         chatWeights = LLamaWeights.LoadFromFile(parameters);
         chatContext = chatWeights.CreateContext(parameters);
-
-        if (useClipModel && clipModelPath != null)
-        {
-            clipWeights = LLavaWeights.LoadFromFile(clipModelPath);
-            executor = new InteractiveExecutor(chatContext, clipWeights);
-        }
-        else
-        {
-            executor = new InteractiveExecutor(chatContext);
-        }
-
-
-        ExecutorAvailable?.Invoke(executor);
+        bool executorInitialized = InitializeExecutor();
+        if (executorInitialized) { unloadChatModelButton.Disabled = false; }
 
         // Uncomment to use model as embedder instead of BERT
         // embedder = new LLamaEmbedder(chatWeights, parameters);
         // EmbedderAvailable?.Invoke(embedder);
 
+    }
 
-
+    private bool InitializeExecutor()
+    {
+        if (usingClipModel && clipModelPath != null && chatModelPath != null)
+        {
+            clipWeights = LLavaWeights.LoadFromFile(clipModelPath);
+            executor = new InteractiveExecutor(chatContext, clipWeights);
+            ExecutorAvailable?.Invoke(executor);
+            return true;
+        }
+        else if (chatModelPath != null)
+        {
+            executor = new InteractiveExecutor(chatContext);
+            ExecutorAvailable?.Invoke(executor);
+            return true;
+        }
+        else { return false; }
     }
 
     public void UnloadChatModel()
@@ -202,6 +206,8 @@ public partial class ModelInterface : Control, IDisposable
 
         if (chatContext != null) { chatContext.Dispose(); }
         if (embedder != null) { embedder.Dispose(); }
+        if (executor != null) { executor = null; }
+        unloadChatModelButton.Disabled = true;
     }
 
     private void OnUnloadChatModelButtonPressed()
