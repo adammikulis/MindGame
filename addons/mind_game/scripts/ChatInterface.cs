@@ -2,15 +2,22 @@
 using Godot;
 using LLama;
 using LLama.Common;
-using System;
+using LLama.Abstractions;
+using LLama.Native;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+
 
 [Tool]
 public partial class ChatInterface : Control
 {
     [Signal]
     public delegate void ModelOutputEventHandler(string text);
+
+    private Button uploadImageButton, uploadViewportButton, loadChatSessionButton, newChatSessionButton, saveChatSession;
+    private FileDialog uploadImageFileDialog;
 
     private LLamaEmbedder embedder;
     private InteractiveExecutor executor;
@@ -21,20 +28,38 @@ public partial class ChatInterface : Control
     private LineEdit promptLineEdit;
 
     private string[] antiPrompts;
+    private string[] imagePaths;
 
 
     
 
     public override void _Ready()
     {
+        uploadImageButton = GetNode<Button>("%UploadImageButton");
+        uploadImageFileDialog = GetNode<FileDialog>("%UploadImageFileDialog");
         modelOutputRichTextLabel = GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
         promptLineEdit = GetNode<LineEdit>("%PromptLineEdit");
 
         promptLineEdit.TextSubmitted += OnPromptSubmitted;
         ModelOutput += OnModelOutput;
+        uploadImageButton.Pressed += OnUploadImagePressed;
+        uploadImageFileDialog.FilesSelected += OnImageFilePathsSelected;
 
         antiPrompts = ["<|eot_id|>", "\nUser:", "\nUSER:"];
 
+    }
+
+    private async void OnImageFilePathsSelected(string[] paths)
+    {
+        foreach (var imagePath in paths)
+        {
+            executor.ImagePaths.Add(imagePath);
+        }
+    }
+
+    private void OnUploadImagePressed()
+    {
+        uploadImageFileDialog.PopupCentered();
     }
 
     private void OnChatSessionStatusUpdated()
@@ -67,7 +92,7 @@ public partial class ChatInterface : Control
         if (chatSession != null)
         {
             promptLineEdit.Text = "";
-            modelOutputRichTextLabel.Text += "\n" + prompt + "\n";
+            modelOutputRichTextLabel.Text += "\n\n" + prompt + "\n\n";
             await Task.Run(async () =>
             {
                 await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = antiPrompts }))

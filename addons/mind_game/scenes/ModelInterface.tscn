@@ -30,7 +30,7 @@ size_flags_vertical = 8
 [node name="Label" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
-text = "Chat and Clip Models"
+text = "Chat and Clip (LLaVa) Models"
 horizontal_alignment = 1
 
 [node name="GpuLayerCountTitleLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
@@ -77,7 +77,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
-text = "Use Clip Model (Image Analysis)"
+text = "Use Clip Model (LLaVa)"
 
 [node name="SelectChatModelButton" type="Button" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 unique_name_in_owner = true

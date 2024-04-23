@@ -70,7 +70,6 @@ Viewport"
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-disabled = true
 text = "Upload
 Image"
 
@@ -84,17 +83,20 @@ layout_mode = 2
 [node name="MaxTokensHSlider" type="HSlider" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="New Chat Session" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="NewChatSessionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 text = "New Chat Session"
 
 [node name="SaveChatSessionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 text = "Save Chat Session"
 
 [node name="LoadChatSessionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 disabled = true
@@ -106,7 +108,6 @@ auto_translate_mode = 1
 title = "Open a File"
 initial_position = 2
 size = Vector2i(400, 600)
-visible = false
 min_size = Vector2i(400, 600)
 ok_button_text = "Open"
 file_mode = 0

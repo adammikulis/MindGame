@@ -30,6 +30,7 @@ grow_vertical = 2
 layout_mode = 2
 
 [node name="DebugPanelContainer" type="PanelContainer" parent="HBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 
