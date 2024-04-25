@@ -76,7 +76,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 8
 theme_override_constants/separation = 10
 
-[node name="ModelGpuLayerCountHSlider" type="HSlider" parent="ModelHBoxContainer/ChatModelVBoxContainer/HBoxContainer"]
+[node name="ChatModelGpuLayerCountHSlider" type="HSlider" parent="ModelHBoxContainer/ChatModelVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
@@ -87,7 +87,7 @@ value = 33.0
 tick_count = 32
 ticks_on_borders = true
 
-[node name="ModelGpuLayerCountLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer/HBoxContainer"]
+[node name="ChatModelGpuLayerCountLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
@@ -107,7 +107,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
-text = "Use Clip Model (LLaVa)"
+text = "Use Selected Clip Model (LLaVa)"
 
 [node name="SelectChatModelButton" type="Button" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 unique_name_in_owner = true
@@ -147,37 +147,42 @@ size_flags_vertical = 8
 [node name="Label" type="Label" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
-text = "Embedding Model (BERT)"
+text = "Embedder Model (BERT)"
 horizontal_alignment = 1
 
-[node name="SelectEmbeddingModelButton" type="Button" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="UseChatModelAsEmbedderCheckBox" type="CheckBox" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Use Loaded Chat Model"
+
+[node name="SelectEmbedderModelButton" type="Button" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer/GridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "Select Embedding Model (.gguf)"
+text = "Select Embedder Model (.gguf)"
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer"]
-auto_translate_mode = 1
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="LoadEmbeddingModelButton" type="Button" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer/HBoxContainer4"]
+[node name="LoadEmbedderModelButton" type="Button" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer/GridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 disabled = true
-text = "Load Embedding Model"
+text = "Load Embedder Model"
 
-[node name="UnloadEmbeddingModelButton" type="Button" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer/HBoxContainer4"]
+[node name="UnloadEmbedderModelButton" type="Button" parent="ModelHBoxContainer/EmbeddingModelVBoxContainer/GridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 disabled = true
-text = "Unload Embedding Model"
+text = "Unload Embedder Model"
 
 [node name="SelectChatModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
 unique_name_in_owner = true
@@ -189,6 +194,7 @@ min_size = Vector2i(400, 600)
 ok_button_text = "Open"
 file_mode = 0
 access = 2
+show_hidden_files = true
 use_native_dialog = true
 
 [node name="SelectClipModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
@@ -201,9 +207,10 @@ min_size = Vector2i(400, 600)
 ok_button_text = "Open"
 file_mode = 0
 access = 2
+show_hidden_files = true
 use_native_dialog = true
 
-[node name="SelectEmbeddingModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
+[node name="SelectEmbedderModelFileDialog" type="FileDialog" parent="ModelHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 title = "Open a File"
@@ -213,4 +220,5 @@ min_size = Vector2i(400, 600)
 ok_button_text = "Open"
 file_mode = 0
 access = 2
+show_hidden_files = true
 use_native_dialog = true
