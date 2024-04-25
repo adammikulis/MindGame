@@ -82,14 +82,18 @@ public partial class ModelInterface : Control, IDisposable
         modelGpuLayerCountHSlider.ValueChanged += OnModelGpuLayerCountHSliderValueChanged;
 
         selectChatModelButton.Pressed += OnSelectChatModelButtonPressed;
-        unloadChatModelButton.Pressed += OnUnloadChatModelButtonPressed;
         loadChatModelButton.Pressed += OnLoadChatModelButtonPressed;
+        unloadChatModelButton.Pressed += OnUnloadChatModelButtonPressed;
 
         selectChatModelFileDialog.FileSelected += OnChatModelSelected;
-        
+
 
         // Embedder signals
+        selectEmbeddingModelButton.Pressed += OnSelectEmbeddingModelPressed;
+        loadEmbeddingModelButton.Pressed += OnLoadEmbeddingModelButtonPressed;
+        unloadEmbeddingModelButton.Pressed += OnUnloadEmbeddingModelButtonPressed;
 
+        selectEmbeddingModelFileDialog.FileSelected += OnEmbeddingModelSelected;
 
         // Clip signals
         selectClipModelButton.Pressed += OnSelectClipModelButtonPressed;
@@ -105,6 +109,26 @@ public partial class ModelInterface : Control, IDisposable
         chatContextSize = getContextSize(chatContextSizeSliderValue);
         chatContextSizeLabel.Text = chatContextSize.ToString();
 
+    }
+
+    private void OnEmbeddingModelSelected(string path)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnLoadEmbeddingModelButtonPressed()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnUnloadEmbeddingModelButtonPressed()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnSelectEmbeddingModelPressed()
+    {
+        throw new NotImplementedException();
     }
 
     private uint getContextSize(double value)
