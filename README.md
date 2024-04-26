@@ -9,7 +9,9 @@ Currently you have to manually add the [LLamaSharp](https://www.nuget.org/packag
 
 Load a .gguf file of the llama, mistral, mixtral, or phi families to get going!
 
-Recommended model download: https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/tree/main
+Recommended model download: https://huggingface.co/QuantFactory/Meta-Llama-3-8B-Instruct-GGUF/tree/main
+
+Next best: https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/tree/main
 
 Smaller model for those with less VRAM: https://huggingface.co/TheBloke/phi-2-GGUF/tree/main
 
