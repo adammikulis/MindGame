@@ -1,6 +1,7 @@
 This is a plugin for the Godot game engine that allows the user to load and run a local Large Language Model (LLM) in-engine using the [LLamaSharp](https://github.com/SciSharp/LLamaSharp) (v0.11.1) C# library.
 
 Download [Godot 4.3 dev5 (.NET version)](https://godotengine.org/article/dev-snapshot-godot-4-3-dev-5/)
+
 [Download/install .NET8](https://dotnet.microsoft.com/en-us/download)
 
 Download this repo, open it with Godot 4.3 dev5 .NET, click Project > Project Settings > Plugins > Enabled (Mind Game) to make it appear in the bottom bar.
