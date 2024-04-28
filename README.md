@@ -6,9 +6,9 @@ This is a plugin for the Godot game engine that allows the user to load and run 
 
 3) Clone/download this repo, open it with Godot 4.3 .NET, click Project > Project Settings > Plugins > Enabled (Mind Game) to make it appear in the bottom bar.
 
-Currently you have to manually add the [LLamaSharp](https://www.nuget.org/packages/LLamaSharp) and [Cuda12 backend](https://www.nuget.org/packages/LLamaSharp.Backend.Cuda12) or [Cpu backend](https://www.nuget.org/packages/LLamaSharp.Backend.Cpu) Nuget packages to the project solution, use Visual Studio Community for this or a visual NuGet Manager extension for VS Code.
+4) Currently you have to manually add the [LLamaSharp](https://www.nuget.org/packages/LLamaSharp) and [Cuda12 backend](https://www.nuget.org/packages/LLamaSharp.Backend.Cuda12) or [Cpu backend](https://www.nuget.org/packages/LLamaSharp.Backend.Cpu) Nuget packages to the project solution, use Visual Studio Community for this or a visual NuGet Manager extension for VS Code.
 
-Load a .gguf file of the llama, mistral, mixtral, or phi families to get going!
+5) Load a .gguf file of the llama, mistral, mixtral, or phi families to get going!
 
 Recommended model: [Llama3-8B-Instruct](https://huggingface.co/QuantFactory/Meta-Llama-3-8B-Instruct-GGUF/tree/main)
 
