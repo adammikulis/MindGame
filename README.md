@@ -10,7 +10,7 @@ This is a plugin for the Godot game engine that allows the user to load and run 
 
 5) Load a .gguf file of the llama, mistral, mixtral, or phi families to get going!
 
-Recommended model: [Llama3-8B-Instruct](https://huggingface.co/QuantFactory/Meta-Llama-3-8B-Instruct-GGUF/tree/main)
+Recommended model: [Llama3-8B-Instruct](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF/tree/main)
 
 Next best: [Mistral-7B-Instruct-v0.2](https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/tree/main)
 
