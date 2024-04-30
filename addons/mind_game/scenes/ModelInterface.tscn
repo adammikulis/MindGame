@@ -51,15 +51,15 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 17.0
-value = 8.0
-tick_count = 16
+value = 7.0
+tick_count = 18
 ticks_on_borders = true
 
 [node name="ChatContextSizeLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer/ContextSizeHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "8192"
+text = "4096"
 
 [node name="GpuLayerCountTitleLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 auto_translate_mode = 1
@@ -188,11 +188,12 @@ auto_translate_mode = 1
 title = "Select a Model"
 initial_position = 2
 size = Vector2i(400, 600)
-ok_button_text = "Select"
+ok_button_text = "Open"
 mode_overrides_title = false
 file_mode = 0
 access = 2
 show_hidden_files = true
+use_native_dialog = true
 
 [node name="SelectEmbedderModelFileDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
@@ -200,7 +201,7 @@ auto_translate_mode = 1
 title = "Select an Embedder (BERT)"
 initial_position = 2
 size = Vector2i(400, 600)
-ok_button_text = "Select"
+ok_button_text = "Open"
 mode_overrides_title = false
 file_mode = 0
 access = 2
@@ -212,7 +213,7 @@ auto_translate_mode = 1
 title = "Select a Clip model (mmproj)"
 initial_position = 2
 size = Vector2i(400, 600)
-ok_button_text = "Select"
+ok_button_text = "Open"
 mode_overrides_title = false
 file_mode = 0
 access = 2
