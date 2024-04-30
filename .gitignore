@@ -18,3 +18,4 @@ mono_crash.*.json
 android/
 .vs
 models
+.releases
