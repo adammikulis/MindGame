@@ -2,8 +2,19 @@ This is a plugin for the Godot game engine that allows the user to load and run 
 
 **Run Mind Game stand-alone:**
 
-1) Download the latest release for your platform and run the executable
-2) Load your model and have fun!
+1) Install [CUDA Toolkit 12.x](https://developer.nvidia.com/cuda-12-1-0-download-archive) if you haven't already (CPU-only support coming soon)
+2) Download the [latest Mind Game release](https://github.com/adammikulis/MindGame/releases) for your platform and run the executable
+3) Download a .gguf model of the Llama, Phi, or Mistral families
+4) Load your model and have fun!
+
+Recommended model: [Llama3-8B-Instruct](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF/tree/main)
+
+Next best: [Mistral-7B-Instruct-v0.2](https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/tree/main)
+
+Smaller model for those with less VRAM: [Phi-3](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/tree/main)
+
+
+
 
 **Run Mind Game as a Godot plug-in:**
 
@@ -13,11 +24,7 @@ This is a plugin for the Godot game engine that allows the user to load and run 
 4) Currently you have to manually add the [LLamaSharp](https://www.nuget.org/packages/LLamaSharp) and [Cuda12 backend](https://www.nuget.org/packages/LLamaSharp.Backend.Cuda12) or [Cpu backend](https://www.nuget.org/packages/LLamaSharp.Backend.Cpu) Nuget packages to the project solution, use Visual Studio Community for this or a visual NuGet Manager extension for VS Code.
 5) Load a .gguf file of the llama, mistral, mixtral, or phi families to get going!
 
-Recommended model: [Llama3-8B-Instruct](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF/tree/main)
 
-Next best: [Mistral-7B-Instruct-v0.2](https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/tree/main)
-
-Smaller model for those with less VRAM: [Phi-3](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/tree/main)
 
 The lower quantization (q), the smaller the model is to run but at the cost of accuracy. Llama-3-8B-Instruct.Q4_K_M is a great middle-ground for those with 8GB of VRAM. The absolute smallest model (phi-2.Q2_K.gguf) can run on less than 4GB of VRAM.
 
