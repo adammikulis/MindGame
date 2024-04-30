@@ -95,7 +95,7 @@ selection_enabled = true
 
 [node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/ChatVBoxContainer"]
 auto_translate_mode = 1
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 
