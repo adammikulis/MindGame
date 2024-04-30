@@ -29,21 +29,14 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
 
-[node name="SavedConversationsScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="ChatHistoryVBoxContainer" type="VBoxContainer" parent="HBoxContainer/SavedConversationsScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="HBoxContainer" parent="HBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer"]
+[node name="SavedChatVBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+visible = false
 layout_mode = 2
 
-[node name="NewChatButton" type="Button" parent="HBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/SavedChatVBoxContainer"]
+layout_mode = 2
+
+[node name="NewChatSessionButton" type="Button" parent="HBoxContainer/SavedChatVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -53,18 +46,30 @@ text = "New Chat
 icon = ExtResource("2_w2x42")
 icon_alignment = 2
 
-[node name="Button" type="Button" parent="HBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer/VBoxContainer"]
+[node name="ChatDirectoryButton" type="Button" parent="HBoxContainer/SavedChatVBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 0
 text = "Chat Directory"
 icon = ExtResource("3_vybev")
 icon_alignment = 2
 
-[node name="SavedConversationsHFlowContainer" type="HFlowContainer" parent="HBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer"]
+[node name="SavedConversationsScrollContainer" type="ScrollContainer" parent="HBoxContainer/SavedChatVBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ChatHistoryVBoxContainer" type="VBoxContainer" parent="HBoxContainer/SavedChatVBoxContainer/SavedConversationsScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SavedConversationsHFlowContainer" type="HFlowContainer" parent="HBoxContainer/SavedChatVBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SavedConversationHBoxContainer" parent="HBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer/SavedConversationsHFlowContainer" instance=ExtResource("2_yfnj0")]
+[node name="SavedConversationHBoxContainer" parent="HBoxContainer/SavedChatVBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer/SavedConversationsHFlowContainer" instance=ExtResource("2_yfnj0")]
 layout_mode = 2
 
 [node name="ChatVBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
@@ -100,13 +105,12 @@ auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-placeholder_text = "Load model and choose a session"
+placeholder_text = "Load model first to chat"
 editable = false
 clear_button_enabled = true
 
 [node name="ChatOptionsVBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 8
 
 [node name="MaxTokensTitleLabel" type="Label" parent="HBoxContainer/ChatOptionsVBoxContainer"]
@@ -135,10 +139,13 @@ horizontal_alignment = 1
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ChatOptionsVBoxContainer"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="ClearOutputButton" type="Button" parent="HBoxContainer/ChatOptionsVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
 text = "Clear
 Output"
 icon = ExtResource("5_jv6yj")
@@ -147,6 +154,8 @@ icon_alignment = 2
 [node name="UploadViewportButton" type="Button" parent="HBoxContainer/ChatOptionsVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
 text = "Upload
 Viewport"
 icon = ExtResource("6_e3cgf")
@@ -156,6 +165,8 @@ icon_alignment = 2
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
 text = "Upload
 Image"
 icon = ExtResource("6_cl2aa")
