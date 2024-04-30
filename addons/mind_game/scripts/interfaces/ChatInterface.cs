@@ -161,7 +161,7 @@ public partial class ChatInterface : Control
 
     public override void _ExitTree()
     {
-        promptLineEdit.TextSubmitted -= OnPromptSubmitted;
+        // promptLineEdit.TextSubmitted -= OnPromptSubmitted;
         ModelOutputReceived -= OnModelOutputReceived;
 
     }
