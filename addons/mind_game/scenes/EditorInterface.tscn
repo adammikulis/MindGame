@@ -17,6 +17,18 @@ size_flags_horizontal = 3
 size_flags_vertical = 2
 script = ExtResource("1_jbfvo")
 
+[node name="ExitProgramButton" type="Button" parent="."]
+unique_name_in_owner = true
+top_level = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -37.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "Exit Program"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15

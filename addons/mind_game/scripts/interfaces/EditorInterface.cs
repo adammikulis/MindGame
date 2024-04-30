@@ -8,6 +8,7 @@ public partial class EditorInterface : Control
 {
     public ModelInterface modelInterface;
     public ChatInterface chatInterface;
+    private Button exitProgramButton;
     
     public override void _EnterTree()
     {
@@ -17,6 +18,8 @@ public partial class EditorInterface : Control
 
     public override void _Ready()
     {
+        exitProgramButton = GetNode<Button>("%ExitProgramButton");
+
         Control modelNode = GetNode<Control>("%Models");
         modelInterface = modelNode as ModelInterface;
 
@@ -39,8 +42,16 @@ public partial class EditorInterface : Control
                 GD.PrintErr("chatInterface is null in EditorInterface");
             }
         }
+
+        exitProgramButton.Pressed += OnExitProgramPressed;
     }
 
+    private void OnExitProgramPressed()
+    {
+        modelInterface.UnloadChatModel();
+        modelInterface.UnloadEmbedderModel();
+        GetTree().Quit();
+    }
 
     private void OnEmbedderAvailable(LLamaEmbedder embedder)
     {
