@@ -78,12 +78,14 @@ public partial class ChatInterface : Control
         {
             promptLineEdit.Editable = true;
             promptLineEdit.PlaceholderText = "Enter prompt here";
+            clearOutputButton.Disabled = false;
         }
         else
         {
             chatSession = null;
             promptLineEdit.Editable = false;
             promptLineEdit.PlaceholderText = "Load model first to chat";
+            clearOutputButton.Disabled = true;
         }
     }
 
