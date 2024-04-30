@@ -17,7 +17,7 @@ public partial class ChatInterface : Control
     [Signal]
     public delegate void ModelOutputReceivedEventHandler(string text);
 
-    private Button clearOutputButton, uploadImageButton, uploadViewportButton, loadChatSessionButton, newChatSessionButton, saveChatSession;
+    private Button clearOutputButton, uploadImageButton, uploadViewportButton, loadChatSessionButton, newChatSessionButton, saveChatSessionButton;
     private FileDialog uploadImageFileDialog;
 
     private LLamaEmbedder embedder;
@@ -33,20 +33,26 @@ public partial class ChatInterface : Control
 
     public override void _Ready()
     {
+        // Chat session management
+        newChatSessionButton = GetNode<Button>("%NewChatSessionButton");
+        
+        // Chat session buttons
         clearOutputButton = GetNode<Button>("%ClearOutputButton");
         uploadImageButton = GetNode<Button>("%UploadImageButton");
         uploadImageFileDialog = GetNode<FileDialog>("%UploadImageFileDialog");
+        
+        // Chat session I/O
         modelOutputRichTextLabel = GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
         promptLineEdit = GetNode<LineEdit>("%PromptLineEdit");
 
-
+        // Signals
         clearOutputButton.Pressed += OnClearOutputPressed;
         promptLineEdit.TextSubmitted += OnPromptSubmitted;
         ModelOutputReceived += OnModelOutputReceived;
         uploadImageButton.Pressed += OnUploadImagePressed;
         uploadImageFileDialog.FilesSelected += OnImageFilePathsSelected;
 
-        antiPrompts = ["<|eot_id|>", "\nUser:", "\nUSER:"];
+        antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "\nUser:", "\nUSER:", "\n\nUser:", "\n\nUSER:"];
 
     }
 
