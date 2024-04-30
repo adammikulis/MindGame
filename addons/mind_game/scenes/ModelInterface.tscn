@@ -52,8 +52,8 @@ auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 15.0
-value = 7.0
+max_value = 17.0
+value = 8.0
 tick_count = 16
 ticks_on_borders = true
 
@@ -61,7 +61,7 @@ ticks_on_borders = true
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "4096"
+text = "8192"
 
 [node name="GpuLayerCountTitleLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer"]
 auto_translate_mode = 1

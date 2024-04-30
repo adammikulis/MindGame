@@ -305,10 +305,6 @@ public partial class ModelInterface : Control, IDisposable
         UnloadChatModel();
     }
 
-    public LLamaEmbedder GetLLamaEmbedder()
-    {
-        return embedder;
-    }
 
     public override void _ExitTree()
     {
