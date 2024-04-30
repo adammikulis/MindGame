@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://cvjvwql4bp2p0"]
+[gd_scene load_steps=9 format=3 uid="uid://cvjvwql4bp2p0"]
 
 [ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/ChatInterface.cs" id="1_3a2uk"]
+[ext_resource type="Texture2D" uid="uid://dnp0lvxevsc4m" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/plus.png" id="2_w2x42"]
+[ext_resource type="PackedScene" uid="uid://b84iwhex1h0xb" path="res://addons/mind_game/scenes/SavedConversation.tscn" id="2_yfnj0"]
+[ext_resource type="Texture2D" uid="uid://dr4wqoyl7ereh" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/save.png" id="3_vybev"]
+[ext_resource type="Texture2D" uid="uid://ctnriuhubkahg" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/cross.png" id="5_jv6yj"]
+[ext_resource type="Texture2D" uid="uid://c6sffmslt8fid" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/export.png" id="6_cl2aa"]
+[ext_resource type="Texture2D" uid="uid://bgxq2yni8l4ih" path="res://addons/mind_game/assets/cursors/Basic/look_b.svg" id="6_e3cgf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_m8rqd"]
 
 [node name="Chat" type="Control"]
 auto_translate_mode = 1
@@ -20,6 +28,44 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
+
+[node name="SavedConversationsScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ChatHistoryVBoxContainer" type="VBoxContainer" parent="HBoxContainer/SavedConversationsScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="HBoxContainer" parent="HBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer"]
+layout_mode = 2
+
+[node name="NewChatButton" type="Button" parent="HBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "New Chat
+"
+icon = ExtResource("2_w2x42")
+icon_alignment = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Chat Directory"
+icon = ExtResource("3_vybev")
+icon_alignment = 2
+
+[node name="SavedConversationsHFlowContainer" type="HFlowContainer" parent="HBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SavedConversationHBoxContainer" parent="HBoxContainer/SavedConversationsScrollContainer/ChatHistoryVBoxContainer/SavedConversationsHFlowContainer" instance=ExtResource("2_yfnj0")]
+layout_mode = 2
 
 [node name="ChatVBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 auto_translate_mode = 1
@@ -42,73 +88,78 @@ focus_mode = 2
 scroll_following = true
 selection_enabled = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ChatVBoxContainer"]
-custom_minimum_size = Vector2(0, 75)
-layout_mode = 2
-
-[node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer"]
+[node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/ChatVBoxContainer"]
 auto_translate_mode = 1
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PromptLineEdit" type="LineEdit" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer/ScrollContainer2"]
+[node name="PromptLineEdit" type="LineEdit" parent="HBoxContainer/ChatVBoxContainer/ScrollContainer2"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-placeholder_text = "Load model first to chat"
+placeholder_text = "Load model and choose a session"
 editable = false
 clear_button_enabled = true
 
-[node name="ClearOutputButton" type="Button" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer"]
+[node name="ChatOptionsVBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+
+[node name="MaxTokensTitleLabel" type="Label" parent="HBoxContainer/ChatOptionsVBoxContainer"]
+layout_mode = 2
+text = "Max Tokens"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/ChatOptionsVBoxContainer"]
+layout_mode = 2
+
+[node name="MaxTokensHSlider" type="HSlider" parent="HBoxContainer/ChatOptionsVBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 15.0
+value = 8.0
+tick_count = 16
+
+[node name="MaxTokensLabel" type="Label" parent="HBoxContainer/ChatOptionsVBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "4096"
+label_settings = SubResource("LabelSettings_m8rqd")
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ChatOptionsVBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+
+[node name="ClearOutputButton" type="Button" parent="HBoxContainer/ChatOptionsVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Clear
 Output"
+icon = ExtResource("5_jv6yj")
+icon_alignment = 2
 
-[node name="UploadViewportButton" type="Button" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer"]
+[node name="UploadViewportButton" type="Button" parent="HBoxContainer/ChatOptionsVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Upload
 Viewport"
+icon = ExtResource("6_e3cgf")
+icon_alignment = 2
 
-[node name="UploadImageButton" type="Button" parent="HBoxContainer/ChatVBoxContainer/HBoxContainer"]
+[node name="UploadImageButton" type="Button" parent="HBoxContainer/ChatOptionsVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 text = "Upload
 Image"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 8
-
-[node name="MaxTokensLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="MaxTokensHSlider" type="HSlider" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="NewChatSessionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-disabled = true
-text = "New Chat Session"
-
-[node name="SaveChatSessionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-disabled = true
-text = "Save Chat Session"
-
-[node name="LoadChatSessionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
-unique_name_in_owner = true
-auto_translate_mode = 1
-layout_mode = 2
-disabled = true
-text = "Load Chat Session"
+icon = ExtResource("6_cl2aa")
+icon_alignment = 2
 
 [node name="UploadImageFileDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
