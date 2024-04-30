@@ -1,4 +1,3 @@
-#if TOOLS
 using Godot;
 using LLama;
 using LLama.Common;
@@ -166,4 +165,3 @@ public partial class ChatInterface : Control
 
     }
 }
-#endif

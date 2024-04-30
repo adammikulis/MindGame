@@ -1,4 +1,3 @@
-#if TOOLS
 using Godot;
 using LLama.Common;
 using LLama;
@@ -314,4 +313,3 @@ public partial class ModelInterface : Control, IDisposable
         //chatModelGpuLayerCountHSlider.ValueChanged -= OnModelGpuLayerCountHSliderValueChanged;
     }
 }
-#endif

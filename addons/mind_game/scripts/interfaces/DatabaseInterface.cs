@@ -1,4 +1,4 @@
-#if TOOLS
+
 using Godot;
 using System;
 
@@ -6,4 +6,3 @@ using System;
 public partial class DatabaseInterface : Control
 {
 }
-#endif

@@ -1,4 +1,3 @@
-#if TOOLS
 using Godot;
 using LLama;
 using System;
@@ -73,4 +72,3 @@ public partial class EditorInterface : Control
 
 
 }
-#endif
