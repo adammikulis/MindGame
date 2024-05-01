@@ -18,3 +18,5 @@ mono_crash.*.json
 android/
 .vs
 models
+.releases
+addons/mind_game/assets/models

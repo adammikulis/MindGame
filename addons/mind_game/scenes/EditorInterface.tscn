@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dtsyxmjtwi6u0"]
+[gd_scene load_steps=6 format=3 uid="uid://dtsyxmjtwi6u0"]
 
 [ext_resource type="PackedScene" uid="uid://dve4ynjuwr2cm" path="res://addons/mind_game/scenes/ModelInterface.tscn" id="1_cwmgi"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/EditorInterface.cs" id="1_jbfvo"]
 [ext_resource type="PackedScene" uid="uid://cvjvwql4bp2p0" path="res://addons/mind_game/scenes/ChatInterface.tscn" id="1_vdu7h"]
 [ext_resource type="PackedScene" uid="uid://b4b5fh23okx7s" path="res://addons/mind_game/scenes/HelpInterface.tscn" id="2_c3rd0"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/ModelInterface.cs" id="5_4pe56"]
 
 [node name="EditorInterface" type="Control"]
 custom_minimum_size = Vector2(0, 300)
@@ -77,3 +78,11 @@ layout_mode = 2
 [node name="Help" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("2_c3rd0")]
 visible = false
 layout_mode = 2
+
+[node name="ModelInterface" type="Node" parent="."]
+script = ExtResource("5_4pe56")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="ModelInterface"]
+
+[node name="ModelInterface" type="Node" parent="ModelInterface/CharacterBody3D"]
+script = ExtResource("5_4pe56")
