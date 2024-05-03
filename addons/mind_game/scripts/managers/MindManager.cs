@@ -5,10 +5,8 @@ using LLama.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public partial class MindManager : Node
+public partial class MindManager : Node, IDisposable
 {
-    public static MindManager Singleton { get; private set; }
-
     [Export]
     public string ChatModelPath { get; private set; }
 
@@ -41,7 +39,7 @@ public partial class MindManager : Node
 
     public override void _EnterTree()
     {
-        Singleton = this;
+        
     }
 
     public override void _Ready()
@@ -54,8 +52,17 @@ public partial class MindManager : Node
         if (!string.IsNullOrEmpty(ChatModelPath))
         {
             chatWeights = LLamaWeights.LoadFromFile(new ModelParams(ChatModelPath));
+            
+        }
+    }
+
+    public async Task CreateContext()
+    {
+        if (chatWeights != null)
+        {
             context = chatWeights.CreateContext(new ModelParams(ChatModelPath));
         }
+       
     }
 
     public async Task LoadClipWeights()
@@ -78,12 +85,11 @@ public partial class MindManager : Node
 
 
 
-
     public async Task InferAsync(string prompt, List<string> imagePaths = null)
     {
-        if (executor == null || chatSession == null)
+        if (chatSession == null)
         {
-            GD.PrintErr("Executor or chat session not initialized. Please check the model configuration.");
+            GD.PrintErr("Chat session not initialized. Please check the model configuration.");
             return;
         }
 
@@ -109,10 +115,32 @@ public partial class MindManager : Node
         EmitSignal(nameof(ModelOutputReceivedEventHandler), output);
     }
 
+    public void DisposeChatModel()
+    {
+        chatWeights?.Dispose();
+    }
+
+    public void DisposeClipModel()
+    {
+        clipWeights?.Dispose();
+    }
+
+    public void DisposeEmbedder()
+    {
+        embedder?.Dispose();
+    }
+
+    public void DisposeAll()
+    {
+        DisposeChatModel();
+        DisposeClipModel();
+        DisposeEmbedder();
+    }
+
+
     public override void _ExitTree()
     {
-        // Clean up
-        Singleton = null;
+        
     }
 
 }
