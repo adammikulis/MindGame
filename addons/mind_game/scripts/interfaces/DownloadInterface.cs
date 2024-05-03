@@ -1,3 +1,5 @@
+/* This class is deprecated for v0.2
+
 using Godot;
 using System;
 using System.IO;
@@ -85,7 +87,7 @@ public partial class DownloadInterface : Control
         CheckCanDownloadModel();
     }
 
-    private async void OnDownloadModelButtonPressed()
+    private void OnDownloadModelButtonPressed()
     {
         // Sample URL: https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf
 
@@ -136,3 +138,4 @@ public partial class DownloadInterface : Control
 
     }
 }
+*/

@@ -1,3 +1,5 @@
+/* This class is deprecated for v0.2
+
 using Godot;
 using LLama;
 using System;
@@ -72,3 +74,4 @@ public partial class EditorInterface : Control
 
 
 }
+*/

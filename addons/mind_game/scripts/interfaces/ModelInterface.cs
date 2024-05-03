@@ -1,3 +1,5 @@
+/* This class is deprecated for v0.2
+
 using Godot;
 using LLama.Common;
 using LLama;
@@ -313,3 +315,4 @@ public partial class ModelInterface : Control, IDisposable
         chatModelGpuLayerCountHSlider.ValueChanged -= OnModelGpuLayerCountHSliderValueChanged;
     }
 }
+*/
