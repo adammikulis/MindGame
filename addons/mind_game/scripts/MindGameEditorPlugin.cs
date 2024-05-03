@@ -12,7 +12,7 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
 {
     
     private Control editorInterface;
-    private Script mindManagerScript = GD.Load<CSharpScript>("res://addons/mind_game/scripts/managers/MindManager.cs");
+    private Script mindManagerScript = GD.Load<CSharpScript>("res://addons/mind_game/scripts/model_classes/MindManager.cs");
     private Texture2D mindManagerIcon = GD.Load<Texture2D>("res://addons/mind_game/assets/logos/brain_pink.png");
 
 

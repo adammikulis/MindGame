@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://bew4jlihie8s0"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/managers/MindManager.cs" id="1_tmdtn"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/model_classes/MindManager.cs" id="1_if8ho"]
 
 [node name="Node" type="Node"]
 
 [node name="MindManager" type="Node" parent="."]
-script = ExtResource("1_tmdtn")
+script = ExtResource("1_if8ho")

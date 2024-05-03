@@ -16,7 +16,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="addons\mind_game\scripts\interfaces\" />
-    <Folder Include="addons\mind_game\scripts\model_classes\" />
-    <Folder Include="addons\mind_game\scripts\managers\" />
   </ItemGroup>
 </Project>

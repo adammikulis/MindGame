@@ -5,6 +5,7 @@ using LLama.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+[Tool]
 public partial class MindManager : Node, IDisposable
 {
 
@@ -63,11 +64,16 @@ public partial class MindManager : Node, IDisposable
     public override void _Ready()
     {
         GD.Print("Mind Manager ready!");
-        EmbedderModelPath = "res://addons/mind_game/assets/models/all-MiniLM-L12-v2.Q4_K_M.gguf";
     }
 
-
-
+    public async Task InitializeAsync()
+    {
+        await LoadChatWeightsAsync();
+        await LoadClipWeightsAsync();
+        await CreateContextAsync();
+        await CreateExecutorAsync();
+        await CreateChatSessionAsync();
+    }
 
     public async Task LoadChatWeightsAsync()
     {
