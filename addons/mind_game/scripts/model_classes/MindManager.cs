@@ -1,3 +1,5 @@
+// This node must exist somewhere in your project and initialized prior to creating MindAgent nodes
+
 using Godot;
 using System;
 using LLama;
@@ -47,12 +49,12 @@ public partial class MindManager : Node, IDisposable
     public delegate void ChatSessionStatusEventHandler(bool isLoaded);
 
 
-    public LLamaWeights chatWeights { get; private set; }
-    public LLavaWeights clipWeights { get; private set; }
-    public LLamaEmbedder embedder { get; private set; }
-    public LLamaContext context { get; private set; }
-    public InteractiveExecutor executor { get; private set; }
-    public ChatSession chatSession { get; private set; }
+    public LLamaWeights chatWeights { get; private set; } = null;
+    public LLavaWeights clipWeights { get; private set; } = null;
+    public LLamaEmbedder embedder { get; private set; } = null;
+    public LLamaContext context { get; private set; } = null;
+    public InteractiveExecutor executor { get; private set; } = null;
+    public ChatSession chatSession { get; private set; } = null;
 
 
 
@@ -84,6 +86,10 @@ public partial class MindManager : Node, IDisposable
                 chatWeights = LLamaWeights.LoadFromFile(new ModelParams(ChatModelPath));
             });
         }
+        else
+        {
+            GD.PrintErr("Chat model path not set.");
+        }
     }
 
     public async Task LoadClipWeightsAsync()
@@ -94,6 +100,10 @@ public partial class MindManager : Node, IDisposable
             { 
                 clipWeights = LLavaWeights.LoadFromFile(ClipModelPath); 
             });
+        }
+        else
+        {
+            GD.PrintErr("Clip model path not set.");
         }
     }
 
@@ -107,25 +117,36 @@ public partial class MindManager : Node, IDisposable
             });
             EmitSignal(SignalName.ContextStatus, true);
         }
-       
+        else
+        {
+            GD.PrintErr("Chat weights not set.");
+        }
+
     }
 
 
     public async Task CreateExecutorAsync()
     {
-        if (clipWeights != null)
+        if (context != null)
         {
-            await Task.Run(() =>
+            if (clipWeights != null)
             {
-                executor = new InteractiveExecutor(context, clipWeights);
-            });
+                await Task.Run(() =>
+                {
+                    executor = new InteractiveExecutor(context, clipWeights);
+                });
+            }
+            else
+            {
+                await Task.Run(() =>
+                {
+                    executor = new InteractiveExecutor(context);
+                });
+            }
         }
         else
         {
-            await Task.Run(() =>
-            {
-                executor = new InteractiveExecutor(context);
-            });
+            GD.PrintErr("Context not initialized.");
         }
     }
 
@@ -187,11 +208,32 @@ public partial class MindManager : Node, IDisposable
         EmitSignal(SignalName.EmbedderModelStatus, false);
     }
 
+    public void DisposeContext()
+    {
+        context?.Dispose();
+        EmitSignal(SignalName.ContextStatus, false);
+    }
+
+    public void DisposeExecutor()
+    {
+        executor = null;
+        EmitSignal(SignalName.ExecutorStatus, false);
+    }
+
+    public void DisposeChatSession()
+    {
+        chatSession = null;
+        EmitSignal(SignalName.ChatSessionStatus, false);
+    }
+
     public void DisposeAll()
     {
         DisposeChatModel();
         DisposeClipModel();
         DisposeEmbedder();
+        DisposeContext();
+        DisposeExecutor();
+        DisposeChatSession();
     }
 
 
