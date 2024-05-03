@@ -12,8 +12,8 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
 {
     
     private Control editorInterface;
-    private Script modelInterfaceScript = GD.Load<CSharpScript>("res://addons/mind_game/scripts/interfaces/ModelInterface.cs");
-    private Texture2D modelIcon = GD.Load<Texture2D>("res://addons/mind_game/assets/logos/brain_pink.png");
+    private Script mindManagerScript = GD.Load<CSharpScript>("res://addons/mind_game/scripts/managers/MindManager.cs");
+    private Texture2D mindManagerIcon = GD.Load<Texture2D>("res://addons/mind_game/assets/logos/brain_pink.png");
 
 
 
@@ -23,7 +23,7 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
         editorInterface = mindGameInterfaceScene.Instantiate<Control>();
         AddControlToBottomPanel(editorInterface, "Mind Game");
 
-        AddCustomType("ModelInterface", "Node", modelInterfaceScript, modelIcon);
+        AddCustomType("MindManager", "Node", mindManagerScript, mindManagerIcon);
 
     }
 
