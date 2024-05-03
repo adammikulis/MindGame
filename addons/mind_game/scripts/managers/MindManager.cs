@@ -7,27 +7,45 @@ using System.Threading.Tasks;
 
 public partial class MindManager : Node, IDisposable
 {
-    [Export]
-    public string ChatModelPath { get; private set; }
 
+    // Chat model in a .gguf format
     [Export]
-    public string ClipModelPath { get; private set; }
+    public string ChatModelPath { get; private set; } = "res://addons/mind_game/assets/models/Phi-3-mini-4k-instruct-q4.gguf";
 
+    // Clip model in a .gguf format
     [Export]
-    public string EmbedderModelPath { get; private set; }
+    public string ClipModelPath { get; private set; } = "res://addons/mind_game/assets/models/llava-phi-3-mini-mmproj-f16.gguf";
 
-
+    // Embedder model in a .gguf format
     [Export]
-    public int GpuLayerCount { get; private set; } = 16;
+    public string EmbedderModelPath { get; private set; } = "res://addons/mind_game/assets/models/all-MiniLM-L12-v2.Q4_K_M.gguf";
+
+    // Gpu Layers set 0-33
+    [Export]
+    public int GpuLayerCount { get; private set; } = 33;
 
     [Export]
     public uint ContextSize { get; private set; } = 4096;
+    [Export]
+    public uint Seed { get; private set; } = 0;
 
 
     [Signal]
     public delegate void ModelOutputReceivedEventHandler(string text);
+    [Signal]
+    public delegate void ChatModelStatusEventHandler(bool isLoaded);
+    [Signal]
+    public delegate void ClipModelStatusEventHandler(bool isLoaded);
+    [Signal]
+    public delegate void ContextStatusEventHandler(bool isLoaded);
+    [Signal]
+    public delegate void EmbedderModelStatusEventHandler(bool isLoaded);
+    [Signal]
+    public delegate void ExecutorStatusEventHandler(bool isLoaded);
+    [Signal]
+    public delegate void ChatSessionStatusEventHandler(bool isLoaded);
 
-  
+
     public LLamaWeights chatWeights { get; private set; }
     public LLavaWeights clipWeights { get; private set; }
     public LLamaEmbedder embedder { get; private set; }
@@ -45,42 +63,72 @@ public partial class MindManager : Node, IDisposable
     public override void _Ready()
     {
         GD.Print("Mind Manager ready!");
+        EmbedderModelPath = "res://addons/mind_game/assets/models/all-MiniLM-L12-v2.Q4_K_M.gguf";
     }
 
-    public async Task LoadChatWeights()
+
+
+
+    public async Task LoadChatWeightsAsync()
     {
         if (!string.IsNullOrEmpty(ChatModelPath))
         {
-            chatWeights = LLamaWeights.LoadFromFile(new ModelParams(ChatModelPath));
-            
+            await Task.Run(() =>
+            {
+                chatWeights = LLamaWeights.LoadFromFile(new ModelParams(ChatModelPath));
+            });
         }
     }
 
-    public async Task CreateContext()
+    public async Task LoadClipWeightsAsync()
+    {
+        if (!string.IsNullOrEmpty(ClipModelPath))
+        {
+            await Task.Run(() => 
+            { 
+                clipWeights = LLavaWeights.LoadFromFile(ClipModelPath); 
+            });
+        }
+    }
+
+    public async Task CreateContextAsync()
     {
         if (chatWeights != null)
         {
-            context = chatWeights.CreateContext(new ModelParams(ChatModelPath));
+            await Task.Run(() =>
+            {
+                context = chatWeights.CreateContext(new ModelParams(ChatModelPath));
+            });
+            EmitSignal(SignalName.ContextStatus, true);
         }
        
     }
 
-    public async Task LoadClipWeights()
+
+    public async Task CreateExecutorAsync()
     {
-        if (!string.IsNullOrEmpty(ClipModelPath))
+        if (clipWeights != null)
         {
-            clipWeights = LLavaWeights.LoadFromFile(ClipModelPath);
+            await Task.Run(() =>
+            {
+                executor = new InteractiveExecutor(context, clipWeights);
+            });
+        }
+        else
+        {
+            await Task.Run(() =>
+            {
+                executor = new InteractiveExecutor(context);
+            });
         }
     }
 
-    public void CreateExecutor()
+    public async Task CreateChatSessionAsync()
     {
-        executor = new InteractiveExecutor(context);
-    }
-
-    public void CreateChatSession()
-    { 
-        chatSession = new ChatSession(executor);
+        await Task.Run(() =>
+        {
+            chatSession = new ChatSession(executor);
+        });
     }
 
 
@@ -100,7 +148,7 @@ public partial class MindManager : Node, IDisposable
             executor.ImagePaths.AddRange(imagePaths);
         }
 
-        // Execute the chat session with the current prompt and possibly the images set earlier
+        // Execute the chat session with the current prompt and any images
         await Task.Run(async () =>
         {
             await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f }))
@@ -112,22 +160,25 @@ public partial class MindManager : Node, IDisposable
 
     private void DeferredEmitModelOutput(string output)
     {
-        EmitSignal(nameof(ModelOutputReceivedEventHandler), output);
+        EmitSignal(SignalName.ModelOutputReceived, output);
     }
 
     public void DisposeChatModel()
     {
         chatWeights?.Dispose();
+        EmitSignal(SignalName.ChatModelStatus, false);
     }
 
     public void DisposeClipModel()
     {
         clipWeights?.Dispose();
+        EmitSignal(SignalName.ClipModelStatus, false);
     }
 
     public void DisposeEmbedder()
     {
         embedder?.Dispose();
+        EmitSignal(SignalName.EmbedderModelStatus, false);
     }
 
     public void DisposeAll()
