@@ -307,9 +307,9 @@ public partial class ModelInterface : Control, IDisposable
 
     public override void _ExitTree()
     {
-        //selectChatModelButton.Pressed -= OnSelectChatModelButtonPressed;
-        //unloadChatModelButton.Pressed -= OnUnloadChatModelButtonPressed;
-        //selectChatModelFileDialog.FileSelected -= OnChatModelSelected;
-        //chatModelGpuLayerCountHSlider.ValueChanged -= OnModelGpuLayerCountHSliderValueChanged;
+        selectChatModelButton.Pressed -= OnSelectChatModelButtonPressed;
+        unloadChatModelButton.Pressed -= OnUnloadChatModelButtonPressed;
+        selectChatModelFileDialog.FileSelected -= OnChatModelSelected;
+        chatModelGpuLayerCountHSlider.ValueChanged -= OnModelGpuLayerCountHSliderValueChanged;
     }
 }

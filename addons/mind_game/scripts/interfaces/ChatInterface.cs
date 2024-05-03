@@ -1,13 +1,7 @@
 using Godot;
 using LLama;
 using LLama.Common;
-using LLama.Abstractions;
-using LLama.Native;
 using System.Threading.Tasks;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using System;
 
 
 [Tool]
@@ -23,12 +17,10 @@ public partial class ChatInterface : Control
     private InteractiveExecutor executor;
     private ChatSession chatSession;
 
-
     private RichTextLabel modelOutputRichTextLabel;
     private LineEdit promptLineEdit;
 
     private string[] antiPrompts;
-
 
     public override void _Ready()
     {
@@ -51,7 +43,7 @@ public partial class ChatInterface : Control
         uploadImageButton.Pressed += OnUploadImagePressed;
         uploadImageFileDialog.FilesSelected += OnImageFilePathsSelected;
 
-        antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "\nUser:", "\nUSER:", "\n\nUser:", "\n\nUSER:"];
+        antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "User:", "USER:", "\nUser:", "\nUSER:"];
 
     }
 
@@ -60,7 +52,7 @@ public partial class ChatInterface : Control
         modelOutputRichTextLabel.Text = "";
     }
 
-    private async void OnImageFilePathsSelected(string[] paths)
+    private void OnImageFilePathsSelected(string[] paths)
     {
         executor.ImagePaths.Clear();
         executor.ImagePaths.AddRange(paths);
@@ -107,22 +99,10 @@ public partial class ChatInterface : Control
             await Task.Run(async () =>
             {
                 await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f, AntiPrompts = antiPrompts }))
-                {
-                    bool isAntiPrompt = false;
-                    foreach (var antiPrompt in antiPrompts)
-                    {
-                        if (output.Contains(antiPrompt))
-                        {
-                            isAntiPrompt = true;
-                            break;
-                        }
-                    }
-
-                    if (!isAntiPrompt)
-                    {
-                        CallDeferred(nameof(DeferredEmitNewOutput), output);
-                    }
+                { 
+                    CallDeferred(nameof(DeferredEmitNewOutput), output);
                 }
+                
             });
         }
     }
@@ -144,7 +124,6 @@ public partial class ChatInterface : Control
         OnChatSessionStatusUpdated();
         GD.Print("Chat session initialized!");
     }
-
 
     public void SetExecutor(InteractiveExecutor executor)
     {
