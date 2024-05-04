@@ -1,8 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dve4ynjuwr2cm"]
+[gd_scene format=3 uid="uid://62u4i8raj8tj"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/ModelConfigInterface.cs" id="1_cwjy2"]
-
-[node name="ModelConfigurationInterface" type="Control"]
+[node name="ModelConfigInterface" type="Control"]
 auto_translate_mode = 1
 layout_mode = 3
 anchors_preset = 15
@@ -10,7 +8,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_cwjy2")
 
 [node name="ModelHBoxContainer" type="HBoxContainer" parent="."]
 auto_translate_mode = 1
@@ -98,6 +95,7 @@ layout_mode = 2
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Select Clip Model (.gguf) (optional)"
 
 [node name="UseClipModelCheckBox" type="CheckBox" parent="ModelHBoxContainer/ChatModelVBoxContainer/ClipModelHBoxContainer"]
@@ -147,19 +145,20 @@ layout_mode = 2
 text = "Embedder Model (BERT)"
 horizontal_alignment = 1
 
-[node name="ContextSizeTitleLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer/EmbeddingModelVBoxContainer"]
+[node name="EmbedderContextSizeTitleLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer/EmbeddingModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Context Size:"
+text = "Embedder Context Size:"
 
-[node name="ContextSizeHBoxContainer" type="HBoxContainer" parent="ModelHBoxContainer/ChatModelVBoxContainer/EmbeddingModelVBoxContainer"]
+[node name="EmbedderContextSizeHBoxContainer" type="HBoxContainer" parent="ModelHBoxContainer/ChatModelVBoxContainer/EmbeddingModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 10
 
-[node name="ChatContextSizeHSlider" type="HSlider" parent="ModelHBoxContainer/ChatModelVBoxContainer/EmbeddingModelVBoxContainer/ContextSizeHBoxContainer"]
+[node name="EmbedderContextSizeHSlider" type="HSlider" parent="ModelHBoxContainer/ChatModelVBoxContainer/EmbeddingModelVBoxContainer/EmbedderContextSizeHBoxContainer"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
@@ -169,7 +168,8 @@ value = 7.0
 tick_count = 18
 ticks_on_borders = true
 
-[node name="ChatContextSizeLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer/EmbeddingModelVBoxContainer/ContextSizeHBoxContainer"]
+[node name="EmbedderContextSizeLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer/EmbeddingModelVBoxContainer/EmbedderContextSizeHBoxContainer"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 text = "4096"
@@ -187,6 +187,7 @@ size_flags_vertical = 8
 theme_override_constants/separation = 10
 
 [node name="EmbedderModelGpuLayerCountHSlider" type="HSlider" parent="ModelHBoxContainer/ChatModelVBoxContainer/EmbeddingModelVBoxContainer/GpuLayerHBoxContainer"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
@@ -196,7 +197,8 @@ value = 33.0
 tick_count = 32
 ticks_on_borders = true
 
-[node name="ChatModelGpuLayerCountLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer/EmbeddingModelVBoxContainer/GpuLayerHBoxContainer"]
+[node name="EmbedderModelGpuLayerCountLabel" type="Label" parent="ModelHBoxContainer/ChatModelVBoxContainer/EmbeddingModelVBoxContainer/GpuLayerHBoxContainer"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 text = "33"
