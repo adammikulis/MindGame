@@ -8,21 +8,20 @@ using LLama.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-[Tool]
 public partial class MindManager : Node, IDisposable
 {
 
     // Chat model in a .gguf format
     [Export]
-    public string ChatModelPath { get; private set; } = "res://addons/mind_game/assets/models/Phi-3-mini-4k-instruct-q4.gguf";
+    public string ChatModelPath { get; private set; } = "addons/mind_game/assets/models/Phi-3-mini-4k-instruct-q4.gguf";
 
     // Clip model in a .gguf format
     [Export]
-    public string ClipModelPath { get; private set; } = "res://addons/mind_game/assets/models/llava-phi-3-mini-mmproj-f16.gguf";
+    public string ClipModelPath { get; private set; } = "addons/mind_game/assets/models/llava-phi-3-mini-mmproj-f16.gguf";
 
     // Embedder model in a .gguf format
     [Export]
-    public string EmbedderModelPath { get; private set; } = "res://addons/mind_game/assets/models/all-MiniLM-L12-v2.Q4_K_M.gguf";
+    public string EmbedderModelPath { get; private set; } = "addons/mind_game/assets/models/all-MiniLM-L12-v2.Q4_K_M.gguf";
 
     // Gpu Layers set 0-33
     [Export]

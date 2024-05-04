@@ -25,8 +25,15 @@ public partial class MindAgent : Node
 
     public override void _Ready()
     {
-        mm = GetNode<MindManager>("/root/MindManager");
-        mm.InitializeAsync();
+        try
+        {
+            mm = GetNode<MindManager>("/root/MindManager");
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr("Please ensure MindManager is enabled in Autoloads!");
+        }
+        
     }
 
     public async Task InitializeAsync()
