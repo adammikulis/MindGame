@@ -8,16 +8,28 @@ using System.Threading.Tasks;
 public partial class MindAgent : Node
 {
 
-    private MindManager mm;
-
-    public InteractiveExecutor executor { get; private set; } = null;
-    public ChatSession chatSession { get; private set; } = null;
+    [Signal]
+    public delegate void ContextStatusUpdateEventHandler(bool isLoaded);
     [Signal]
     public delegate void ExecutorStatusUpdateEventHandler(bool isLoaded);
     [Signal]
     public delegate void ChatSessionStatusUpdateEventHandler(bool isLoaded);
     [Signal]
     public delegate void ChatOutputReceivedEventHandler(string text);
+
+
+    private MindManager mm;
+    public string[] antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "User:", "USER:", "\nUser:", "\nUSER:"];
+    public float temperature = 0.5f;
+    public int maxTokens = 4096;
+
+
+
+    public LLamaContext context { get; private set; } = null;
+    public InteractiveExecutor executor { get; private set; } = null;
+    public ChatSession chatSession { get; private set; } = null;
+
+    
     public override void _EnterTree()
     {
         
@@ -28,7 +40,7 @@ public partial class MindAgent : Node
         try
         {
             mm = GetNode<MindManager>("/root/MindManager");
-            if (mm.context != null)
+            if (mm.isReady == true)
             {
                 await InitializeAsync();
             }
@@ -39,11 +51,23 @@ public partial class MindAgent : Node
             GD.PrintErr("Please ensure MindManager is enabled in Autoloads!");
         }
 
-        mm.ContextStatusUpdate += OnContextStatusUpdate;
+        mm.ChatModelStatusUpdate += OnChatModelStatusUpdate;
+        mm.ClipModelStatusUpdate += OnClipModelStatusUpdate;
+        mm.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
         
     }
 
-    private async void OnContextStatusUpdate(bool isLoaded)
+    private void OnEmbedderModelStatusUpdate(bool isLoaded)
+    {
+        
+    }
+
+    private void OnClipModelStatusUpdate(bool isLoaded)
+    {
+        
+    }
+
+    private async void OnChatModelStatusUpdate(bool isLoaded)
     {
         if (isLoaded)
         {
@@ -54,28 +78,46 @@ public partial class MindAgent : Node
 
     public async Task InitializeAsync()
     {
+        await CreateContextAsync();
         await CreateExecutorAsync();
         await CreateChatSessionAsync();
     }
 
+    public async Task CreateContextAsync()
+    {
+        if (mm.chatWeights != null)
+        {
+            await Task.Run(() =>
+            {
+                context = mm.chatWeights.CreateContext(new ModelParams(mm.ChatModelPath));
+            });
+            EmitSignal(SignalName.ContextStatusUpdate, true);
+        }
+        else
+        {
+            GD.PrintErr("Chat weights not set.");
+        }
+
+    }
+
     public async Task CreateExecutorAsync()
     {
-        if (mm.context != null)
+        if (context != null)
         {
             if (mm.clipWeights != null)
             {
                 await Task.Run(() =>
                 {
-                    executor = new InteractiveExecutor(mm.context, mm.clipWeights);
-                    EmitSignal(SignalName.ExecutorStatusUpdate, true);
+                    executor = new InteractiveExecutor(context, mm.clipWeights);
+                    CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, true);
                 });
             }
             else
             {
                 await Task.Run(() =>
                 {
-                    executor = new InteractiveExecutor(mm.context);
-                    EmitSignal(SignalName.ExecutorStatusUpdate, true);
+                    executor = new InteractiveExecutor(context);
+                    CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, true);
                 });
             }
         }
@@ -90,7 +132,7 @@ public partial class MindAgent : Node
         await Task.Run(() =>
         {
             chatSession = new ChatSession(executor);
-            EmitSignal(SignalName.ChatSessionStatusUpdate, true);
+            CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, true);
         });
     }
 
@@ -112,16 +154,20 @@ public partial class MindAgent : Node
         // Execute the chat session with the current prompt and any images
         await Task.Run(async () =>
         {
-            await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f }))
+            await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { AntiPrompts = antiPrompts, Temperature = temperature, MaxTokens = maxTokens }))
             {
-                CallDeferred(nameof(DeferredEmitModelOutput), output);
+                CallDeferred("emit_signal", SignalName.ChatOutputReceived, output);
             }
         });
     }
 
-    private void DeferredEmitModelOutput(string output)
+    public async Task DisposeContextAsync()
     {
-        EmitSignal(SignalName.ChatOutputReceived, output);
+        await Task.Run(() =>
+        {
+            context?.Dispose();
+            CallDeferred("emit_signal", SignalName.ContextStatusUpdate, false);
+        });
     }
 
     public async Task DisposeExecutorAsync()
@@ -129,7 +175,7 @@ public partial class MindAgent : Node
         await Task.Run(() =>
         {
             executor = null;
-            EmitSignal(SignalName.ExecutorStatusUpdate, false);
+            CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, false);
         });
     }
 
@@ -138,7 +184,7 @@ public partial class MindAgent : Node
         await Task.Run(() =>
         {
             chatSession = null;
-            EmitSignal(SignalName.ChatSessionStatusUpdate, false);
+            CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, false);
         });
     }
 
@@ -146,6 +192,7 @@ public partial class MindAgent : Node
     {
         await DisposeChatSessionAsync();
         await DisposeExecutorAsync();
+        await DisposeContextAsync();
 
     }
 

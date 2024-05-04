@@ -31,15 +31,15 @@ public partial class MindManager : Node, IDisposable
     [Signal]
     public delegate void ClipModelStatusUpdateEventHandler(bool isLoaded);
     [Signal]
-    public delegate void ContextStatusUpdateEventHandler(bool isLoaded);
-    [Signal]
     public delegate void EmbedderModelStatusUpdateEventHandler(bool isLoaded);
 
 
     public LLamaWeights chatWeights { get; private set; } = null;
     public LLavaWeights clipWeights { get; private set; } = null;
     public LLamaEmbedder embedder { get; private set; } = null;
-    public LLamaContext context { get; private set; } = null;
+
+    public bool isReady { get; private set; } = false;
+ 
     
 
     public async override void _EnterTree()
@@ -55,8 +55,7 @@ public partial class MindManager : Node, IDisposable
     public async Task InitializeAsync()
     {
         await LoadClipWeightsAsync();
-        await LoadModelWeightsAsync();
-        await CreateContextAsync();
+        await LoadChatModelWeightsAsync();
     }
 
     // Involves loading a separate LLamaWeights
@@ -65,13 +64,15 @@ public partial class MindManager : Node, IDisposable
         GD.Print("Embedder not yet coded");
     }
 
-    public async Task LoadModelWeightsAsync()
+    public async Task LoadChatModelWeightsAsync()
     {
         if (!string.IsNullOrEmpty(ChatModelPath))
         {
             await Task.Run(() =>
             {
                 chatWeights = LLamaWeights.LoadFromFile(new ModelParams(ChatModelPath));
+                CallDeferred("emit_signal", SignalName.ChatModelStatusUpdate, true);
+                isReady = true;
             });
         }
         else
@@ -88,7 +89,8 @@ public partial class MindManager : Node, IDisposable
         {
             await Task.Run(() => 
             { 
-                clipWeights = LLavaWeights.LoadFromFile(ClipModelPath); 
+                clipWeights = LLavaWeights.LoadFromFile(ClipModelPath);
+                CallDeferred("emit_signal", SignalName.ClipModelStatusUpdate, true);
             });
         }
         else
@@ -97,29 +99,14 @@ public partial class MindManager : Node, IDisposable
         }
     }
 
-    public async Task CreateContextAsync()
-    {
-        if (chatWeights != null)
-        {
-            await Task.Run(() =>
-            {
-                context = chatWeights.CreateContext(new ModelParams(ChatModelPath));
-            });
-            EmitSignal(SignalName.ContextStatusUpdate, true);
-        }
-        else
-        {
-            GD.PrintErr("Chat weights not set.");
-        }
 
-    }
 
     public async Task DisposeChatWeightsAsync()
     {
         await Task.Run(() =>
         {
             chatWeights?.Dispose();
-            EmitSignal(SignalName.ChatModelStatusUpdate, false);
+            CallDeferred("emit_signal", SignalName.ChatModelStatusUpdate, false);
         });
             
     }
@@ -129,7 +116,7 @@ public partial class MindManager : Node, IDisposable
         await Task.Run(() =>
         {
             clipWeights?.Dispose();
-            EmitSignal(SignalName.ClipModelStatusUpdate, false);
+            CallDeferred("emit_signal", SignalName.ClipModelStatusUpdate, false);
         });
         
     }
@@ -139,28 +126,16 @@ public partial class MindManager : Node, IDisposable
         await Task.Run(() =>
         {
             embedder?.Dispose();
-            EmitSignal(SignalName.EmbedderModelStatusUpdate, false);
+            CallDeferred("emit_signal", SignalName.EmbedderModelStatusUpdate, false);
         });
     }
-
-    public async Task DisposeContextAsync()
-    {
-        await Task.Run(() =>
-        {
-            context?.Dispose();
-            EmitSignal(SignalName.ContextStatusUpdate, false);
-        });
-    }
-
     
 
     public async Task DisposeAll()
     {
-        await DisposeContextAsync();
         await DisposeEmbedderAsync();
         await DisposeClipWeightsAsync();
         await DisposeChatWeightsAsync();
-
     }
 
 
