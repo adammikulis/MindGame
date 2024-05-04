@@ -3,14 +3,14 @@ using System;
 
 public partial class SingleAgentChat : Node
 {
-    private MindManager mm;
+    private MindManager mindManager;
     private MindAgent mindAgent;
 
     private RichTextLabel modelOutputRichTextLabel;
     private LineEdit modelInputLineEdit;
     public override void _Ready()
     {
-        mm = GetNode<MindManager>("/root/MindManager");
+        mindManager = GetNode<MindManager>("/root/MindManager");
         mindAgent = GetNode<MindAgent>("%MindAgent");
         modelOutputRichTextLabel = GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
         modelInputLineEdit = GetNode<LineEdit>("%ModelInputLineEdit");
@@ -30,6 +30,7 @@ public partial class SingleAgentChat : Node
     private async void OnModelInputTextSubmitted(string newText)
     {
         modelInputLineEdit.Text = "";
+        modelOutputRichTextLabel.Text += $"\n\n{newText}\n\n";
         await mindAgent.InferAsync(newText);
     }
 
