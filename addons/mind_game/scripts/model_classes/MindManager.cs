@@ -1,4 +1,5 @@
-// This node must exist somewhere in your project and initialized prior to creating MindAgent nodes
+// This script is autoloaded and referenced by all MindAgent nodes
+// Not seeing your .gguf files? Editor > Editor Settings > Docks > FilesSystem > add gguf to TextFile Extensions
 
 using Godot;
 using System;
@@ -33,8 +34,7 @@ public partial class MindManager : Node, IDisposable
     public uint Seed { get; private set; } = 0;
 
 
-    [Signal]
-    public delegate void ModelOutputReceivedEventHandler(string text);
+    
     [Signal]
     public delegate void ChatModelStatusEventHandler(bool isLoaded);
     [Signal]
@@ -43,20 +43,13 @@ public partial class MindManager : Node, IDisposable
     public delegate void ContextStatusEventHandler(bool isLoaded);
     [Signal]
     public delegate void EmbedderModelStatusEventHandler(bool isLoaded);
-    [Signal]
-    public delegate void ExecutorStatusEventHandler(bool isLoaded);
-    [Signal]
-    public delegate void ChatSessionStatusEventHandler(bool isLoaded);
 
 
     public LLamaWeights chatWeights { get; private set; } = null;
     public LLavaWeights clipWeights { get; private set; } = null;
     public LLamaEmbedder embedder { get; private set; } = null;
     public LLamaContext context { get; private set; } = null;
-    public InteractiveExecutor executor { get; private set; } = null;
-    public ChatSession chatSession { get; private set; } = null;
-
-
+    
 
     public override void _EnterTree()
     {
@@ -70,14 +63,18 @@ public partial class MindManager : Node, IDisposable
 
     public async Task InitializeAsync()
     {
-        await LoadChatWeightsAsync();
+        await LoadModelWeightsAsync();
         await LoadClipWeightsAsync();
         await CreateContextAsync();
-        await CreateExecutorAsync();
-        await CreateChatSessionAsync();
     }
 
-    public async Task LoadChatWeightsAsync()
+    // Involves loading a separate LLamaWeights
+    private async Task LoadEmbedderAsync()
+    {
+        GD.Print("Embedder not yet coded");
+    }
+
+    public async Task LoadModelWeightsAsync()
     {
         if (!string.IsNullOrEmpty(ChatModelPath))
         {
@@ -91,6 +88,8 @@ public partial class MindManager : Node, IDisposable
             GD.PrintErr("Chat model path not set.");
         }
     }
+
+
 
     public async Task LoadClipWeightsAsync()
     {
@@ -124,116 +123,53 @@ public partial class MindManager : Node, IDisposable
 
     }
 
-
-    public async Task CreateExecutorAsync()
-    {
-        if (context != null)
-        {
-            if (clipWeights != null)
-            {
-                await Task.Run(() =>
-                {
-                    executor = new InteractiveExecutor(context, clipWeights);
-                });
-            }
-            else
-            {
-                await Task.Run(() =>
-                {
-                    executor = new InteractiveExecutor(context);
-                });
-            }
-        }
-        else
-        {
-            GD.PrintErr("Context not initialized.");
-        }
-    }
-
-    public async Task CreateChatSessionAsync()
+    public async Task DisposeChatWeightsAsync()
     {
         await Task.Run(() =>
         {
-            chatSession = new ChatSession(executor);
+            chatWeights?.Dispose();
+            EmitSignal(SignalName.ChatModelStatus, false);
+        });
+            
+    }
+
+    public async Task DisposeClipWeightsAsync()
+    {
+        await Task.Run(() =>
+        {
+            clipWeights?.Dispose();
+            EmitSignal(SignalName.ClipModelStatus, false);
+        });
+        
+    }
+
+    public async Task DisposeEmbedderAsync()
+    {
+        await Task.Run(() =>
+        {
+            embedder?.Dispose();
+            EmitSignal(SignalName.EmbedderModelStatus, false);
         });
     }
 
-
-
-    public async Task InferAsync(string prompt, List<string> imagePaths = null)
+    public async Task DisposeContextAsync()
     {
-        if (chatSession == null)
+        await Task.Run(() =>
         {
-            GD.PrintErr("Chat session not initialized. Please check the model configuration.");
-            return;
-        }
-
-        // Handle image paths by setting them in the executor
-        if (imagePaths != null && imagePaths.Count > 0)
-        {
-            executor.ImagePaths.Clear();
-            executor.ImagePaths.AddRange(imagePaths);
-        }
-
-        // Execute the chat session with the current prompt and any images
-        await Task.Run(async () =>
-        {
-            await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { Temperature = 0.5f }))
-            {
-                CallDeferred(nameof(DeferredEmitModelOutput), output);
-            }
+            context?.Dispose();
+            EmitSignal(SignalName.ContextStatus, false);
         });
     }
 
-    private void DeferredEmitModelOutput(string output)
-    {
-        EmitSignal(SignalName.ModelOutputReceived, output);
-    }
+    
 
-    public void DisposeChatModel()
+    public async Task DisposeAll()
     {
-        chatWeights?.Dispose();
-        EmitSignal(SignalName.ChatModelStatus, false);
-    }
+        await DisposeContextAsync();
+        await DisposeEmbedderAsync();
+        await DisposeClipWeightsAsync();
+        await DisposeChatWeightsAsync();
 
-    public void DisposeClipModel()
-    {
-        clipWeights?.Dispose();
-        EmitSignal(SignalName.ClipModelStatus, false);
-    }
-
-    public void DisposeEmbedder()
-    {
-        embedder?.Dispose();
-        EmitSignal(SignalName.EmbedderModelStatus, false);
-    }
-
-    public void DisposeContext()
-    {
-        context?.Dispose();
-        EmitSignal(SignalName.ContextStatus, false);
-    }
-
-    public void DisposeExecutor()
-    {
-        executor = null;
-        EmitSignal(SignalName.ExecutorStatus, false);
-    }
-
-    public void DisposeChatSession()
-    {
-        chatSession = null;
-        EmitSignal(SignalName.ChatSessionStatus, false);
-    }
-
-    public void DisposeAll()
-    {
-        DisposeChatModel();
-        DisposeClipModel();
-        DisposeEmbedder();
-        DisposeContext();
-        DisposeExecutor();
-        DisposeChatSession();
     }
 
 
