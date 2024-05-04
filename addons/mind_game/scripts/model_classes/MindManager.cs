@@ -12,36 +12,28 @@ public partial class MindManager : Node, IDisposable
 {
 
     // Chat model in a .gguf format
-    [Export]
     public string ChatModelPath { get; private set; } = "addons/mind_game/assets/models/Phi-3-mini-4k-instruct-q4.gguf";
 
     // Clip model in a .gguf format
-    [Export]
     public string ClipModelPath { get; private set; } = "addons/mind_game/assets/models/llava-phi-3-mini-mmproj-f16.gguf";
 
     // Embedder model in a .gguf format
-    [Export]
     public string EmbedderModelPath { get; private set; } = "addons/mind_game/assets/models/all-MiniLM-L12-v2.Q4_K_M.gguf";
 
     // Gpu Layers set 0-33
-    [Export]
     public int GpuLayerCount { get; private set; } = 33;
-
-    [Export]
     public uint ContextSize { get; private set; } = 4096;
-    [Export]
     public uint Seed { get; private set; } = 0;
 
 
-    
     [Signal]
-    public delegate void ChatModelStatusEventHandler(bool isLoaded);
+    public delegate void ChatModelStatusUpdateEventHandler(bool isLoaded);
     [Signal]
-    public delegate void ClipModelStatusEventHandler(bool isLoaded);
+    public delegate void ClipModelStatusUpdateEventHandler(bool isLoaded);
     [Signal]
-    public delegate void ContextStatusEventHandler(bool isLoaded);
+    public delegate void ContextStatusUpdateEventHandler(bool isLoaded);
     [Signal]
-    public delegate void EmbedderModelStatusEventHandler(bool isLoaded);
+    public delegate void EmbedderModelStatusUpdateEventHandler(bool isLoaded);
 
 
     public LLamaWeights chatWeights { get; private set; } = null;
@@ -50,20 +42,20 @@ public partial class MindManager : Node, IDisposable
     public LLamaContext context { get; private set; } = null;
     
 
-    public override void _EnterTree()
+    public async override void _EnterTree()
     {
-        
+        await InitializeAsync();
     }
 
     public override void _Ready()
     {
-        GD.Print("Mind Manager ready!");
+        
     }
 
     public async Task InitializeAsync()
     {
-        await LoadModelWeightsAsync();
         await LoadClipWeightsAsync();
+        await LoadModelWeightsAsync();
         await CreateContextAsync();
     }
 
@@ -113,7 +105,7 @@ public partial class MindManager : Node, IDisposable
             {
                 context = chatWeights.CreateContext(new ModelParams(ChatModelPath));
             });
-            EmitSignal(SignalName.ContextStatus, true);
+            EmitSignal(SignalName.ContextStatusUpdate, true);
         }
         else
         {
@@ -127,7 +119,7 @@ public partial class MindManager : Node, IDisposable
         await Task.Run(() =>
         {
             chatWeights?.Dispose();
-            EmitSignal(SignalName.ChatModelStatus, false);
+            EmitSignal(SignalName.ChatModelStatusUpdate, false);
         });
             
     }
@@ -137,7 +129,7 @@ public partial class MindManager : Node, IDisposable
         await Task.Run(() =>
         {
             clipWeights?.Dispose();
-            EmitSignal(SignalName.ClipModelStatus, false);
+            EmitSignal(SignalName.ClipModelStatusUpdate, false);
         });
         
     }
@@ -147,7 +139,7 @@ public partial class MindManager : Node, IDisposable
         await Task.Run(() =>
         {
             embedder?.Dispose();
-            EmitSignal(SignalName.EmbedderModelStatus, false);
+            EmitSignal(SignalName.EmbedderModelStatusUpdate, false);
         });
     }
 
@@ -156,7 +148,7 @@ public partial class MindManager : Node, IDisposable
         await Task.Run(() =>
         {
             context?.Dispose();
-            EmitSignal(SignalName.ContextStatus, false);
+            EmitSignal(SignalName.ContextStatusUpdate, false);
         });
     }
 

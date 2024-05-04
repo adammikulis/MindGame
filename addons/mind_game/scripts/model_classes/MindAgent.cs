@@ -13,9 +13,9 @@ public partial class MindAgent : Node
     public InteractiveExecutor executor { get; private set; } = null;
     public ChatSession chatSession { get; private set; } = null;
     [Signal]
-    public delegate void ExecutorStatusEventHandler(bool isLoaded);
+    public delegate void ExecutorStatusUpdateEventHandler(bool isLoaded);
     [Signal]
-    public delegate void ChatSessionStatusEventHandler(bool isLoaded);
+    public delegate void ChatSessionStatusUpdateEventHandler(bool isLoaded);
     [Signal]
     public delegate void ChatOutputReceivedEventHandler(string text);
     public override void _EnterTree()
@@ -23,18 +23,34 @@ public partial class MindAgent : Node
         
     }
 
-    public override void _Ready()
+    public async override void _Ready()
     {
         try
         {
             mm = GetNode<MindManager>("/root/MindManager");
+            if (mm.context != null)
+            {
+                await InitializeAsync();
+            }
+            
         }
         catch (Exception e)
         {
             GD.PrintErr("Please ensure MindManager is enabled in Autoloads!");
         }
+
+        mm.ContextStatusUpdate += OnContextStatusUpdate;
         
     }
+
+    private async void OnContextStatusUpdate(bool isLoaded)
+    {
+        if (isLoaded)
+        {
+            await InitializeAsync();
+        }
+    }
+
 
     public async Task InitializeAsync()
     {
@@ -51,6 +67,7 @@ public partial class MindAgent : Node
                 await Task.Run(() =>
                 {
                     executor = new InteractiveExecutor(mm.context, mm.clipWeights);
+                    EmitSignal(SignalName.ExecutorStatusUpdate, true);
                 });
             }
             else
@@ -58,12 +75,13 @@ public partial class MindAgent : Node
                 await Task.Run(() =>
                 {
                     executor = new InteractiveExecutor(mm.context);
+                    EmitSignal(SignalName.ExecutorStatusUpdate, true);
                 });
             }
         }
         else
         {
-            GD.PrintErr("Context not initialized.");
+            GD.PrintErr("Executor not initialized.");
         }
     }
 
@@ -72,6 +90,7 @@ public partial class MindAgent : Node
         await Task.Run(() =>
         {
             chatSession = new ChatSession(executor);
+            EmitSignal(SignalName.ChatSessionStatusUpdate, true);
         });
     }
 
@@ -110,7 +129,7 @@ public partial class MindAgent : Node
         await Task.Run(() =>
         {
             executor = null;
-            EmitSignal(SignalName.ExecutorStatus, false);
+            EmitSignal(SignalName.ExecutorStatusUpdate, false);
         });
     }
 
@@ -119,7 +138,7 @@ public partial class MindAgent : Node
         await Task.Run(() =>
         {
             chatSession = null;
-            EmitSignal(SignalName.ChatSessionStatus, false);
+            EmitSignal(SignalName.ChatSessionStatusUpdate, false);
         });
     }
 
