@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dtsyxmjtwi6u0"]
 
-[ext_resource type="PackedScene" uid="uid://dve4ynjuwr2cm" path="res://addons/mind_game/scenes/ModelInterface.tscn" id="1_cwmgi"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/EditorInterface.cs" id="1_jbfvo"]
 [ext_resource type="PackedScene" uid="uid://cvjvwql4bp2p0" path="res://addons/mind_game/scenes/ChatInterface.tscn" id="1_vdu7h"]
 [ext_resource type="PackedScene" uid="uid://b4b5fh23okx7s" path="res://addons/mind_game/scenes/HelpInterface.tscn" id="2_c3rd0"]
+[ext_resource type="PackedScene" uid="uid://62u4i8raj8tj" path="res://addons/mind_game/scenes/ModelConfigInterface.tscn" id="3_ub5bj"]
 
 [node name="EditorInterface" type="Control"]
 custom_minimum_size = Vector2(0, 300)
@@ -70,8 +70,7 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Models" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("1_cwmgi")]
-unique_name_in_owner = true
+[node name="ModelConfigInterface" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("3_ub5bj")]
 layout_mode = 2
 
 [node name="Help" parent="HBoxContainer/MainPanelContainer/TabContainer" instance=ExtResource("2_c3rd0")]
