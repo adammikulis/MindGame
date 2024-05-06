@@ -38,6 +38,7 @@ layout_mode = 2
 
 [node name="ConfigTitleLabel" type="Label" parent="VBoxContainer/ConfigHeadingPanelContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("1_u3f0h")
 text = "Model Configuration"
 horizontal_alignment = 1
@@ -49,7 +50,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
+theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 5
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer"]
@@ -125,7 +126,7 @@ size_flags_vertical = 3
 
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer/PanelContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Example Config"
+text = "Saved Config 1"
 
 [node name="ModelConfigMarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -195,7 +196,8 @@ ticks_on_borders = true
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "4096"
+text = "4000
+"
 
 [node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 auto_translate_mode = 1
@@ -302,7 +304,7 @@ ticks_on_borders = true
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "4096"
+text = "4000"
 
 [node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 auto_translate_mode = 1
@@ -316,7 +318,7 @@ layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 10
 
-[node name="EmbedderModelGpuLayerCountHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/GpuLayerHBoxContainer"]
+[node name="EmbedderGpuLayerCountHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/GpuLayerHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
@@ -327,7 +329,7 @@ value = 33.0
 tick_count = 32
 ticks_on_borders = true
 
-[node name="EmbedderModelGpuLayerCountLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/GpuLayerHBoxContainer"]
+[node name="EmbedderGpuLayerCountLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/GpuLayerHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
@@ -336,7 +338,7 @@ text = "33"
 [node name="SelectEmbedderModelHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 layout_mode = 2
 
-[node name="SelectEmbedderModelButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/SelectEmbedderModelHBoxContainer"]
+[node name="SelectEmbedderPathButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/SelectEmbedderModelHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2

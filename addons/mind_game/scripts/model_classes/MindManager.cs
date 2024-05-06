@@ -12,17 +12,17 @@ public partial class MindManager : Node, IDisposable
 {
 
     // Chat model in a .gguf format
-    public string ChatModelPath { get; private set; } = "addons/mind_game/assets/models/Phi-3-mini-4k-instruct-q4.gguf";
+    public string ChatModelPath { get; private set; }
 
     // Clip model in a .gguf format
-    public string ClipModelPath { get; private set; } = "addons/mind_game/assets/models/llava-phi-3-mini-mmproj-f16.gguf";
+    public string ClipModelPath { get; private set; }
 
     // Embedder model in a .gguf format
-    public string EmbedderModelPath { get; private set; } = "addons/mind_game/assets/models/all-MiniLM-L12-v2.Q4_K_M.gguf";
+    public string EmbedderModelPath { get; private set; }
 
     // Gpu Layers set 0-33
-    public int GpuLayerCount { get; private set; } = 33;
-    public uint ContextSize { get; private set; } = 4096;
+    public int GpuLayerCount { get; private set; }
+    public uint ContextSize { get; private set; }
     public uint Seed { get; private set; } = 0;
 
 
@@ -44,7 +44,7 @@ public partial class MindManager : Node, IDisposable
     // Embedder model vars
     public LLamaEmbedder embedder { get; private set; } = null;
 
-    public LLamaEmbedder embedderWeights { get; private set; } = null;
+    public LLamaWeights embedderWeights { get; private set; } = null;
 
     public bool isReady { get; private set; } = false;
  
@@ -52,7 +52,7 @@ public partial class MindManager : Node, IDisposable
 
     public async override void _EnterTree()
     {
-        await InitializeAsync();
+
     }
 
     public override void _Ready()
@@ -62,38 +62,38 @@ public partial class MindManager : Node, IDisposable
 
     public async Task InitializeAsync()
     {
-        await LoadClipWeightsAsync();
+        await LoadClipModelWeightsAsync();
         await LoadChatModelWeightsAsync();
     }
 
-    // Involves loading a separate LLamaWeights
-    private async Task LoadEmbedderAsync()
-    {
-        if (embedderWeights != null)
-        {
-            UnloadEmbedderModelAsync();
-        }
+    //// Involves loading a separate LLamaWeights
+    //private async Task LoadEmbedderAsync()
+    //{
+    //    if (embedderWeights != null)
+    //    {
+    //        UnloadEmbedderModelAsync();
+    //    }
 
-        var parameters = new ModelParams(embedderModelPath)
-        {
-            ContextSize = embedderContextSize,
-            Seed = 0,
-            GpuLayerCount = embedderGpuLayerCount,
-            EmbeddingMode = true
-        };
+    //    var parameters = new ModelParams(EmbedderModelPath)
+    //    {
+    //        ContextSize = embedderContextSize,
+    //        Seed = 0,
+    //        GpuLayerCount = embedderGpuLayerCount,
+    //        EmbeddingMode = true
+    //    };
 
-        embedderWeights = LLamaWeights.LoadFromFile(parameters);
-        embedder = new LLamaEmbedder(embedderWeights, parameters);
+    //    embedderWeights = LLamaWeights.LoadFromFile(parameters);
+    //    embedder = new LLamaEmbedder(embedderWeights, parameters);
 
-    }
+    //}
 
-    public async void UnloadEmbedderModelAsync()
-    {
+    //public async void UnloadEmbedderModelAsync()
+    //{
 
-        if (embedderWeights != null) { embedderWeights.Dispose(); }
-        if (embedder != null) { embedder.Dispose(); }
+    //    if (embedderWeights != null) { embedderWeights.Dispose(); }
+    //    if (embedder != null) { embedder.Dispose(); }
 
-    }
+    //}
 
 
     public async Task LoadChatModelWeightsAsync()
@@ -115,7 +115,7 @@ public partial class MindManager : Node, IDisposable
 
 
 
-    public async Task LoadClipWeightsAsync()
+    public async Task LoadClipModelWeightsAsync()
     {
         if (!string.IsNullOrEmpty(ClipModelPath))
         {
@@ -127,7 +127,7 @@ public partial class MindManager : Node, IDisposable
         }
         else
         {
-            GD.PrintErr("Clip model path not set.");
+            GD.Print("Clip model path not set, no model loaded.");
         }
     }
 
