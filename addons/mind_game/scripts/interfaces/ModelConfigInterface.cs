@@ -10,7 +10,7 @@ public partial class ModelConfigInterface : Control
  
 
     // UI elements
-    private Button selectChatModelButton, loadChatModelButton, unloadChatModelButton, selectEmbedderModelButton, loadEmbedderModelButton, unloadEmbedderModelButton, selectClipModelButton;
+    private Button selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton;
     private Label chatContextSizeLabel, chatModelGpuLayerCountLabel;
     private FileDialog selectChatModelFileDialog, selectClipModelFileDialog, selectEmbedderModelFileDialog;
     private HSlider chatContextSizeHSlider, chatModelGpuLayerCountHSlider;
@@ -50,22 +50,21 @@ public partial class ModelConfigInterface : Control
         chatModelGpuLayerCountLabel = GetNode<Label>("%ChatModelGpuLayerCountLabel");
         chatModelGpuLayerCountHSlider = GetNode<HSlider>("%ChatModelGpuLayerCountHSlider");
 
-        selectChatModelButton = GetNode<Button>("%SelectChatModelButton");
-        loadChatModelButton = GetNode<Button>("%LoadChatModelButton");
-        unloadChatModelButton = GetNode<Button>("%UnloadChatModelButton");
-        
-        selectChatModelFileDialog = GetNode<FileDialog>("%SelectChatModelFileDialog");
+
+        selectChatPathButton = GetNode<Button>("%SelectChatPathButton");
+        clearChatPathButton = GetNode<Button>("%ClearChatPathButton");
+        selectChatModelFileDialog = GetNode<FileDialog>("%SelectChatPathFileDialog");
 
         // Clip model vars
-        selectClipModelButton = GetNode<Button>("%SelectClipModelButton");
-        selectClipModelFileDialog = GetNode<FileDialog>("%SelectClipModelFileDialog");
+        selectClipPathButton = GetNode<Button>("%SelectClipPathButton");
+        clearClipPathButton = GetNode<Button>("%ClearClipPathButton");
+        selectClipModelFileDialog = GetNode<FileDialog>("%SelectClipPathFileDialog");
 
 
         // Embedder model vars
-        selectEmbedderModelButton = GetNode<Button>("%SelectEmbedderModelButton");
-        loadEmbedderModelButton = GetNode<Button>("%LoadEmbedderModelButton");
-        unloadEmbedderModelButton = GetNode<Button>("%UnloadEmbedderModelButton");
-        selectEmbedderModelFileDialog = GetNode<FileDialog>("%SelectEmbedderModelFileDialog");
+        selectEmbedderPathButton = GetNode<Button>("%SelectEmbedderPathButton");
+        clearEmbedderPathButton = GetNode<Button>("%ClearEmbedderPathButton");
+        selectEmbedderModelFileDialog = GetNode<FileDialog>("%SelectEmbedderPathFileDialog");
 
         InitializeParameters();
         SetupSignals();
@@ -89,20 +88,18 @@ public partial class ModelConfigInterface : Control
         chatContextSizeHSlider.ValueChanged += OnChatContextSizeHSliderValueChanged;
         chatModelGpuLayerCountHSlider.ValueChanged += OnModelGpuLayerCountHSliderValueChanged;
 
-        selectChatModelButton.Pressed += OnSelectChatModelButtonPressed;
-        loadChatModelButton.Pressed += OnLoadChatModelButtonPressed;
-        unloadChatModelButton.Pressed += OnUnloadChatModelButtonPressed;
+        selectChatPathButton.Pressed += OnSelectChatModelButtonPressed;
 
         selectChatModelFileDialog.FileSelected += OnChatModelSelected;
 
 
         // Embedder signals
-        selectEmbedderModelButton.Pressed += OnSelectEmbedderModelPressed;
+        selectEmbedderPathButton.Pressed += OnSelectEmbedderModelPressed;
 
         selectEmbedderModelFileDialog.FileSelected += OnEmbedderModelSelected;
 
         // Clip signals
-        selectClipModelButton.Pressed += OnSelectClipModelButtonPressed;
+        selectClipPathButton.Pressed += OnSelectClipModelButtonPressed;
         selectClipModelFileDialog.FileSelected += OnClipModelSelected;
     }
 

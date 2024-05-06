@@ -1,8 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://62u4i8raj8tj"]
+[gd_scene load_steps=9 format=3 uid="uid://62u4i8raj8tj"]
 
+[ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/ModelConfigInterface.cs" id="1_kl464"]
 [ext_resource type="Theme" uid="uid://brptib3mp8h1o" path="res://addons/mind_game/assets/themes/config_header_theme.tres" id="1_u3f0h"]
+[ext_resource type="Texture2D" uid="uid://dnp0lvxevsc4m" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/plus.png" id="2_d7swh"]
+[ext_resource type="Texture2D" uid="uid://5ga0x3yawju4" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/trashcan.png" id="4_v2ps6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pcrja"]
+bg_color = Color(0.419813, 0.419813, 0.419813, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tivu8"]
 bg_color = Color(0.272874, 0.418358, 0.436817, 1)
@@ -21,6 +25,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_kl464")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
@@ -53,41 +59,50 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_pcrja")
 [node name="SavedConfigsVBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
+[node name="NewSaveDeleteMarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer"]
 layout_mode = 2
 
-[node name="ConfigNameHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer/VBoxContainer"]
+[node name="ConfigNameHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer/VBoxContainer/ConfigNameHBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/ConfigNameHBoxContainer"]
 layout_mode = 2
 text = "Name:"
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer/VBoxContainer/ConfigNameHBoxContainer"]
+[node name="ConfigNameLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/ConfigNameHBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Save Config"
-
-[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="AddNewConfigButton" type="Button" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Delete Config"
+icon = ExtResource("2_d7swh")
+icon_alignment = 1
 
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
+[node name="DeleteConfigButton" type="Button" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+icon = ExtResource("4_v2ps6")
+icon_alignment = 1
+
+[node name="SavedConfigsLabel" type="Label" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Saved Configurations:"
+
+[node name="SavedConfigsMarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 5
@@ -95,21 +110,22 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer2"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer2/PanelContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer/PanelContainer"]
 layout_mode = 2
+horizontal_scroll_mode = 0
 
-[node name="SavedConfigsLabel" type="Label" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer2/PanelContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer/PanelContainer/ScrollContainer"]
 layout_mode = 2
-text = "Saved Model Configurations"
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer2/PanelContainer/VBoxContainer"]
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer/PanelContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Model Config 1"
-alignment = 0
+text = "Example Config"
 
 [node name="ModelConfigMarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -214,15 +230,17 @@ text = "33"
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SelectChatModelButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/SelectChatModelHBoxContainer"]
+[node name="SelectChatPathButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/SelectChatModelHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
-text = "Select Model Path"
+text = "Select Model (.gguf)
+"
 
-[node name="ClearSelectedChatModelButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/SelectChatModelHBoxContainer"]
+[node name="ClearChatPathButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/SelectChatModelHBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear Selected Path"
@@ -323,13 +341,19 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Select Model Path"
+text = "Select Model (.gguf)"
 
-[node name="ClearSelectedEmbedderPathButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/SelectEmbedderModelHBoxContainer"]
+[node name="ClearEmbedderPathButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/SelectEmbedderModelHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear Selected Path"
+
+[node name="CurrentEmbedderModelPathLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Current model path:"
 
 [node name="ClipModelPanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
 layout_mode = 2
@@ -355,52 +379,61 @@ horizontal_alignment = 1
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
 layout_mode = 2
 
-[node name="SelectClipModelButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer/HBoxContainer"]
+[node name="SelectClipPathButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Select Model Path
+text = "Select Model (.gguf)
 "
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer/HBoxContainer"]
+[node name="ClearClipPathButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear Selected Path"
 
-[node name="SelectChatModelFileDialog" type="FileDialog" parent="."]
+[node name="CurrentClipModelPathLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
-title = "Select a Model"
+layout_mode = 2
+text = "Current model path:"
+
+[node name="SelectChatPathFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+auto_translate_mode = 1
+title = "Select a Chat Model"
 initial_position = 2
 size = Vector2i(400, 600)
-ok_button_text = "Open"
+ok_button_text = "Select"
 mode_overrides_title = false
 file_mode = 0
 access = 2
 show_hidden_files = true
 use_native_dialog = true
 
-[node name="SelectEmbedderModelFileDialog" type="FileDialog" parent="."]
+[node name="SelectEmbedderPathFileDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
 auto_translate_mode = 1
-title = "Select an Embedder (BERT)"
+title = "Select an Embedder"
 initial_position = 2
 size = Vector2i(400, 600)
-ok_button_text = "Open"
+ok_button_text = "Select"
 mode_overrides_title = false
 file_mode = 0
 access = 2
 show_hidden_files = true
+use_native_dialog = true
 
-[node name="SelectClipModelFileDialog" type="FileDialog" parent="."]
+[node name="SelectClipPathFileDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
 auto_translate_mode = 1
-title = "Select a Clip model (mmproj)"
+title = "Select a Clip Model (mmproj)"
 initial_position = 2
 size = Vector2i(400, 600)
-ok_button_text = "Open"
+ok_button_text = "Select"
 mode_overrides_title = false
 file_mode = 0
 access = 2
 show_hidden_files = true
+use_native_dialog = true
