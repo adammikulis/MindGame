@@ -34,9 +34,17 @@ public partial class MindManager : Node, IDisposable
     public delegate void EmbedderModelStatusUpdateEventHandler(bool isLoaded);
 
 
+    // Chat model vars
     public LLamaWeights chatWeights { get; private set; } = null;
+
+    // Clip model vars
     public LLavaWeights clipWeights { get; private set; } = null;
+
+   
+    // Embedder model vars
     public LLamaEmbedder embedder { get; private set; } = null;
+
+    public LLamaEmbedder embedderWeights { get; private set; } = null;
 
     public bool isReady { get; private set; } = false;
  
@@ -61,8 +69,32 @@ public partial class MindManager : Node, IDisposable
     // Involves loading a separate LLamaWeights
     private async Task LoadEmbedderAsync()
     {
-        GD.Print("Embedder not yet coded");
+        if (embedderWeights != null)
+        {
+            UnloadEmbedderModelAsync();
+        }
+
+        var parameters = new ModelParams(embedderModelPath)
+        {
+            ContextSize = embedderContextSize,
+            Seed = 0,
+            GpuLayerCount = embedderGpuLayerCount,
+            EmbeddingMode = true
+        };
+
+        embedderWeights = LLamaWeights.LoadFromFile(parameters);
+        embedder = new LLamaEmbedder(embedderWeights, parameters);
+
     }
+
+    public async void UnloadEmbedderModelAsync()
+    {
+
+        if (embedderWeights != null) { embedderWeights.Dispose(); }
+        if (embedder != null) { embedder.Dispose(); }
+
+    }
+
 
     public async Task LoadChatModelWeightsAsync()
     {
@@ -125,7 +157,7 @@ public partial class MindManager : Node, IDisposable
     {
         await Task.Run(() =>
         {
-            embedder?.Dispose();
+            embedderWeights?.Dispose();
             CallDeferred("emit_signal", SignalName.EmbedderModelStatusUpdate, false);
         });
     }

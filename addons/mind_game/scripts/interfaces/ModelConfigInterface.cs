@@ -1,5 +1,3 @@
-/* This class is deprecated for v0.2
-
 using Godot;
 using LLama.Common;
 using LLama;
@@ -7,17 +5,12 @@ using System;
 using static System.Collections.Specialized.BitVector32;
 
 [Tool]
-public partial class ModelInterface : Control, IDisposable
+public partial class ModelConfigInterface : Control
 {
-    
-    public delegate void EmbedderEventHandler(LLamaEmbedder embedder);
-    public event EmbedderEventHandler EmbedderAvailable;
-    public delegate void ExecutorEventHandler(InteractiveExecutor executor);
-    public event ExecutorEventHandler ExecutorAvailable;
+ 
 
     // UI elements
     private Button selectChatModelButton, loadChatModelButton, unloadChatModelButton, selectEmbedderModelButton, loadEmbedderModelButton, unloadEmbedderModelButton, selectClipModelButton;
-    private CheckBox useClipModelCheckBox, useChatModelAsEmbedder;
     private Label chatContextSizeLabel, chatModelGpuLayerCountLabel;
     private FileDialog selectChatModelFileDialog, selectClipModelFileDialog, selectEmbedderModelFileDialog;
     private HSlider chatContextSizeHSlider, chatModelGpuLayerCountHSlider;
@@ -35,11 +28,8 @@ public partial class ModelInterface : Control, IDisposable
     // Clip (LLaVa) model vars
     private LLavaWeights clipWeights = null;
     private string clipModelPath = null;
-    private bool useClipModel = false;
 
-    // Embedder model vars
-    private LLamaWeights embedderWeights = null;
-    private LLamaEmbedder embedder = null;
+    
     private string embedderModelPath = null;
 
     // Executor
@@ -68,7 +58,6 @@ public partial class ModelInterface : Control, IDisposable
 
         // Clip model vars
         selectClipModelButton = GetNode<Button>("%SelectClipModelButton");
-        useClipModelCheckBox = GetNode<CheckBox>("%UseClipModelCheckBox");
         selectClipModelFileDialog = GetNode<FileDialog>("%SelectClipModelFileDialog");
 
 
@@ -109,20 +98,17 @@ public partial class ModelInterface : Control, IDisposable
 
         // Embedder signals
         selectEmbedderModelButton.Pressed += OnSelectEmbedderModelPressed;
-        loadEmbedderModelButton.Pressed += OnLoadEmbedderModelButtonPressed;
-        unloadEmbedderModelButton.Pressed += OnUnloadEmbedderModelButtonPressed;
 
         selectEmbedderModelFileDialog.FileSelected += OnEmbedderModelSelected;
 
         // Clip signals
         selectClipModelButton.Pressed += OnSelectClipModelButtonPressed;
-        useClipModelCheckBox.Toggled += OnUseClipModelCheckBoxToggled;
         selectClipModelFileDialog.FileSelected += OnClipModelSelected;
     }
 
-    private void OnUseClipModelCheckBoxToggled(bool toggledOn)
+    private void OnClipModelSelected(string path)
     {
-        useClipModel = toggledOn;
+        throw new NotImplementedException();
     }
 
     private void OnEmbedderModelSelected(string path)
@@ -131,17 +117,6 @@ public partial class ModelInterface : Control, IDisposable
         chatModelPath = path;
     }
 
-    private void OnLoadEmbedderModelButtonPressed()
-    {
-        LoadEmbedderModel();
-    }
-
-
-
-    private void OnUnloadEmbedderModelButtonPressed()
-    {
-        UnloadEmbedderModel();
-    }
 
     private void OnSelectEmbedderModelPressed()
     {
@@ -149,36 +124,9 @@ public partial class ModelInterface : Control, IDisposable
     }
 
 
-    public void LoadEmbedderModel()
-    {
 
-        if (embedderWeights != null)
-        {
-            UnloadEmbedderModel();
-        }
 
-        var parameters = new ModelParams(embedderModelPath)
-        {
-            ContextSize = chatContextSize,
-            Seed = 0,
-            GpuLayerCount = chatGpuLayerCount,
-            EmbeddingMode = true
-        };
 
-        embedderWeights = LLamaWeights.LoadFromFile(parameters);
-        embedder = new LLamaEmbedder(embedderWeights, parameters);
-
-        EmbedderAvailable?.Invoke(embedder);
-
-    }
-
-    public void UnloadEmbedderModel()
-    {
-
-        if (embedderWeights != null) { embedderWeights.Dispose(); }
-        if (embedder != null) { embedder.Dispose(); }
-
-    }
 
     private uint getContextSize(double value)
     {
@@ -196,18 +144,6 @@ public partial class ModelInterface : Control, IDisposable
         chatContextSizeSliderValue = chatContextSizeHSlider.Value;
         chatContextSize = getContextSize(chatContextSizeSliderValue);
         chatContextSizeLabel.Text = chatContextSize.ToString();
-    }
-
-    private void OnLoadChatModelButtonPressed()
-    {
-        LoadChatModel();
-    }
-
-    private void OnClipModelSelected(string path)
-    {
-        useClipModelCheckBox.Disabled = false;
-        useClipModelCheckBox.ToggleMode = true;
-        clipModelPath = path;
     }
 
     private void OnSelectClipModelButtonPressed()
@@ -228,91 +164,11 @@ public partial class ModelInterface : Control, IDisposable
 
     private void OnChatModelSelected(string path)
     {
-        loadChatModelButton.Disabled = false;
         chatModelPath = path;
     }
 
-
-
-    public void LoadChatModel()
-    {
-        if (string.IsNullOrEmpty(chatModelPath))
-        {
-            GD.Print("Chat model path is not set.");
-            return;
-        }
-
-        if (chatWeights != null)
-        {
-            UnloadChatModel();
-        }
-
-        var parameters = new ModelParams(chatModelPath)
-        {
-            ContextSize = chatContextSize,
-            Seed = 0,
-            GpuLayerCount = chatGpuLayerCount,
-            EmbeddingMode = false
-        };
-
-        try
-        {
-            chatWeights = LLamaWeights.LoadFromFile(parameters);
-            chatContext = chatWeights.CreateContext(parameters);
-            bool executorInitialized = InitializeExecutor();
-            if (executorInitialized)
-            {
-                unloadChatModelButton.Disabled = false;
-                useChatModelAsEmbedder.Disabled = false;
-            }
-        }
-        catch (Exception ex)
-        {
-            GD.Print("Failed to load chat model: ", ex.Message);
-        }
-    }
-
-
-    private bool InitializeExecutor()
-    {
-        if (useClipModel && clipModelPath != null && chatModelPath != null)
-        {
-            clipWeights = LLavaWeights.LoadFromFile(clipModelPath);
-            executor = new InteractiveExecutor(chatContext, clipWeights);
-            ExecutorAvailable?.Invoke(executor);
-            return true;
-        }
-        else if (chatModelPath != null)
-        {
-            executor = new InteractiveExecutor(chatContext);
-            ExecutorAvailable?.Invoke(executor);
-            return true;
-        }
-        else { return false; }
-    }
-
-    public void UnloadChatModel()
-    {
-        if (chatWeights != null) { chatWeights.Dispose(); }
-        if (chatContext != null) { chatContext.Dispose(); }
-        if (embedder != null) { embedder.Dispose(); }
-        if (executor != null) { executor = null; }
-        
-        unloadChatModelButton.Disabled = true;
-    }
-
-    private void OnUnloadChatModelButtonPressed()
-    {
-        UnloadChatModel();
-    }
-
-
     public override void _ExitTree()
     {
-        selectChatModelButton.Pressed -= OnSelectChatModelButtonPressed;
-        unloadChatModelButton.Pressed -= OnUnloadChatModelButtonPressed;
-        selectChatModelFileDialog.FileSelected -= OnChatModelSelected;
-        chatModelGpuLayerCountHSlider.ValueChanged -= OnModelGpuLayerCountHSliderValueChanged;
+        
     }
 }
-*/
