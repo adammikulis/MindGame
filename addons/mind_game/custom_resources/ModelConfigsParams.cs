@@ -32,7 +32,6 @@ namespace MindGame
         [Export]
         public string ClipModelPath { get; set; }
 
-
         public ModelConfigsParams() : this("", 4000, 33, 0, "", 4000, 33, 0, "", "") { }
 
         public ModelConfigsParams(string modelConfigsName, uint chatContextSize, int chatGpuLayerCount, uint chatRandomSeed, string chatModelPath, uint embedderContextSize, int embedderGpuLayerCount, uint embedderRandomSeed, string embedderModelPath, string clipModelPath)

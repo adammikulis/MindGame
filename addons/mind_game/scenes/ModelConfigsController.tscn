@@ -102,6 +102,7 @@ icon_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+disabled = true
 icon = ExtResource("4_v2ps6")
 icon_alignment = 1
 
@@ -261,10 +262,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear Selected"
 
-[node name="CurrentChatModelPathLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
+[node name="ChatCurrentModelPathLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Current model path:"
 
 [node name="EmbedderModelPanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
 layout_mode = 2
@@ -382,11 +382,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear Selected"
 
-[node name="CurrentEmbedderModelPathLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+[node name="EmbedderCurrentModelPathLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "Current model path:"
 
 [node name="ClipModelPanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
 layout_mode = 2
@@ -429,11 +428,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear Selected"
 
-[node name="CurrentClipModelPathLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
+[node name="ClipCurrentModelPathLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-text = "Current model path:"
 
 [node name="SelectChatPathFileDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true

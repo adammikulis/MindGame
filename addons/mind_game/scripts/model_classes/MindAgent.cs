@@ -22,11 +22,8 @@ namespace MindGame
         private MindManager mm;
         public string[] antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "User:", "USER:", "\nUser:", "\nUSER:"];
         public float temperature = 0.5f;
-        public int maxTokens = 4096;
+        public int maxTokens = 4000;
 
-
-
-    
         public InteractiveExecutor executor { get; private set; } = null;
         public ChatSession chatSession { get; private set; } = null;
 
