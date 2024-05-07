@@ -15,14 +15,14 @@ public partial class ModelConfigsController : Control
     private Label chatContextSizeLabel, chatGpuLayerCountLabel, embedderContextSizeLabel, embedderGpuLayerCountLabel;
     private FileDialog selectChatPathFileDialog, selectClipPathFileDialog, selectEmbedderPathFileDialog;
     private HSlider chatContextSizeHSlider, chatGpuLayerCountHSlider, embedderContextSizeHSlider, embedderGpuLayerCountHSlider;
-    private LineEdit configNameLineEdit;
+    private LineEdit configNameLineEdit, chatRandomSeedLineEdit, embedderRandomSeedLineEdit;
     private ItemList savedConfigsItemList;
 
     // Model params
     private string configName;
     private int chatGpuLayerCount, embedderGpuLayerCount;
     private double chatContextSizeSliderValue, embedderContextSizeSliderValue;
-    private uint chatContextSize, embedderContextSize, chatSeed, embedderSeed;
+    private uint chatContextSize, embedderContextSize, chatRandomSeed, embedderRandomSeed;
     private string chatModelPath, clipModelPath, embedderModelPath;
 
     public override void _EnterTree()
@@ -32,40 +32,72 @@ public partial class ModelConfigsController : Control
 
     public override void _Ready()
     {
+        InitializeDefaultValues();
         InitializeNodeRefs();
         InitializeSignals();
-        InitializeParameters();
+        InitializeUiElements();
+    }
+
+    private void InitializeDefaultValues()
+    {
+        configName = "new_config";
+        
+        chatContextSize = 4000;
+        chatGpuLayerCount = 33;
+        chatRandomSeed = 0;
+        chatModelPath = "";
+
+        embedderContextSize = 4000;
+        embedderGpuLayerCount = 33;
+        embedderRandomSeed = 0;
+        embedderModelPath = "";
+
+        clipModelPath = "";
+        
     }
 
     private void InitializeNodeRefs()
     {
+
+        // Manage configs nodes
+        configNameLineEdit = GetNode<LineEdit>("%ConfigNameLineEdit");
+        savedConfigsItemList = GetNode<ItemList>("%SavedConfigsItemList");
         addNewConfigButton = GetNode<Button>("%AddNewConfigButton");
         deleteConfigButton = GetNode<Button>("%DeleteConfigButton");
+
+        // Chat param nodes
+        chatContextSizeHSlider = GetNode<HSlider>("%ChatContextSizeHSlider");
+        chatContextSizeLabel = GetNode<Label>("%ChatContextSizeLabel");
+
+        chatGpuLayerCountHSlider = GetNode<HSlider>("%ChatModelGpuLayerCountHSlider");
+        chatGpuLayerCountLabel = GetNode<Label>("%ChatModelGpuLayerCountLabel");
+
+        chatRandomSeedLineEdit = GetNode<LineEdit>("%ChatRandomSeedLineEdit");
+
+        // Chat path nodes
         selectChatPathButton = GetNode<Button>("%SelectChatPathButton");
         clearChatPathButton = GetNode<Button>("%ClearChatPathButton");
-        selectClipPathButton = GetNode<Button>("%SelectClipPathButton");
-        clearClipPathButton = GetNode<Button>("%ClearClipPathButton");
-        selectEmbedderPathButton = GetNode<Button>("%SelectEmbedderPathButton");
-        clearEmbedderPathButton = GetNode<Button>("%ClearEmbedderPathButton");
-
         selectChatPathFileDialog = GetNode<FileDialog>("%SelectChatPathFileDialog");
-        selectClipPathFileDialog = GetNode<FileDialog>("%SelectClipPathFileDialog");
-        selectEmbedderPathFileDialog = GetNode<FileDialog>("%SelectEmbedderPathFileDialog");
 
-        chatContextSizeHSlider = GetNode<HSlider>("%ChatContextSizeHSlider");
-        chatGpuLayerCountHSlider = GetNode<HSlider>("%ChatModelGpuLayerCountHSlider");
+        // Embedder param nodes
         embedderContextSizeHSlider = GetNode<HSlider>("%EmbedderContextSizeHSlider");
-        embedderGpuLayerCountHSlider = GetNode<HSlider>("%EmbedderGpuLayerCountHSlider");
-
-        savedConfigsItemList = GetNode<ItemList>("%SavedConfigsItemList");
-
-        chatContextSizeLabel = GetNode<Label>("%ChatContextSizeLabel");
-        chatGpuLayerCountLabel = GetNode<Label>("%ChatModelGpuLayerCountLabel");
         embedderContextSizeLabel = GetNode<Label>("%EmbedderContextSizeLabel");
+
+        embedderGpuLayerCountHSlider = GetNode<HSlider>("%EmbedderGpuLayerCountHSlider");
         embedderGpuLayerCountLabel = GetNode<Label>("%EmbedderGpuLayerCountLabel");
 
-        configNameLineEdit = GetNode<LineEdit>("%ConfigNameLineEdit");
-        
+        embedderRandomSeedLineEdit = GetNode<LineEdit>("%EmbedderRandomSeedLineEdit");
+
+        // Embedder path nodes
+        selectEmbedderPathButton = GetNode<Button>("%SelectEmbedderPathButton");
+        clearEmbedderPathButton = GetNode<Button>("%ClearEmbedderPathButton");
+        selectEmbedderPathFileDialog = GetNode<FileDialog>("%SelectEmbedderPathFileDialog");
+
+        // Clip path nodes
+        selectClipPathButton = GetNode<Button>("%SelectClipPathButton");
+        clearClipPathButton = GetNode<Button>("%ClearClipPathButton");
+        selectClipPathFileDialog = GetNode<FileDialog>("%SelectClipPathFileDialog");
+
     }
 
     private void InitializeSignals()
@@ -99,6 +131,28 @@ public partial class ModelConfigsController : Control
 
     }
 
+    private void InitializeUiElements()
+    {
+        // Initialize chat sliders and labels
+        chatGpuLayerCountHSlider.Value = (double)chatGpuLayerCount;
+        chatGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
+
+        chatContextSizeHSlider.Value = calculateLogContextSize(chatContextSize);
+        chatContextSizeLabel.Text = chatContextSize.ToString();
+
+        chatRandomSeedLineEdit.Text = chatRandomSeed.ToString();
+
+        // Initialize embedder sliders and labels
+        embedderGpuLayerCountHSlider.Value = (double)embedderGpuLayerCount;
+        embedderGpuLayerCountLabel.Text = embedderGpuLayerCount.ToString();
+
+        embedderContextSizeHSlider.Value = calculateLogContextSize(embedderContextSize);
+        embedderContextSizeLabel.Text = embedderContextSize.ToString();
+
+        embedderRandomSeedLineEdit.Text = embedderRandomSeed.ToString();
+    }
+
+
 
 
 
@@ -109,7 +163,7 @@ public partial class ModelConfigsController : Control
 
     private void OnDeleteConfigPressed()
     {
-        // Removes currently selected entry from model_configs.json
+        // Remove currently selected entry from model_configs.json
     }
 
     private void OnAddNewConfigPressed()
@@ -123,37 +177,20 @@ public partial class ModelConfigsController : Control
 
     private void OnClearEmbedderPathPressed()
     {
-        embedderModelPath = null;
+        embedderModelPath = "";
     }
 
     private void OnClearClipPathPressed()
     {
-        clipModelPath = null;
+        clipModelPath = "";
     }
 
     private void OnClearChatPathPressed()
     {
-        chatModelPath = null;
+        chatModelPath = "";
     }
 
-    private void InitializeParameters()
-    {
-        // Initialize chat labels
-        chatGpuLayerCount = (int)chatGpuLayerCountHSlider.Value;
-        chatGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
-
-        chatContextSizeSliderValue = chatContextSizeHSlider.Value;
-        chatContextSize = calculateContextSize(chatContextSizeSliderValue);
-        chatContextSizeLabel.Text = chatContextSize.ToString();
-
-        // Initialize embedder labels
-        embedderGpuLayerCount = (int)embedderGpuLayerCountHSlider.Value;
-        embedderGpuLayerCountLabel.Text = embedderGpuLayerCount.ToString();
-
-        embedderContextSizeSliderValue = embedderContextSizeHSlider.Value;
-        embedderContextSize = calculateContextSize(embedderContextSizeSliderValue);
-        embedderContextSizeLabel.Text = embedderContextSize.ToString();
-    }
+    
 
     private void OnConfigNameTextChanged(string newText)
     {
@@ -197,20 +234,25 @@ public partial class ModelConfigsController : Control
         selectEmbedderPathFileDialog.PopupCentered();
     }
 
-    private uint calculateContextSize(double value)
+    private uint calculateExpContextSize(double value)
     {
         return (uint)Math.Pow(2, value) * 1000;
     }
 
+    private double calculateLogContextSize(uint value)
+    {
+        return (double)Math.Log2(value / 1000);
+    }
+
     private void OnChatContextSizeHSliderValueChanged(double value)
     {
-        chatContextSize = calculateContextSize(value);
+        chatContextSize = calculateExpContextSize(value);
         chatContextSizeLabel.Text = chatContextSize.ToString();
     }
 
     private void OnEmbedderContextSizeHSliderValueChanged(double value)
     {
-        embedderContextSize = calculateContextSize(value);
+        embedderContextSize = calculateExpContextSize(value);
         embedderContextSizeLabel.Text = embedderContextSize.ToString();
     }
 

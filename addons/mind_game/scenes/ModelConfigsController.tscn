@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://62u4i8raj8tj"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/interfaces/ModelConfigInterface.cs" id="1_kl464"]
 [ext_resource type="Theme" uid="uid://brptib3mp8h1o" path="res://addons/mind_game/assets/themes/config_header_theme.tres" id="1_u3f0h"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/controllers/ModelConfigsController.cs" id="1_uorev"]
 [ext_resource type="Texture2D" uid="uid://dnp0lvxevsc4m" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/plus.png" id="2_d7swh"]
 [ext_resource type="Texture2D" uid="uid://5ga0x3yawju4" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/trashcan.png" id="4_v2ps6"]
 
@@ -26,7 +26,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
-script = ExtResource("1_kl464")
+script = ExtResource("1_uorev")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -160,8 +160,11 @@ size_flags_vertical = 0
 [node name="HeadingLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
+tooltip_text = "Chat model required for proper functionality (Llama/Mistral/Mixtral/Phi)"
+mouse_filter = 1
+mouse_default_cursor_shape = 16
 theme = ExtResource("1_u3f0h")
-text = "Chat Model (Llama/Mistral/Mixtral/Phi)"
+text = "Chat Model"
 horizontal_alignment = 1
 
 [node name="ChatGridContainer" type="GridContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
@@ -224,14 +227,14 @@ layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 10
 
-[node name="ChatSeedHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
+[node name="ChatRandomSeedHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 layout_mode = 2
 
-[node name="ChatSeedLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatSeedHBoxContainer"]
+[node name="ChatRandomSeedLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatRandomSeedHBoxContainer"]
 layout_mode = 2
-text = "Seed:"
+text = "Random Seed:"
 
-[node name="ChatSeedLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatSeedHBoxContainer"]
+[node name="ChatRandomSeedLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatRandomSeedHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -247,7 +250,6 @@ auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
-tooltip_text = "Chat model required for proper functionality"
 text = "Select Model (.gguf)
 "
 
@@ -283,8 +285,11 @@ size_flags_vertical = 8
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
+tooltip_text = "Embedder model is optional (all-MiniLM-L12-v2)"
+mouse_filter = 1
+mouse_default_cursor_shape = 16
 theme = ExtResource("1_u3f0h")
-text = "Embedder Model (all-MiniLM-L12-v2)"
+text = "Embedder Model"
 horizontal_alignment = 1
 
 [node name="EmbedderGridContainer" type="GridContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
@@ -341,16 +346,16 @@ layout_mode = 2
 text = "0"
 horizontal_alignment = 1
 
-[node name="EmbedderSeedHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+[node name="EmbedderRandomSeedHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 
-[node name="EmbedderSeedLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderSeedHBoxContainer"]
+[node name="EmbedderRandomSeedLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderRandomSeedHBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
-text = "Seed:"
+text = "Random Seed:"
 
-[node name="EmbedderSeedLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderSeedHBoxContainer"]
+[node name="EmbedderRandomSeedLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderRandomSeedHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
@@ -365,7 +370,6 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Embedder model is optional"
 text = "Select Model (.gguf)"
 
 [node name="ClearEmbedderPathButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/SelectEmbedderModelHBoxContainer"]
@@ -397,8 +401,11 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
 layout_mode = 2
+tooltip_text = "Clip model is optional (mmproj)"
+mouse_filter = 1
+mouse_default_cursor_shape = 16
 theme = ExtResource("1_u3f0h")
-text = "Clip/LLaVa Model (mmproj)"
+text = "Clip/LLaVa Model"
 horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
@@ -409,7 +416,6 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Clip model is optional"
 text = "Select Model (.gguf)
 "
 
