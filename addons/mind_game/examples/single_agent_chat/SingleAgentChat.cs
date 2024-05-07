@@ -3,15 +3,15 @@ using System;
 
 public partial class SingleAgentChat : Node
 {
-    private MindManager mindManager;
-    private MindAgent mindAgent;
+    private MindGame.MindManager mindManager;
+    private MindGame.MindAgent mindAgent;
 
     private RichTextLabel modelOutputRichTextLabel;
     private LineEdit modelInputLineEdit;
     public override void _Ready()
     {
-        mindManager = GetNode<MindManager>("/root/MindManager");
-        mindAgent = GetNode<MindAgent>("%MindAgent");
+        mindManager = GetNode<MindGame.MindManager>("/root/MindManager");
+        mindAgent = GetNode<MindGame.MindAgent>("%MindAgent");
         modelOutputRichTextLabel = GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
         modelInputLineEdit = GetNode<LineEdit>("%ModelInputLineEdit");
 

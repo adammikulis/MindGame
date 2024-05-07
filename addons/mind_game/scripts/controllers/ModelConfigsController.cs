@@ -2,6 +2,7 @@ using Godot;
 using LLama.Common;
 using LLama;
 using System;
+using System.Collections.Generic;
 using static System.Collections.Specialized.BitVector32;
 
 [Tool]
@@ -158,20 +159,18 @@ public partial class ModelConfigsController : Control
 
     private void OnSavedConfigsItemSelected(long index)
     {
-        // Load the config from the json
+        
     }
 
     private void OnDeleteConfigPressed()
     {
-        // Remove currently selected entry from model_configs.json
+        
     }
 
     private void OnAddNewConfigPressed()
     {
-        // Add a new entry to model_configs.json with all the current variables
+       
     }
-
-    // If a config is loaded, every change to a variable should automatically save the whole config back to json
 
 
 
@@ -269,15 +268,3 @@ public partial class ModelConfigsController : Control
     }
 }
 
-public class ModelConfigsParams
-{
-    public string ChatModelPath { get; set; }
-    public string ClipModelPath { get; set; }
-    public string EmbedderModelPath { get; set; }
-    public int ChatGpuLayerCount { get; set; }
-    public int EmbedderGpuLayerCount { get; set; }
-    public uint ChatContextSize { get; set; }
-    public uint EmbedderContextSize { get; set; }
-    public uint ChatSeed { get; set; }
-    public uint EmbedderSeed { get; set;}
-}

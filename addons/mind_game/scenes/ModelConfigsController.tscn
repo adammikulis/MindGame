@@ -186,6 +186,7 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 12.0
+value = 2.0
 tick_count = 13
 ticks_on_borders = true
 
@@ -194,7 +195,7 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
-text = "1000"
+text = "4000"
 horizontal_alignment = 1
 
 [node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
@@ -210,6 +211,7 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 33.0
+value = 33.0
 tick_count = 34
 ticks_on_borders = true
 
@@ -218,7 +220,7 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
-text = "0"
+text = "33"
 horizontal_alignment = 1
 
 [node name="GpuLayerHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
@@ -311,6 +313,7 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 12.0
+value = 2.0
 tick_count = 13
 ticks_on_borders = true
 
@@ -319,7 +322,7 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
-text = "1000"
+text = "4000"
 horizontal_alignment = 1
 
 [node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
@@ -335,6 +338,7 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 33.0
+value = 33.0
 tick_count = 34
 ticks_on_borders = true
 
@@ -343,7 +347,7 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
-text = "0"
+text = "33"
 horizontal_alignment = 1
 
 [node name="EmbedderRandomSeedHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
