@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bew4jlihie8s0"]
 
-[ext_resource type="Script" path="res://addons/mind_game/examples/SingleAgentChat.cs" id="1_7500t"]
+[ext_resource type="Script" path="res://addons/mind_game/examples/single_agent_chat/SingleAgentChat.cs" id="1_7500t"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/model_classes/MindAgent.cs" id="2_4a0p2"]
 
 [node name="SingleAgentChat" type="Node"]
