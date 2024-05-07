@@ -17,7 +17,7 @@ bg_color = Color(0.453305, 0.439765, 0.391286, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4l5yd"]
 bg_color = Color(0.520589, 0.388576, 0.290517, 1)
 
-[node name="ModelConfigInterface" type="Control"]
+[node name="ModelConfigsController" type="Control"]
 auto_translate_mode = 1
 layout_mode = 3
 anchors_preset = 15
@@ -43,7 +43,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_u3f0h")
-text = "Model Configuration"
+text = "Model Configurations"
 horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
@@ -126,8 +126,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-item_count = 1
-item_0/text = "Config 1"
 
 [node name="ModelConfigMarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -163,47 +161,62 @@ size_flags_vertical = 0
 layout_mode = 2
 size_flags_vertical = 0
 theme = ExtResource("1_u3f0h")
-theme_override_font_sizes/font_size = 24
 text = "Chat Model (Llama/Mistral/Mixtral/Phi)"
 horizontal_alignment = 1
 
-[node name="ChatContextSizeTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
+[node name="ChatGridContainer" type="GridContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_vertical = 8
+columns = 3
+
+[node name="ChatContextSizeTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
 text = "Chat Context Size:"
 
-[node name="ContextSizeHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
-auto_translate_mode = 1
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_constants/separation = 10
-
-[node name="ChatContextSizeHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ContextSizeHBoxContainer"]
+[node name="ChatContextSizeHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 11.0
-value = 2.0
-tick_count = 12
+max_value = 12.0
+tick_count = 13
 ticks_on_borders = true
 
-[node name="ChatContextSizeLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ContextSizeHBoxContainer"]
+[node name="ChatContextSizeLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
-text = "4000
-"
+text = "1000"
 horizontal_alignment = 1
 
-[node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
+[node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Number of Model Layers to Load to GPU:"
+text = "Num Layers to Load to GPU:"
+
+[node name="ChatModelGpuLayerCountHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 33.0
+tick_count = 34
+ticks_on_borders = true
+
+[node name="ChatModelGpuLayerCountLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
 
 [node name="GpuLayerHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 auto_translate_mode = 1
@@ -211,24 +224,18 @@ layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 10
 
-[node name="ChatModelGpuLayerCountHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/GpuLayerHBoxContainer"]
+[node name="ChatSeedHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
+layout_mode = 2
+
+[node name="ChatSeedLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatSeedHBoxContainer"]
+layout_mode = 2
+text = "Seed:"
+
+[node name="ChatSeedLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatSeedHBoxContainer"]
 unique_name_in_owner = true
-auto_translate_mode = 1
-custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 33.0
-value = 33.0
-tick_count = 32
-ticks_on_borders = true
-
-[node name="ChatModelGpuLayerCountLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/GpuLayerHBoxContainer"]
-unique_name_in_owner = true
-auto_translate_mode = 1
-custom_minimum_size = Vector2(25, 0)
-layout_mode = 2
-text = "33"
-horizontal_alignment = 1
+text = "0"
 
 [node name="SelectChatModelHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 layout_mode = 2
@@ -240,6 +247,7 @@ auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
+tooltip_text = "Chat model required for proper functionality"
 text = "Select Model (.gguf)
 "
 
@@ -247,7 +255,7 @@ text = "Select Model (.gguf)
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Clear Selected Path"
+text = "Clear Selected"
 
 [node name="CurrentChatModelPathLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 unique_name_in_owner = true
@@ -276,71 +284,78 @@ size_flags_vertical = 8
 auto_translate_mode = 1
 layout_mode = 2
 theme = ExtResource("1_u3f0h")
-theme_override_font_sizes/font_size = 24
 text = "Embedder Model (all-MiniLM-L12-v2)"
 horizontal_alignment = 1
 
-[node name="EmbedderContextSizeTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+[node name="EmbedderGridContainer" type="GridContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_vertical = 8
+columns = 3
+
+[node name="EmbedderContextSizeTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
 text = "Embedder Context Size:"
 
-[node name="EmbedderContextSizeHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
-auto_translate_mode = 1
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_constants/separation = 10
-
-[node name="EmbedderContextSizeHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderContextSizeHBoxContainer"]
+[node name="EmbedderContextSizeHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 11.0
-value = 2.0
-tick_count = 12
+max_value = 12.0
+tick_count = 13
 ticks_on_borders = true
 
-[node name="EmbedderContextSizeLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderContextSizeHBoxContainer"]
+[node name="EmbedderContextSizeLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
-text = "4000"
+text = "1000"
 horizontal_alignment = 1
 
-[node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+[node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Number of Model Layers to Load to GPU:"
+text = "Num Layers to Load to GPU:"
 
-[node name="GpuLayerHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
-auto_translate_mode = 1
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_constants/separation = 10
-
-[node name="EmbedderGpuLayerCountHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/GpuLayerHBoxContainer"]
+[node name="EmbedderGpuLayerCountHSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 33.0
-value = 33.0
-tick_count = 32
+tick_count = 34
 ticks_on_borders = true
 
-[node name="EmbedderGpuLayerCountLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/GpuLayerHBoxContainer"]
+[node name="EmbedderGpuLayerCountLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
-text = "33"
+text = "0"
 horizontal_alignment = 1
+
+[node name="EmbedderSeedHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="EmbedderSeedLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderSeedHBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+text = "Seed:"
+
+[node name="EmbedderSeedLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderSeedHBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
 
 [node name="SelectEmbedderModelHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 layout_mode = 2
@@ -350,13 +365,14 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Embedder model is optional"
 text = "Select Model (.gguf)"
 
 [node name="ClearEmbedderPathButton" type="Button" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/SelectEmbedderModelHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Clear Selected Path"
+text = "Clear Selected"
 
 [node name="CurrentEmbedderModelPathLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 unique_name_in_owner = true
@@ -382,7 +398,6 @@ layout_mode = 2
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_u3f0h")
-theme_override_font_sizes/font_size = 24
 text = "Clip/LLaVa Model (mmproj)"
 horizontal_alignment = 1
 
@@ -394,6 +409,7 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Clip model is optional"
 text = "Select Model (.gguf)
 "
 
@@ -401,7 +417,7 @@ text = "Select Model (.gguf)
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Clear Selected Path"
+text = "Clear Selected"
 
 [node name="CurrentClipModelPathLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
 unique_name_in_owner = true
@@ -415,7 +431,7 @@ auto_translate_mode = 1
 title = "Select a Chat Model"
 initial_position = 2
 size = Vector2i(400, 600)
-ok_button_text = "Select"
+ok_button_text = "Open"
 mode_overrides_title = false
 file_mode = 0
 access = 2
@@ -428,7 +444,7 @@ auto_translate_mode = 1
 title = "Select an Embedder"
 initial_position = 2
 size = Vector2i(400, 600)
-ok_button_text = "Select"
+ok_button_text = "Open"
 mode_overrides_title = false
 file_mode = 0
 access = 2
@@ -441,7 +457,7 @@ auto_translate_mode = 1
 title = "Select a Clip Model (mmproj)"
 initial_position = 2
 size = Vector2i(400, 600)
-ok_button_text = "Select"
+ok_button_text = "Open"
 mode_overrides_title = false
 file_mode = 0
 access = 2

@@ -5,11 +5,10 @@ using System;
 using static System.Collections.Specialized.BitVector32;
 
 [Tool]
-public partial class ModelConfigInterface : Control
+public partial class ModelConfigsController : Control
 {
 
     private const string ConfigFilePath = "res://addons/mind_game/model_configs.json";
-
 
     // UI elements
     private Button addNewConfigButton, deleteConfigButton, selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton;
@@ -23,7 +22,7 @@ public partial class ModelConfigInterface : Control
     private string configName;
     private int chatGpuLayerCount, embedderGpuLayerCount;
     private double chatContextSizeSliderValue, embedderContextSizeSliderValue;
-    private uint chatContextSize, embedderContextSize;
+    private uint chatContextSize, embedderContextSize, chatSeed, embedderSeed;
     private string chatModelPath, clipModelPath, embedderModelPath;
 
     public override void _EnterTree()
@@ -161,7 +160,6 @@ public partial class ModelConfigInterface : Control
         configName = newText;
     }
 
-
     private void OnChatGpuLayerCountHSliderValueChanged(double value)
     {
         chatGpuLayerCount = (int)value;
@@ -177,10 +175,6 @@ public partial class ModelConfigInterface : Control
     {
         chatModelPath = path;
     }
-
-
-
-
 
     private void OnEmbedderGpuLayerCountHSliderValueChanged(double value)
     {
@@ -231,4 +225,17 @@ public partial class ModelConfigInterface : Control
     {
         
     }
+}
+
+public class ModelConfigsParams
+{
+    public string ChatModelPath { get; set; }
+    public string ClipModelPath { get; set; }
+    public string EmbedderModelPath { get; set; }
+    public int ChatGpuLayerCount { get; set; }
+    public int EmbedderGpuLayerCount { get; set; }
+    public uint ChatContextSize { get; set; }
+    public uint EmbedderContextSize { get; set; }
+    public uint ChatSeed { get; set; }
+    public uint EmbedderSeed { get; set;}
 }

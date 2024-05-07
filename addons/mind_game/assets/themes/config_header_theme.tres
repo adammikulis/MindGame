@@ -4,4 +4,4 @@
 
 [resource]
 default_font = SubResource("SystemFont_acuki")
-default_font_size = 36
+default_font_size = 20

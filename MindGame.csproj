@@ -14,7 +14,4 @@
 	<TrimmerRootAssembly Include="GodotSharp" />
     <TrimmerRootAssembly Include="$(TargetName)" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="addons\mind_game\scripts\interfaces\" />
-  </ItemGroup>
 </Project>
