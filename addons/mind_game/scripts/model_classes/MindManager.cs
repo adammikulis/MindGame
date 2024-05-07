@@ -32,10 +32,13 @@ public partial class MindManager : Node, IDisposable
     public delegate void ClipModelStatusUpdateEventHandler(bool isLoaded);
     [Signal]
     public delegate void EmbedderModelStatusUpdateEventHandler(bool isLoaded);
+    [Signal]
+    public delegate void ContextStatusUpdateEventHandler(bool isLoaded);
 
 
     // Chat model vars
     public LLamaWeights chatWeights { get; private set; } = null;
+    public LLamaContext context { get; private set; } = null;
 
     // Clip model vars
     public LLavaWeights clipWeights { get; private set; } = null;
@@ -50,7 +53,7 @@ public partial class MindManager : Node, IDisposable
  
     
 
-    public async override void _EnterTree()
+    public override void _EnterTree()
     {
 
     }
@@ -62,8 +65,26 @@ public partial class MindManager : Node, IDisposable
 
     public async Task InitializeAsync()
     {
+        await CreateContextAsync();
         await LoadClipModelWeightsAsync();
         await LoadChatModelWeightsAsync();
+    }
+
+    public async Task CreateContextAsync()
+    {
+        if (chatWeights != null)
+        {
+            await Task.Run(() =>
+            {
+                context = chatWeights.CreateContext(new ModelParams(ChatModelPath));
+            });
+            EmitSignal(SignalName.ContextStatusUpdate, true);
+        }
+        else
+        {
+            GD.PrintErr("Chat weights not set.");
+        }
+
     }
 
     //// Involves loading a separate LLamaWeights
@@ -161,10 +182,19 @@ public partial class MindManager : Node, IDisposable
             CallDeferred("emit_signal", SignalName.EmbedderModelStatusUpdate, false);
         });
     }
-    
+
+    public async Task DisposeContextAsync()
+    {
+        await Task.Run(() =>
+        {
+            context?.Dispose();
+            CallDeferred("emit_signal", SignalName.ContextStatusUpdate, false);
+        });
+    }
 
     public async Task DisposeAll()
     {
+        await DisposeContextAsync();
         await DisposeEmbedderAsync();
         await DisposeClipWeightsAsync();
         await DisposeChatWeightsAsync();

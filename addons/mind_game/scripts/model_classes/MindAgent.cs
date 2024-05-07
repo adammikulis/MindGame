@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 public partial class MindAgent : Node
 {
 
-    [Signal]
-    public delegate void ContextStatusUpdateEventHandler(bool isLoaded);
+    
     [Signal]
     public delegate void ExecutorStatusUpdateEventHandler(bool isLoaded);
     [Signal]
@@ -25,7 +24,7 @@ public partial class MindAgent : Node
 
 
 
-    public LLamaContext context { get; private set; } = null;
+    
     public InteractiveExecutor executor { get; private set; } = null;
     public ChatSession chatSession { get; private set; } = null;
 
@@ -78,37 +77,22 @@ public partial class MindAgent : Node
 
     public async Task InitializeAsync()
     {
-        await CreateContextAsync();
+        
         await CreateExecutorAsync();
         await CreateChatSessionAsync();
     }
 
-    public async Task CreateContextAsync()
-    {
-        if (mm.chatWeights != null)
-        {
-            await Task.Run(() =>
-            {
-                context = mm.chatWeights.CreateContext(new ModelParams(mm.ChatModelPath));
-            });
-            EmitSignal(SignalName.ContextStatusUpdate, true);
-        }
-        else
-        {
-            GD.PrintErr("Chat weights not set.");
-        }
-
-    }
+    
 
     public async Task CreateExecutorAsync()
     {
-        if (context != null)
+        if (mm.context != null)
         {
             if (mm.clipWeights != null)
             {
                 await Task.Run(() =>
                 {
-                    executor = new InteractiveExecutor(context, mm.clipWeights);
+                    executor = new InteractiveExecutor(mm.context, mm.clipWeights);
                     CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, true);
                 });
             }
@@ -116,7 +100,7 @@ public partial class MindAgent : Node
             {
                 await Task.Run(() =>
                 {
-                    executor = new InteractiveExecutor(context);
+                    executor = new InteractiveExecutor(mm.context);
                     CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, true);
                 });
             }
@@ -161,14 +145,7 @@ public partial class MindAgent : Node
         });
     }
 
-    public async Task DisposeContextAsync()
-    {
-        await Task.Run(() =>
-        {
-            context?.Dispose();
-            CallDeferred("emit_signal", SignalName.ContextStatusUpdate, false);
-        });
-    }
+
 
     public async Task DisposeExecutorAsync()
     {
@@ -192,7 +169,7 @@ public partial class MindAgent : Node
     {
         await DisposeChatSessionAsync();
         await DisposeExecutorAsync();
-        await DisposeContextAsync();
+        
 
     }
 
