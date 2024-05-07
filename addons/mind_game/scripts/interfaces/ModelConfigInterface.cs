@@ -7,15 +7,20 @@ using static System.Collections.Specialized.BitVector32;
 [Tool]
 public partial class ModelConfigInterface : Control
 {
- 
+
+    private const string ConfigFilePath = "res://addons/mind_game/model_configs.json";
+
 
     // UI elements
-    private Button selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton;
+    private Button addNewConfigButton, deleteConfigButton, selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton;
     private Label chatContextSizeLabel, chatGpuLayerCountLabel, embedderContextSizeLabel, embedderGpuLayerCountLabel;
     private FileDialog selectChatPathFileDialog, selectClipPathFileDialog, selectEmbedderPathFileDialog;
     private HSlider chatContextSizeHSlider, chatGpuLayerCountHSlider, embedderContextSizeHSlider, embedderGpuLayerCountHSlider;
+    private LineEdit configNameLineEdit;
+    private ItemList savedConfigsItemList;
 
     // Model params
+    private string configName;
     private int chatGpuLayerCount, embedderGpuLayerCount;
     private double chatContextSizeSliderValue, embedderContextSizeSliderValue;
     private uint chatContextSize, embedderContextSize;
@@ -28,41 +33,108 @@ public partial class ModelConfigInterface : Control
 
     public override void _Ready()
     {
-        // Chat model vars
-        chatContextSizeHSlider = GetNode<HSlider>("%ChatContextSizeHSlider");
-        chatContextSizeLabel = GetNode<Label>("%ChatContextSizeLabel");
+        InitializeNodeRefs();
+        InitializeSignals();
+        InitializeParameters();
+    }
 
-        chatGpuLayerCountLabel = GetNode<Label>("%ChatModelGpuLayerCountLabel");
-        chatGpuLayerCountHSlider = GetNode<HSlider>("%ChatModelGpuLayerCountHSlider");
-
-
+    private void InitializeNodeRefs()
+    {
+        addNewConfigButton = GetNode<Button>("%AddNewConfigButton");
+        deleteConfigButton = GetNode<Button>("%DeleteConfigButton");
         selectChatPathButton = GetNode<Button>("%SelectChatPathButton");
         clearChatPathButton = GetNode<Button>("%ClearChatPathButton");
-        selectChatPathFileDialog = GetNode<FileDialog>("%SelectChatPathFileDialog");
-
-        // Clip model vars
         selectClipPathButton = GetNode<Button>("%SelectClipPathButton");
         clearClipPathButton = GetNode<Button>("%ClearClipPathButton");
-        selectClipPathFileDialog = GetNode<FileDialog>("%SelectClipPathFileDialog");
-
-
-        // Embedder model vars
-        embedderContextSizeHSlider = GetNode<HSlider>("%EmbedderContextHSlider");
-        embedderContextSizeLabel = GetNode<Label>("%EmbedderContextSizeLabel");
-
-        embedderGpuLayerCountHSlider = GetNode<HSlider>("%EmbedderGpuLayerCountHSlider");
-        embedderGpuLayerCountLabel = GetNode<Label>("%EmbedderGpuLayerCountLabel");
-
-
         selectEmbedderPathButton = GetNode<Button>("%SelectEmbedderPathButton");
         clearEmbedderPathButton = GetNode<Button>("%ClearEmbedderPathButton");
-        selectEmbedderPathFileDialog = GetNode<FileDialog>("%SelectEmbedderPathFileDialog");
-        
-        
-        InitializeParameters();
-        SetupSignals();
-        
 
+        selectChatPathFileDialog = GetNode<FileDialog>("%SelectChatPathFileDialog");
+        selectClipPathFileDialog = GetNode<FileDialog>("%SelectClipPathFileDialog");
+        selectEmbedderPathFileDialog = GetNode<FileDialog>("%SelectEmbedderPathFileDialog");
+
+        chatContextSizeHSlider = GetNode<HSlider>("%ChatContextSizeHSlider");
+        chatGpuLayerCountHSlider = GetNode<HSlider>("%ChatModelGpuLayerCountHSlider");
+        embedderContextSizeHSlider = GetNode<HSlider>("%EmbedderContextSizeHSlider");
+        embedderGpuLayerCountHSlider = GetNode<HSlider>("%EmbedderGpuLayerCountHSlider");
+
+        savedConfigsItemList = GetNode<ItemList>("%SavedConfigsItemList");
+
+        chatContextSizeLabel = GetNode<Label>("%ChatContextSizeLabel");
+        chatGpuLayerCountLabel = GetNode<Label>("%ChatModelGpuLayerCountLabel");
+        embedderContextSizeLabel = GetNode<Label>("%EmbedderContextSizeLabel");
+        embedderGpuLayerCountLabel = GetNode<Label>("%EmbedderGpuLayerCountLabel");
+
+        configNameLineEdit = GetNode<LineEdit>("%ConfigNameLineEdit");
+        
+    }
+
+    private void InitializeSignals()
+    {
+        // Chat signals
+
+        addNewConfigButton.Pressed += OnAddNewConfigPressed;
+        deleteConfigButton.Pressed += OnDeleteConfigPressed;
+
+        clearChatPathButton.Pressed += OnClearChatPathPressed;
+        clearClipPathButton.Pressed += OnClearClipPathPressed;
+        clearEmbedderPathButton.Pressed += OnClearEmbedderPathPressed;
+
+        selectChatPathButton.Pressed += OnSelectChatPathPressed;
+        selectClipPathButton.Pressed += OnSelectClipPathPressed;
+        selectEmbedderPathButton.Pressed += OnSelectEmbedderPathPressed;
+
+
+        chatContextSizeHSlider.ValueChanged += OnChatContextSizeHSliderValueChanged;
+        chatGpuLayerCountHSlider.ValueChanged += OnChatGpuLayerCountHSliderValueChanged;
+        embedderContextSizeHSlider.ValueChanged += OnEmbedderContextSizeHSliderValueChanged;
+        embedderGpuLayerCountHSlider.ValueChanged += OnEmbedderGpuLayerCountHSliderValueChanged;
+
+        selectChatPathFileDialog.FileSelected += OnChatPathSelected;
+        selectClipPathFileDialog.FileSelected += OnClipPathSelected;
+        selectEmbedderPathFileDialog.FileSelected += OnEmbedderPathSelected;
+
+        configNameLineEdit.TextChanged += OnConfigNameTextChanged;
+
+        savedConfigsItemList.ItemSelected += OnSavedConfigsItemSelected;
+
+    }
+
+
+
+
+    private void OnSavedConfigsItemSelected(long index)
+    {
+        // Load the config from the json
+    }
+
+    private void OnDeleteConfigPressed()
+    {
+        // Removes currently selected entry from model_configs.json
+    }
+
+    private void OnAddNewConfigPressed()
+    {
+        // Add a new entry to model_configs.json with all the current variables
+    }
+
+    // If a config is loaded, every change to a variable should automatically save the whole config back to json
+
+
+
+    private void OnClearEmbedderPathPressed()
+    {
+        embedderModelPath = null;
+    }
+
+    private void OnClearClipPathPressed()
+    {
+        clipModelPath = null;
+    }
+
+    private void OnClearChatPathPressed()
+    {
+        chatModelPath = null;
     }
 
     private void InitializeParameters()
@@ -82,31 +154,33 @@ public partial class ModelConfigInterface : Control
         embedderContextSizeSliderValue = embedderContextSizeHSlider.Value;
         embedderContextSize = calculateContextSize(embedderContextSizeSliderValue);
         embedderContextSizeLabel.Text = embedderContextSize.ToString();
-
-
     }
 
-    private void SetupSignals()
+    private void OnConfigNameTextChanged(string newText)
     {
-        // Chat signals
-        chatContextSizeHSlider.ValueChanged += OnChatContextSizeHSliderValueChanged;
-        chatGpuLayerCountHSlider.ValueChanged += OnChatGpuLayerCountHSliderValueChanged;
-
-        selectChatPathButton.Pressed += OnSelectChatPathButtonPressed;
-        selectChatPathFileDialog.FileSelected += OnChatPathSelected;
-
-
-        // Embedder signals
-        embedderContextSizeHSlider.ValueChanged += OnEmbedderContextSizeHSliderValueChanged;
-        embedderGpuLayerCountHSlider.ValueChanged += OnEmbedderGpuLayerCountHSliderValueChanged;
-
-        selectEmbedderPathButton.Pressed += OnSelectEmbedderPathPressed;
-        selectEmbedderPathFileDialog.FileSelected += OnEmbedderPathSelected;
-
-        // Clip signals
-        selectClipPathButton.Pressed += OnSelectClipPathButtonPressed;
-        selectClipPathFileDialog.FileSelected += OnClipPathSelected;
+        configName = newText;
     }
+
+
+    private void OnChatGpuLayerCountHSliderValueChanged(double value)
+    {
+        chatGpuLayerCount = (int)value;
+        chatGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
+    }
+
+    private void OnSelectChatPathPressed()
+    {
+        selectChatPathFileDialog.PopupCentered();
+    }
+
+    private void OnChatPathSelected(string path)
+    {
+        chatModelPath = path;
+    }
+
+
+
+
 
     private void OnEmbedderGpuLayerCountHSliderValueChanged(double value)
     {
@@ -124,24 +198,14 @@ public partial class ModelConfigInterface : Control
         embedderModelPath = path;
     }
 
-
     private void OnSelectEmbedderPathPressed()
     {
         selectEmbedderPathFileDialog.PopupCentered();
     }
 
-
-
-
-
     private uint calculateContextSize(double value)
     {
-        // This sets a minimum context size for the slider
-        if (value == 0) return 0;
-        else
-        {
-            return (uint)Math.Pow(2, value) * 1000;
-        }
+        return (uint)Math.Pow(2, value) * 1000;
     }
 
     private void OnChatContextSizeHSliderValueChanged(double value)
@@ -156,26 +220,12 @@ public partial class ModelConfigInterface : Control
         embedderContextSizeLabel.Text = embedderContextSize.ToString();
     }
 
-    private void OnSelectClipPathButtonPressed()
+    private void OnSelectClipPathPressed()
     {
         selectClipPathFileDialog.PopupCentered();
     }
 
-    private void OnChatGpuLayerCountHSliderValueChanged(double value)
-    {
-        chatGpuLayerCount = (int)value;
-        chatGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
-    }
 
-    private void OnSelectChatPathButtonPressed()
-    {
-        selectChatPathFileDialog.PopupCentered();
-    }
-
-    private void OnChatPathSelected(string path)
-    {
-        chatModelPath = path;
-    }
 
     public override void _ExitTree()
     {

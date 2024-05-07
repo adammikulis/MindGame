@@ -29,9 +29,12 @@ size_flags_horizontal = 3
 script = ExtResource("1_kl464")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ConfigHeadingPanelContainer" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -45,9 +48,11 @@ horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="SavedConfigsMarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 0
@@ -69,6 +74,7 @@ theme_override_constants/margin_bottom = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="ConfigNameHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -99,10 +105,6 @@ size_flags_horizontal = 3
 icon = ExtResource("4_v2ps6")
 icon_alignment = 1
 
-[node name="SavedConfigsLabel" type="Label" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Saved Configurations:"
-
 [node name="SavedConfigsMarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -119,18 +121,19 @@ size_flags_vertical = 3
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer/PanelContainer/ScrollContainer"]
+[node name="SavedConfigsItemList" type="ItemList" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer/PanelContainer/ScrollContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer/PanelContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "Saved Config 1"
+item_count = 1
+item_0/text = "Config 1"
 
 [node name="ModelConfigMarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
@@ -138,14 +141,9 @@ theme_override_constants/margin_bottom = 5
 auto_translate_mode = 1
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/PanelContainer"]
-layout_mode = 2
-
 [node name="ChatModelPanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_tivu8")
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer"]
@@ -187,17 +185,19 @@ auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 17.0
-value = 7.0
-tick_count = 18
+max_value = 11.0
+value = 2.0
+tick_count = 12
 ticks_on_borders = true
 
 [node name="ChatContextSizeLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ContextSizeHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 text = "4000
 "
+horizontal_alignment = 1
 
 [node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 auto_translate_mode = 1
@@ -225,8 +225,10 @@ ticks_on_borders = true
 [node name="ChatModelGpuLayerCountLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/GpuLayerHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
+custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 text = "33"
+horizontal_alignment = 1
 
 [node name="SelectChatModelHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 layout_mode = 2
@@ -254,6 +256,7 @@ text = "Current model path:"
 
 [node name="EmbedderModelPanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_xsa3w")
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer"]
@@ -295,16 +298,18 @@ auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 17.0
-value = 7.0
-tick_count = 18
+max_value = 11.0
+value = 2.0
+tick_count = 12
 ticks_on_borders = true
 
 [node name="EmbedderContextSizeLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderContextSizeHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 text = "4000"
+horizontal_alignment = 1
 
 [node name="GpuLayerCountTitleLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 auto_translate_mode = 1
@@ -332,8 +337,10 @@ ticks_on_borders = true
 [node name="EmbedderGpuLayerCountLabel" type="Label" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/GpuLayerHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
+custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 text = "33"
+horizontal_alignment = 1
 
 [node name="SelectEmbedderModelHBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 layout_mode = 2
@@ -359,6 +366,7 @@ text = "Current model path:"
 
 [node name="ClipModelPanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_4l5yd")
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer"]
