@@ -17,6 +17,7 @@ mono_crash.*.json
 # Project-specific ignores
 android/
 .vs
-models
+/models
 .releases
-addons/mind_game/assets/models
+/addons/mind_game/assets/models
+/addons/mind_game/model_configs.tres

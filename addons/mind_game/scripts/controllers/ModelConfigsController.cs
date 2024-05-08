@@ -37,9 +37,10 @@ namespace MindGame
         {
             InitializeDefaultValues();
             InitializeNodeRefs();
-            InitializeSignals();
             InitializeUIElements();
             InitializeConfigList();
+            InitializeSignals();
+            
         }
 
         private void InitializeConfigList()

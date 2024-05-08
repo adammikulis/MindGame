@@ -70,6 +70,7 @@ namespace MindGame
             await CreateContextAsync();
             await LoadClipModelWeightsAsync();
             await LoadChatModelWeightsAsync();
+            await CreateContextAsync();
         }
 
         public async Task CreateContextAsync()
