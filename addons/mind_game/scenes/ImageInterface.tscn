@@ -1,7 +1,0 @@
-[gd_scene format=3 uid="uid://bkvym55tpn7wu"]
-
-[node name="Image" type="Control"]
-auto_translate_mode = 1
-visible = false
-layout_mode = 3
-anchors_preset = 0
