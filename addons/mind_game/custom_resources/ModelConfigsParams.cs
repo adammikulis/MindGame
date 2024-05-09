@@ -2,6 +2,7 @@ using Godot;
 
 namespace MindGame
 {
+    [Tool]
     public partial class ModelConfigsParams : Resource
     {
         // Model configs exports

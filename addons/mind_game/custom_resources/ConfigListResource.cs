@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace MindGame
 {
+    [Tool]
     public partial class ConfigListResource : Resource
     {
         [Export]
