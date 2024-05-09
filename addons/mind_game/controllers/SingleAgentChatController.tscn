@@ -1,13 +1,20 @@
 [gd_scene load_steps=4 format=3 uid="uid://bew4jlihie8s0"]
 
-[ext_resource type="Script" path="res://addons/mind_game/examples/single_agent_chat/SingleAgentChat.cs" id="1_7500t"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/controllers/SingleAgentChatController.cs" id="1_48rj6"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/model_classes/MindAgent.cs" id="2_4a0p2"]
-[ext_resource type="PackedScene" uid="uid://cfvr575wuu42a" path="res://addons/mind_game/scenes/ModelManagerController.tscn" id="3_liads"]
+[ext_resource type="PackedScene" uid="uid://cfvr575wuu42a" path="res://addons/mind_game/controllers/MindManagerController.tscn" id="3_7pvjl"]
 
-[node name="SingleAgentChat" type="Node"]
-script = ExtResource("1_7500t")
+[node name="SingleAgentChatController" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_48rj6")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -40,6 +47,7 @@ Load Models"
 unique_name_in_owner = true
 script = ExtResource("2_4a0p2")
 
-[node name="ModelManagerController" parent="." instance=ExtResource("3_liads")]
+[node name="MindManagerController" parent="." instance=ExtResource("3_7pvjl")]
 unique_name_in_owner = true
 visible = false
+layout_mode = 1

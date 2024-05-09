@@ -1,14 +1,11 @@
 using Godot;
 using System;
-using System.Collections.Generic;
-using static System.Collections.Specialized.BitVector32;
-using System.IO;
 using System.Linq;
 
 namespace MindGame
 {
     [Tool]
-    public partial class ModelManagerController : Control
+    public partial class MindManagerController : Control
     {
         public ConfigListResource configListResource;
         public ModelConfigsParams config;
