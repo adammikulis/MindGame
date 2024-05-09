@@ -3,6 +3,7 @@ using System;
 
 namespace MindGame
 {
+    [Tool]
     public partial class SingleAgentChatController : Control
     {
         private MindGame.MindManager mindManager;
@@ -52,7 +53,15 @@ namespace MindGame
 
         private void OnChatSessionStatusUpdate(bool isLoaded)
         {
-            modelOutputRichTextLabel.Text += $"Chat session loaded: {isLoaded}";
+            modelInputLineEdit.Editable = isLoaded;
+            if (isLoaded) 
+            { 
+                modelInputLineEdit.PlaceholderText = $"Type prompt and hit Enter"; 
+            }
+            else 
+            { 
+                modelInputLineEdit.PlaceholderText = $"Load a model to chat!"; 
+            }
         }
     }
 }

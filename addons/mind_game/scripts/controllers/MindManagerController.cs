@@ -13,7 +13,7 @@ namespace MindGame
         private string modelConfigListPath = "res://addons/mind_game/model_configs.tres";
 
         // UI elements
-        private Button addNewConfigButton, deleteConfigButton, selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton, backButton, loadModelsButton, unloadModelsButton;
+        private Button addNewConfigButton, deleteConfigButton, selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton, backButton, loadConfigButton, unloadConfigButton;
         private Label chatContextSizeLabel, chatGpuLayerCountLabel, embedderContextSizeLabel, embedderGpuLayerCountLabel, chatCurrentModelPathLabel, embedderCurrentModelPathLabel, clipCurrentModelPathLabel;
         private FileDialog selectChatPathFileDialog, selectClipPathFileDialog, selectEmbedderPathFileDialog;
         private HSlider chatContextSizeHSlider, chatGpuLayerCountHSlider, embedderContextSizeHSlider, embedderGpuLayerCountHSlider;
@@ -91,8 +91,8 @@ namespace MindGame
             addNewConfigButton = GetNode<Button>("%AddNewConfigButton");
             deleteConfigButton = GetNode<Button>("%DeleteConfigButton");
             backButton = GetNode<Button>("%BackButton");
-            loadModelsButton = GetNode<Button>("%LoadModelsButton");
-            unloadModelsButton = GetNode<Button>("%UnloadModelsButton");
+            loadConfigButton = GetNode<Button>("%LoadConfigButton");
+            unloadConfigButton = GetNode<Button>("%UnloadConfigButton");
 
             // Chat param nodes
             chatContextSizeHSlider = GetNode<HSlider>("%ChatContextSizeHSlider");
@@ -137,8 +137,8 @@ namespace MindGame
             addNewConfigButton.Pressed += OnAddNewConfigPressed;
             deleteConfigButton.Pressed += OnDeleteConfigPressed;
             backButton.Pressed += OnBackPressed;
-            loadModelsButton.Pressed += OnLoadModelsPressed;
-            unloadModelsButton.Pressed += OnUnloadModelsPressed;
+            loadConfigButton.Pressed += OnLoadConfigPressed;
+            unloadConfigButton.Pressed += OnUnloadConfigPressed;
 
             clearChatPathButton.Pressed += OnClearChatPathPressed;
             clearClipPathButton.Pressed += OnClearClipPathPressed;
@@ -162,12 +162,12 @@ namespace MindGame
 
         }
 
-        private void OnUnloadModelsPressed()
+        private async void OnUnloadConfigPressed()
         {
-            throw new NotImplementedException();
+            await mm.DisposeExecutorAsync();
         }
 
-        private async void OnLoadModelsPressed()
+        private async void OnLoadConfigPressed()
         {
             if (config != null)
             {

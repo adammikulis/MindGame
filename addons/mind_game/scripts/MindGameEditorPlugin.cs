@@ -22,7 +22,7 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
     {
         PackedScene singleAgentChatControllerScene = (PackedScene)GD.Load("res://addons/mind_game/controllers/SingleAgentChatController.tscn");
         singleAgentChatScene = singleAgentChatControllerScene.Instantiate<Control>();
-        // AddControlToBottomPanel(singleAgentChatScene, "Mind Game");
+        AddControlToBottomPanel(singleAgentChatScene, "Mind Game");
 
         AddCustomType("MindAgent", "Node", mindAgentScript, mindAgentIcon);
 
@@ -45,8 +45,8 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
 
     public override void _ExitTree()
     {
-        // RemoveControlFromBottomPanel(editorInterface);
-        // editorInterface.QueueFree();
+        RemoveControlFromBottomPanel(singleAgentChatScene);
+        singleAgentChatScene.QueueFree();
     }
 }
 #endif

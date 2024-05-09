@@ -20,7 +20,7 @@ namespace MindGame
 
 
         private MindManager mm;
-        public string[] antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "User:", "USER:", "\nUser:", "\nUSER:"];
+        public string[] antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "User:", "USER:", "\nUser:", "\nUSER:"];
         public float temperature = 0.5f;
         public int maxTokens = 4000;
 
@@ -38,7 +38,7 @@ namespace MindGame
             try
             {
                 mm = GetNode<MindManager>("/root/MindManager");
-                if (mm.isReady == true)
+                if (mm.executor != null)
                 {
                     await InitializeAsync();
                 }

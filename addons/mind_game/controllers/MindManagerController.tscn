@@ -1,9 +1,15 @@
-[gd_scene load_steps=9 format=3 uid="uid://cfvr575wuu42a"]
+[gd_scene load_steps=11 format=3 uid="uid://cfvr575wuu42a"]
 
 [ext_resource type="Script" path="res://addons/mind_game/scripts/controllers/MindManagerController.cs" id="1_h6wpt"]
 [ext_resource type="Theme" uid="uid://brptib3mp8h1o" path="res://addons/mind_game/assets/themes/config_header_theme.tres" id="2_rmdwv"]
 [ext_resource type="Texture2D" uid="uid://dnp0lvxevsc4m" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/plus.png" id="3_smjaw"]
 [ext_resource type="Texture2D" uid="uid://5ga0x3yawju4" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/trashcan.png" id="4_gqbp7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5gu4u"]
+bg_color = Color(0.318487, 0.312277, 0.317023, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_osrau"]
+font_size = 24
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pcrja"]
 bg_color = Color(0.419813, 0.419813, 0.419813, 1)
@@ -36,6 +42,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5gu4u")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
@@ -48,6 +55,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_rmdwv")
 text = "Model Manager"
+label_settings = SubResource("LabelSettings_osrau")
 horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
@@ -92,22 +100,43 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
+[node name="AddDeleteConfigHBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="AddNewConfigButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/HBoxContainer"]
+[node name="AddNewConfigButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/AddDeleteConfigHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
 icon = ExtResource("3_smjaw")
 icon_alignment = 1
 
-[node name="DeleteConfigButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/HBoxContainer"]
+[node name="DeleteConfigButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/AddDeleteConfigHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 icon = ExtResource("4_gqbp7")
 icon_alignment = 1
+
+[node name="BackLoadUnloadBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/BackLoadUnloadBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Back"
+icon_alignment = 1
+
+[node name="LoadConfigButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/BackLoadUnloadBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Load Config"
+
+[node name="UnloadConfigButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/BackLoadUnloadBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Unload Config"
 
 [node name="SavedConfigsMarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
 layout_mode = 2
@@ -130,35 +159,8 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer"]
-layout_mode = 2
-
-[node name="BackButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Back"
-icon_alignment = 1
-
-[node name="LoadModelsButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Load Model(s)"
-
-[node name="UnloadModelsButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Unload Model(s)"
+item_count = 1
+item_0/text = "phi3"
 
 [node name="ModelConfigMarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -210,7 +212,7 @@ columns = 3
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Chat Context Size:"
+text = "Context Size:"
 
 [node name="ChatContextSizeHSlider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 unique_name_in_owner = true
@@ -235,7 +237,7 @@ horizontal_alignment = 1
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Num Layers to Load to GPU:"
+text = "Num GPU Layers:"
 
 [node name="ChatModelGpuLayerCountHSlider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 unique_name_in_owner = true
@@ -336,7 +338,7 @@ columns = 3
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Embedder Context Size:"
+text = "Context Size:"
 
 [node name="EmbedderContextSizeHSlider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 unique_name_in_owner = true
@@ -361,7 +363,7 @@ horizontal_alignment = 1
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Num Layers to Load to GPU:"
+text = "Num GPU Layers:"
 
 [node name="EmbedderGpuLayerCountHSlider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 unique_name_in_owner = true
