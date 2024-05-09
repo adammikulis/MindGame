@@ -52,7 +52,16 @@ namespace MindGame
             mm.ChatModelStatusUpdate += OnChatModelStatusUpdate;
             mm.ClipModelStatusUpdate += OnClipModelStatusUpdate;
             mm.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
+            mm.ContextStatusUpdate += OnContextStatusUpdate;
         
+        }
+
+        private async void OnContextStatusUpdate(bool isLoaded)
+        {
+            if (isLoaded)
+            {
+                await InitializeAsync();
+            }
         }
 
         private void OnEmbedderModelStatusUpdate(bool isLoaded)
@@ -67,10 +76,7 @@ namespace MindGame
 
         private async void OnChatModelStatusUpdate(bool isLoaded)
         {
-            if (isLoaded)
-            {
-                await InitializeAsync();
-            }
+            
         }
 
 

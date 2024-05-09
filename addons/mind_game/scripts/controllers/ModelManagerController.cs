@@ -8,13 +8,15 @@ using System.Linq;
 namespace MindGame
 {
     [Tool]
-    public partial class ModelConfigsController : Control
+    public partial class ModelManagerController : Control
     {
-        private ConfigListResource configListResource;
+        public ConfigListResource configListResource;
+        public ModelConfigsParams config;
+        public MindManager mm;
         private string modelConfigListPath = "res://addons/mind_game/model_configs.tres";
 
         // UI elements
-        private Button addNewConfigButton, deleteConfigButton, selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton;
+        private Button addNewConfigButton, deleteConfigButton, selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton, backButton, loadModelsButton, unloadModelsButton;
         private Label chatContextSizeLabel, chatGpuLayerCountLabel, embedderContextSizeLabel, embedderGpuLayerCountLabel, chatCurrentModelPathLabel, embedderCurrentModelPathLabel, clipCurrentModelPathLabel;
         private FileDialog selectChatPathFileDialog, selectClipPathFileDialog, selectEmbedderPathFileDialog;
         private HSlider chatContextSizeHSlider, chatGpuLayerCountHSlider, embedderContextSizeHSlider, embedderGpuLayerCountHSlider;
@@ -40,7 +42,6 @@ namespace MindGame
             InitializeUIElements();
             InitializeConfigList();
             InitializeSignals();
-            
         }
 
         private void InitializeConfigList()
@@ -85,12 +86,16 @@ namespace MindGame
 
         private void InitializeNodeRefs()
         {
+            mm = GetNode<MindManager>("/root/MindManager");
 
             // Manage configs nodes
             configNameLineEdit = GetNode<LineEdit>("%ConfigNameLineEdit");
             savedConfigsItemList = GetNode<ItemList>("%SavedConfigsItemList");
             addNewConfigButton = GetNode<Button>("%AddNewConfigButton");
             deleteConfigButton = GetNode<Button>("%DeleteConfigButton");
+            backButton = GetNode<Button>("%BackButton");
+            loadModelsButton = GetNode<Button>("%LoadModelsButton");
+            unloadModelsButton = GetNode<Button>("%UnloadModelsButton");
 
             // Chat param nodes
             chatContextSizeHSlider = GetNode<HSlider>("%ChatContextSizeHSlider");
@@ -134,6 +139,9 @@ namespace MindGame
             // Chat signals
             addNewConfigButton.Pressed += OnAddNewConfigPressed;
             deleteConfigButton.Pressed += OnDeleteConfigPressed;
+            backButton.Pressed += OnBackPressed;
+            loadModelsButton.Pressed += OnLoadModelsPressed;
+            unloadModelsButton.Pressed += OnUnloadModelsPressed;
 
             clearChatPathButton.Pressed += OnClearChatPathPressed;
             clearClipPathButton.Pressed += OnClearClipPathPressed;
@@ -155,6 +163,24 @@ namespace MindGame
             configNameLineEdit.TextChanged += OnConfigNameTextChanged;
             savedConfigsItemList.ItemSelected += OnSavedConfigsItemSelected;
 
+        }
+
+        private void OnUnloadModelsPressed()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async void OnLoadModelsPressed()
+        {
+            if (config != null)
+            {
+                await mm.InitializeAsync(config);
+            }
+        }
+
+        private void OnBackPressed()
+        {
+            Visible = false;
         }
 
         private void InitializeUIElements()
@@ -182,7 +208,7 @@ namespace MindGame
 
         private void OnSavedConfigsItemSelected(long index)
         {
-            var config = configListResource.Configurations[(int)index];
+            config = configListResource.Configurations[(int)index];
             configNameLineEdit.Text = config.ModelConfigsName;
             chatContextSizeHSlider.Value = calculateLogContextSize(config.ChatContextSize);
             chatGpuLayerCountHSlider.Value = config.ChatGpuLayerCount;

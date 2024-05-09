@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bew4jlihie8s0"]
+[gd_scene load_steps=4 format=3 uid="uid://bew4jlihie8s0"]
 
 [ext_resource type="Script" path="res://addons/mind_game/examples/single_agent_chat/SingleAgentChat.cs" id="1_7500t"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/model_classes/MindAgent.cs" id="2_4a0p2"]
+[ext_resource type="PackedScene" uid="uid://cfvr575wuu42a" path="res://addons/mind_game/scenes/ModelManagerController.tscn" id="3_liads"]
 
 [node name="SingleAgentChat" type="Node"]
 script = ExtResource("1_7500t")
@@ -19,12 +20,26 @@ layout_mode = 2
 size_flags_vertical = 3
 scroll_following = true
 
-[node name="ModelInputLineEdit" type="LineEdit" parent="VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 200)
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
+
+[node name="ModelInputLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 placeholder_text = "Type your prompt and hit Enter"
+
+[node name="ConfigAndLoadModelsButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Config and 
+Load Models"
 
 [node name="MindAgent" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_4a0p2")
+
+[node name="ModelManagerController" parent="." instance=ExtResource("3_liads")]
+unique_name_in_owner = true
+visible = false

@@ -8,24 +8,14 @@ using LLama.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+
 namespace MindGame
-{ 
+{
+    [Tool]
     public partial class MindManager : Node, IDisposable
     {
 
-        // Chat model in a .gguf format
-        public string ChatModelPath { get; private set; }
-
-        // Clip model in a .gguf format
-        public string ClipModelPath { get; private set; }
-
-        // Embedder model in a .gguf format
-        public string EmbedderModelPath { get; private set; }
-
-        // Gpu Layers set 0-33
-        public int GpuLayerCount { get; private set; }
-        public uint ContextSize { get; private set; }
-        public uint Seed { get; private set; } = 0;
+        public ModelConfigsParams CurrentModelConfigs { get; set; }
 
 
         [Signal]
@@ -37,23 +27,21 @@ namespace MindGame
         [Signal]
         public delegate void ContextStatusUpdateEventHandler(bool isLoaded);
 
-
-        // Chat model vars
         public LLamaWeights chatWeights { get; private set; } = null;
         public LLamaContext context { get; private set; } = null;
 
         // Clip model vars
         public LLavaWeights clipWeights { get; private set; } = null;
 
-   
+
         // Embedder model vars
+        public LLamaWeights embedderWeights { get; private set; } = null;
         public LLamaEmbedder embedder { get; private set; } = null;
 
-        public LLamaWeights embedderWeights { get; private set; } = null;
-
+        
         public bool isReady { get; private set; } = false;
- 
-    
+
+
 
         public override void _EnterTree()
         {
@@ -62,74 +50,93 @@ namespace MindGame
 
         public override void _Ready()
         {
-        
+
         }
 
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(ModelConfigsParams config)
         {
-            await CreateContextAsync();
-            await LoadClipModelWeightsAsync();
-            await LoadChatModelWeightsAsync();
-            await CreateContextAsync();
+            CurrentModelConfigs = config;
+            await LoadModelsAsync();
         }
 
-        public async Task CreateContextAsync()
+        private async Task LoadModelsAsync()
         {
-            if (chatWeights != null)
+            await LoadEmbedderAsync(CurrentModelConfigs.EmbedderModelPath, CurrentModelConfigs.EmbedderContextSize, CurrentModelConfigs.EmbedderGpuLayerCount, CurrentModelConfigs.EmbedderRandomSeed);
+            await LoadClipModelAsync(CurrentModelConfigs.ClipModelPath);
+            await LoadChatModelAsync(CurrentModelConfigs.ChatModelPath, CurrentModelConfigs.ChatContextSize, CurrentModelConfigs.ChatGpuLayerCount, CurrentModelConfigs.ChatRandomSeed);
+        }
+
+
+        private async Task LoadEmbedderAsync(string modelPath, uint contextSize, int gpuLayerCount, uint randomSeed)
+        {
+            await Task.Run(() =>
             {
+                if (embedderWeights != null)
+                {
+                    UnloadEmbedderModelAsync();
+                }
+
+                var parameters = new ModelParams(modelPath)
+                {
+                    ContextSize = contextSize,
+                    Seed = randomSeed,
+                    GpuLayerCount = gpuLayerCount,
+                    EmbeddingMode = true
+                };
+
+                embedderWeights = LLamaWeights.LoadFromFile(parameters);
+                embedder = new LLamaEmbedder(embedderWeights, parameters);
+            });
+
+        }
+
+        public async void UnloadEmbedderModelAsync()
+        {
+
+            if (embedderWeights != null) { embedderWeights.Dispose(); }
+            if (embedder != null) { embedder.Dispose(); }
+
+        }
+
+
+        public async Task LoadChatModelAsync(string modelPath, uint contextSize, int gpuLayerCount, uint randomSeed)
+        {
+
+            if (!string.IsNullOrEmpty(modelPath))
+            {
+                var parameters = new ModelParams(modelPath)
+                {
+                    ContextSize = contextSize,
+                    Seed = randomSeed,
+                    GpuLayerCount = gpuLayerCount,
+                    EmbeddingMode = false
+                };
+
                 await Task.Run(() =>
                 {
-                    context = chatWeights.CreateContext(new ModelParams(ChatModelPath));
-                });
-                EmitSignal(SignalName.ContextStatusUpdate, true);
-            }
-            else
-            {
-                GD.PrintErr("Chat weights not set.");
-            }
+                    if (chatWeights != null)
+                    {
+                        UnloadChatWeightsAsync();
+                    }
 
-        }
-
-        //// Involves loading a separate LLamaWeights
-        //private async Task LoadEmbedderAsync()
-        //{
-        //    if (embedderWeights != null)
-        //    {
-        //        UnloadEmbedderModelAsync();
-        //    }
-
-        //    var parameters = new ModelParams(EmbedderModelPath)
-        //    {
-        //        ContextSize = embedderContextSize,
-        //        Seed = 0,
-        //        GpuLayerCount = embedderGpuLayerCount,
-        //        EmbeddingMode = true
-        //    };
-
-        //    embedderWeights = LLamaWeights.LoadFromFile(parameters);
-        //    embedder = new LLamaEmbedder(embedderWeights, parameters);
-
-        //}
-
-        //public async void UnloadEmbedderModelAsync()
-        //{
-
-        //    if (embedderWeights != null) { embedderWeights.Dispose(); }
-        //    if (embedder != null) { embedder.Dispose(); }
-
-        //}
-
-
-        public async Task LoadChatModelWeightsAsync()
-        {
-            if (!string.IsNullOrEmpty(ChatModelPath))
-            {
-                await Task.Run(() =>
-                {
-                    chatWeights = LLamaWeights.LoadFromFile(new ModelParams(ChatModelPath));
+                    chatWeights = LLamaWeights.LoadFromFile(parameters);
                     CallDeferred("emit_signal", SignalName.ChatModelStatusUpdate, true);
-                    isReady = true;
+                    
                 });
+                if (chatWeights != null)
+                {
+                    await Task.Run(() =>
+                    {
+                        context = chatWeights.CreateContext(parameters);
+                        CallDeferred("emit_signal", SignalName.ContextStatusUpdate, true);
+                        isReady = true;
+                    });
+                    
+                }
+                else
+                {
+                    GD.PrintErr("Chat weights not set.");
+                }
             }
             else
             {
@@ -137,15 +144,22 @@ namespace MindGame
             }
         }
 
-
-
-        public async Task LoadClipModelWeightsAsync()
+        public async void UnloadChatWeightsAsync()
         {
-            if (!string.IsNullOrEmpty(ClipModelPath))
+
+            if (chatWeights != null) { chatWeights.Dispose(); }
+
+        }
+
+
+
+        public async Task LoadClipModelAsync(string modelPath)
+        {
+            if (!string.IsNullOrEmpty(modelPath))
             {
                 await Task.Run(() => 
                 { 
-                    clipWeights = LLavaWeights.LoadFromFile(ClipModelPath);
+                    clipWeights = LLavaWeights.LoadFromFile(modelPath);
                     CallDeferred("emit_signal", SignalName.ClipModelStatusUpdate, true);
                 });
             }
