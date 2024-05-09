@@ -11,7 +11,8 @@ using LLama;
 public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
 {
     
-    private Control editorInterface;
+    private Control singleAgentChatScene;
+    
     private Script mindAgentScript = GD.Load<CSharpScript>("res://addons/mind_game/scripts/model_classes/MindAgent.cs");
     private Texture2D mindAgentIcon = GD.Load<Texture2D>("res://addons/mind_game/assets/logos/brain_pink.png");
 
@@ -19,9 +20,9 @@ public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
 
     public override void _EnterTree()
     {
-        // PackedScene mindGameInterfaceScene = (PackedScene)GD.Load("res://addons/mind_game/scenes/EditorInterface.tscn");
-        // editorInterface = mindGameInterfaceScene.Instantiate<Control>();
-        // AddControlToBottomPanel(editorInterface, "Mind Game");
+        PackedScene singleAgentChatControllerScene = (PackedScene)GD.Load("res://addons/mind_game/controllers/SingleAgentChatController.tscn");
+        singleAgentChatScene = singleAgentChatControllerScene.Instantiate<Control>();
+        // AddControlToBottomPanel(singleAgentChatScene, "Mind Game");
 
         AddCustomType("MindAgent", "Node", mindAgentScript, mindAgentIcon);
 

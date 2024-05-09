@@ -12,8 +12,7 @@ namespace MindGame
     {
 
     
-        [Signal]
-        public delegate void ExecutorStatusUpdateEventHandler(bool isLoaded);
+        
         [Signal]
         public delegate void ChatSessionStatusUpdateEventHandler(bool isLoaded);
         [Signal]
@@ -25,7 +24,7 @@ namespace MindGame
         public float temperature = 0.5f;
         public int maxTokens = 4000;
 
-        public InteractiveExecutor executor { get; private set; } = null;
+        
         public ChatSession chatSession { get; private set; } = null;
 
     
@@ -50,14 +49,13 @@ namespace MindGame
                 GD.PrintErr("Please ensure MindManager is enabled in Autoloads!");
             }
 
-            mm.ChatModelStatusUpdate += OnChatModelStatusUpdate;
             mm.ClipModelStatusUpdate += OnClipModelStatusUpdate;
             mm.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
-            mm.ContextStatusUpdate += OnContextStatusUpdate;
+            mm.ExecutorStatusUpdate += OnExecutorStatusUpdate;
         
         }
 
-        private async void OnContextStatusUpdate(bool isLoaded)
+        private async void OnExecutorStatusUpdate(bool isLoaded)
         {
             if (isLoaded)
             {
@@ -75,53 +73,17 @@ namespace MindGame
         
         }
 
-        private async void OnChatModelStatusUpdate(bool isLoaded)
-        {
-            
-        }
-
-
         public async Task InitializeAsync()
         {
-        
-            await CreateExecutorAsync();
+
             await CreateChatSessionAsync();
-        }
-
-    
-
-        public async Task CreateExecutorAsync()
-        {
-            if (mm.context != null)
-            {
-                if (mm.clipWeights != null)
-                {
-                    await Task.Run(() =>
-                    {
-                        executor = new InteractiveExecutor(mm.context, mm.clipWeights);
-                        CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, true);
-                    });
-                }
-                else
-                {
-                    await Task.Run(() =>
-                    {
-                        executor = new InteractiveExecutor(mm.context);
-                        CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, true);
-                    });
-                }
-            }
-            else
-            {
-                GD.PrintErr("Executor not initialized.");
-            }
         }
 
         public async Task CreateChatSessionAsync()
         {
             await Task.Run(() =>
             {
-                chatSession = new ChatSession(executor);
+                chatSession = new ChatSession(mm.executor);
                 CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, true);
             });
         }
@@ -137,8 +99,8 @@ namespace MindGame
             // Handle image paths by setting them in the executor
             if (imagePaths != null && imagePaths.Count > 0)
             {
-                executor.ImagePaths.Clear();
-                executor.ImagePaths.AddRange(imagePaths);
+                mm.executor.ImagePaths.Clear();
+                mm.executor.ImagePaths.AddRange(imagePaths);
             }
 
             // Execute the chat session with the current prompt and any images
@@ -148,17 +110,6 @@ namespace MindGame
                 {
                     CallDeferred("emit_signal", SignalName.ChatOutputReceived, output);
                 }
-            });
-        }
-
-
-
-        public async Task DisposeExecutorAsync()
-        {
-            await Task.Run(() =>
-            {
-                executor = null;
-                CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, false);
             });
         }
 
@@ -174,8 +125,6 @@ namespace MindGame
         public async Task DisposeAllAsync()
         {
             await DisposeChatSessionAsync();
-            await DisposeExecutorAsync();
-        
 
         }
 
