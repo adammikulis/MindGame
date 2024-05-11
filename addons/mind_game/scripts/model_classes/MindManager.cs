@@ -27,19 +27,14 @@ namespace MindGame
 
         // Chat Executor
         public LLamaContext context { get; set; }
-        public InteractiveExecutor executor { get; private set; } = null;
+        public InteractiveExecutor executor { get; private set; }
 
         // Clip model vars
-        public LLavaWeights clipWeights { get; private set; } = null;
+        public LLavaWeights clipWeights { get; private set; }
 
 
         // Embedder model vars
-        public LLamaEmbedder embedder { get; private set; } = null;
-
-
-        
-        public bool isReady { get; private set; } = false;
-
+        public LLamaEmbedder embedder { get; private set; }
 
 
         public override void _EnterTree()
@@ -111,7 +106,6 @@ namespace MindGame
                     
                     executor = new InteractiveExecutor(context); // Make another loader with context and clip weights for llava
                     CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, true);
-                    isReady = true;
                 });
             }
     
@@ -151,7 +145,6 @@ namespace MindGame
             {
                 executor = null;
                 CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, false);
-                isReady = false;
             });
         }
 

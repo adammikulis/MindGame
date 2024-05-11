@@ -13,7 +13,7 @@ namespace MindGame
         private string modelConfigListPath = "res://addons/mind_game/model_configs.tres";
 
         // UI elements
-        private Button addNewConfigButton, deleteConfigButton, selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton, backButton, loadModelsButton, unloadModelsButton;
+        private Button addNewConfigButton, deleteConfigButton, selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton, backButton, loadConfigButton, unloadConfigButton;
         private Label chatContextSizeLabel, chatGpuLayerCountLabel, embedderContextSizeLabel, embedderGpuLayerCountLabel, chatCurrentModelPathLabel, embedderCurrentModelPathLabel, clipCurrentModelPathLabel;
         private FileDialog selectChatPathFileDialog, selectClipPathFileDialog, selectEmbedderPathFileDialog;
         private HSlider chatContextSizeHSlider, chatGpuLayerCountHSlider, embedderContextSizeHSlider, embedderGpuLayerCountHSlider;
@@ -65,7 +65,7 @@ namespace MindGame
 
         private void InitializeDefaultValues()
         {
-            configName = "";
+            configName = "<default>";
 
             chatContextSize = 4000;
             chatGpuLayerCount = 33;
@@ -91,8 +91,8 @@ namespace MindGame
             addNewConfigButton = GetNode<Button>("%AddNewConfigButton");
             deleteConfigButton = GetNode<Button>("%DeleteConfigButton");
             backButton = GetNode<Button>("%BackButton");
-            loadModelsButton = GetNode<Button>("%LoadModelsButton");
-            unloadModelsButton = GetNode<Button>("%UnloadModelsButton");
+            loadConfigButton = GetNode<Button>("%LoadConfigButton");
+            unloadConfigButton = GetNode<Button>("%UnloadConfigButton");
 
             // Chat param nodes
             chatContextSizeHSlider = GetNode<HSlider>("%ChatContextSizeHSlider");
@@ -137,8 +137,8 @@ namespace MindGame
             addNewConfigButton.Pressed += OnAddNewConfigPressed;
             deleteConfigButton.Pressed += OnDeleteConfigPressed;
             backButton.Pressed += OnBackPressed;
-            loadModelsButton.Pressed += OnLoadModelsPressed;
-            unloadModelsButton.Pressed += OnUnloadModelsPressed;
+            loadConfigButton.Pressed += OnLoadConfigPressed;
+            unloadConfigButton.Pressed += OnUnloadConfigPressed;
 
             clearChatPathButton.Pressed += OnClearChatPathPressed;
             clearClipPathButton.Pressed += OnClearClipPathPressed;
@@ -162,12 +162,12 @@ namespace MindGame
 
         }
 
-        private void OnUnloadModelsPressed()
+        private async void OnUnloadConfigPressed()
         {
-            throw new NotImplementedException();
+            await mm.DisposeExecutorAsync();
         }
 
-        private async void OnLoadModelsPressed()
+        private async void OnLoadConfigPressed()
         {
             if (config != null)
             {
@@ -288,7 +288,7 @@ namespace MindGame
             }
             else
             {
-                GD.Print("Configuration saved successfully.");
+                // GD.Print("Configuration saved successfully.");
             }
         }
 
@@ -403,28 +403,28 @@ namespace MindGame
 
         public override void _ExitTree()
         {
-            addNewConfigButton.Pressed -= OnAddNewConfigPressed;
-            deleteConfigButton.Pressed -= OnDeleteConfigPressed;
+            //addNewConfigButton.Pressed -= OnAddNewConfigPressed;
+            //deleteConfigButton.Pressed -= OnDeleteConfigPressed;
 
-            clearChatPathButton.Pressed -= OnClearChatPathPressed;
-            clearClipPathButton.Pressed -= OnClearClipPathPressed;
-            clearEmbedderPathButton.Pressed -= OnClearEmbedderPathPressed;
+            //clearChatPathButton.Pressed -= OnClearChatPathPressed;
+            //clearClipPathButton.Pressed -= OnClearClipPathPressed;
+            //clearEmbedderPathButton.Pressed -= OnClearEmbedderPathPressed;
 
-            selectChatPathButton.Pressed -= OnSelectChatPathPressed;
-            selectClipPathButton.Pressed -= OnSelectClipPathPressed;
-            selectEmbedderPathButton.Pressed -= OnSelectEmbedderPathPressed;
+            //selectChatPathButton.Pressed -= OnSelectChatPathPressed;
+            //selectClipPathButton.Pressed -= OnSelectClipPathPressed;
+            //selectEmbedderPathButton.Pressed -= OnSelectEmbedderPathPressed;
 
-            chatContextSizeHSlider.ValueChanged -= OnChatContextSizeHSliderValueChanged;
-            chatGpuLayerCountHSlider.ValueChanged -= OnChatGpuLayerCountHSliderValueChanged;
-            embedderContextSizeHSlider.ValueChanged -= OnEmbedderContextSizeHSliderValueChanged;
-            embedderGpuLayerCountHSlider.ValueChanged -= OnEmbedderGpuLayerCountHSliderValueChanged;
+            //chatContextSizeHSlider.ValueChanged -= OnChatContextSizeHSliderValueChanged;
+            //chatGpuLayerCountHSlider.ValueChanged -= OnChatGpuLayerCountHSliderValueChanged;
+            //embedderContextSizeHSlider.ValueChanged -= OnEmbedderContextSizeHSliderValueChanged;
+            //embedderGpuLayerCountHSlider.ValueChanged -= OnEmbedderGpuLayerCountHSliderValueChanged;
 
-            selectChatPathFileDialog.FileSelected -= OnChatPathSelected;
-            selectClipPathFileDialog.FileSelected -= OnClipPathSelected;
-            selectEmbedderPathFileDialog.FileSelected -= OnEmbedderPathSelected;
+            //selectChatPathFileDialog.FileSelected -= OnChatPathSelected;
+            //selectClipPathFileDialog.FileSelected -= OnClipPathSelected;
+            //selectEmbedderPathFileDialog.FileSelected -= OnEmbedderPathSelected;
 
-            configNameLineEdit.TextChanged -= OnConfigNameTextChanged;
-            savedConfigsItemList.ItemSelected -= OnSavedConfigsItemSelected;
+            //configNameLineEdit.TextChanged -= OnConfigNameTextChanged;
+            //savedConfigsItemList.ItemSelected -= OnSavedConfigsItemSelected;
         }
     }
 

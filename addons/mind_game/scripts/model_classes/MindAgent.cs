@@ -11,17 +11,14 @@ namespace MindGame
     public partial class MindAgent : Node
     {
 
-    
-        
         [Signal]
         public delegate void ChatSessionStatusUpdateEventHandler(bool isLoaded);
         [Signal]
         public delegate void ChatOutputReceivedEventHandler(string text);
 
-
-        private MindManager mm;
-        public string[] antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "User:", "USER:", "\nUser:", "\nUSER:"];
-        public float temperature = 0.5f;
+        private MindManager mindManager;
+        public string[] antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}"];
+        public float temperature = 0.75f;
         public int maxTokens = 4000;
 
         
@@ -37,8 +34,8 @@ namespace MindGame
         {
             try
             {
-                mm = GetNode<MindManager>("/root/MindManager");
-                if (mm.isReady == true)
+                mindManager = GetNode<MindManager>("/root/MindManager");
+                if (mindManager.executor != null)
                 {
                     await InitializeAsync();
                 }
@@ -49,9 +46,9 @@ namespace MindGame
                 GD.PrintErr("Please ensure MindManager is enabled in Autoloads!");
             }
 
-            mm.ClipModelStatusUpdate += OnClipModelStatusUpdate;
-            mm.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
-            mm.ExecutorStatusUpdate += OnExecutorStatusUpdate;
+            mindManager.ClipModelStatusUpdate += OnClipModelStatusUpdate;
+            mindManager.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
+            mindManager.ExecutorStatusUpdate += OnExecutorStatusUpdate;
         
         }
 
@@ -83,7 +80,7 @@ namespace MindGame
         {
             await Task.Run(() =>
             {
-                chatSession = new ChatSession(mm.executor);
+                chatSession = new ChatSession(mindManager.executor);
                 CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, true);
             });
         }
@@ -99,8 +96,8 @@ namespace MindGame
             // Handle image paths by setting them in the executor
             if (imagePaths != null && imagePaths.Count > 0)
             {
-                mm.executor.ImagePaths.Clear();
-                mm.executor.ImagePaths.AddRange(imagePaths);
+                mindManager.executor.ImagePaths.Clear();
+                mindManager.executor.ImagePaths.AddRange(imagePaths);
             }
 
             // Execute the chat session with the current prompt and any images

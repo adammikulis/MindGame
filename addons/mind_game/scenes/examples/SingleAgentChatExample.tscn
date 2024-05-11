@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://ch5cpcwih8o7r"]
+
+[ext_resource type="Script" path="res://addons/mind_game/scripts/model_classes/MindAgent.cs" id="2_nep3t"]
+[ext_resource type="PackedScene" uid="uid://jfi3klrb0cdp" path="res://addons/mind_game/scenes/controllers/ChatController.tscn" id="3_sxg6n"]
+[ext_resource type="Texture2D" uid="uid://dk12ou3v5g3ga" path="res://icon.svg" id="3_uhk5y"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2quel"]
+albedo_texture = ExtResource("3_uhk5y")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_wrixq"]
+material = SubResource("StandardMaterial3D_2quel")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o3sy4"]
+
+[node name="ChatSceneExample" type="Node"]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="MindAgent" type="Node" parent="CharacterBody3D"]
+unique_name_in_owner = true
+script = ExtResource("2_nep3t")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_wrixq")
+
+[node name="SpeedLabel3D" type="Label3D" parent="CharacterBody3D"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.39011, 0)
+text = "Load a model to chat with me!"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_o3sy4")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.991736, 0.128294, 0, -0.128294, 0.991736, 0, 2.06171, 3.46291)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, 0, -0.5, 0.353553, 0.707107, 0.612372, 0.353553, -0.707107, 0.612372, -3, 4, 3)
+
+[node name="ChatController" parent="." instance=ExtResource("3_sxg6n")]
