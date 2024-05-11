@@ -1,9 +1,9 @@
 This is a plugin for the Godot game engine that allows the user to load and run a local Large Language Model (LLM) in-engine using the [LLamaSharp](https://github.com/SciSharp/LLamaSharp) (v0.11.1) C# library.
-
-# Fast, local chat models in your games
+# Current Mind Game features
+## Fast, local chat models in your games
 ![mindgame_inference](https://github.com/adammikulis/MindGame/assets/27887607/bb9da9c0-622d-4b6d-af08-40cf7f2bdba9)
 
-# Easy configuration
+## Easy configuration
 ![mindgame_config](https://github.com/adammikulis/MindGame/assets/27887607/3ecd86f9-cf92-473f-a667-76b62b7cfdb0)
 
 # Run Mind Game stand-alone
