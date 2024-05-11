@@ -65,7 +65,7 @@ namespace MindGame
 
         private void InitializeDefaultValues()
         {
-            configName = "";
+            configName = "<default>";
 
             chatContextSize = 4000;
             chatGpuLayerCount = 33;
@@ -288,7 +288,7 @@ namespace MindGame
             }
             else
             {
-                GD.Print("Configuration saved successfully.");
+                // GD.Print("Configuration saved successfully.");
             }
         }
 
@@ -403,28 +403,28 @@ namespace MindGame
 
         public override void _ExitTree()
         {
-            addNewConfigButton.Pressed -= OnAddNewConfigPressed;
-            deleteConfigButton.Pressed -= OnDeleteConfigPressed;
+            //addNewConfigButton.Pressed -= OnAddNewConfigPressed;
+            //deleteConfigButton.Pressed -= OnDeleteConfigPressed;
 
-            clearChatPathButton.Pressed -= OnClearChatPathPressed;
-            clearClipPathButton.Pressed -= OnClearClipPathPressed;
-            clearEmbedderPathButton.Pressed -= OnClearEmbedderPathPressed;
+            //clearChatPathButton.Pressed -= OnClearChatPathPressed;
+            //clearClipPathButton.Pressed -= OnClearClipPathPressed;
+            //clearEmbedderPathButton.Pressed -= OnClearEmbedderPathPressed;
 
-            selectChatPathButton.Pressed -= OnSelectChatPathPressed;
-            selectClipPathButton.Pressed -= OnSelectClipPathPressed;
-            selectEmbedderPathButton.Pressed -= OnSelectEmbedderPathPressed;
+            //selectChatPathButton.Pressed -= OnSelectChatPathPressed;
+            //selectClipPathButton.Pressed -= OnSelectClipPathPressed;
+            //selectEmbedderPathButton.Pressed -= OnSelectEmbedderPathPressed;
 
-            chatContextSizeHSlider.ValueChanged -= OnChatContextSizeHSliderValueChanged;
-            chatGpuLayerCountHSlider.ValueChanged -= OnChatGpuLayerCountHSliderValueChanged;
-            embedderContextSizeHSlider.ValueChanged -= OnEmbedderContextSizeHSliderValueChanged;
-            embedderGpuLayerCountHSlider.ValueChanged -= OnEmbedderGpuLayerCountHSliderValueChanged;
+            //chatContextSizeHSlider.ValueChanged -= OnChatContextSizeHSliderValueChanged;
+            //chatGpuLayerCountHSlider.ValueChanged -= OnChatGpuLayerCountHSliderValueChanged;
+            //embedderContextSizeHSlider.ValueChanged -= OnEmbedderContextSizeHSliderValueChanged;
+            //embedderGpuLayerCountHSlider.ValueChanged -= OnEmbedderGpuLayerCountHSliderValueChanged;
 
-            selectChatPathFileDialog.FileSelected -= OnChatPathSelected;
-            selectClipPathFileDialog.FileSelected -= OnClipPathSelected;
-            selectEmbedderPathFileDialog.FileSelected -= OnEmbedderPathSelected;
+            //selectChatPathFileDialog.FileSelected -= OnChatPathSelected;
+            //selectClipPathFileDialog.FileSelected -= OnClipPathSelected;
+            //selectEmbedderPathFileDialog.FileSelected -= OnEmbedderPathSelected;
 
-            configNameLineEdit.TextChanged -= OnConfigNameTextChanged;
-            savedConfigsItemList.ItemSelected -= OnSavedConfigsItemSelected;
+            //configNameLineEdit.TextChanged -= OnConfigNameTextChanged;
+            //savedConfigsItemList.ItemSelected -= OnSavedConfigsItemSelected;
         }
     }
 
