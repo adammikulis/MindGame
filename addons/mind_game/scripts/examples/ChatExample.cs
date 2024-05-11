@@ -34,9 +34,9 @@ namespace MindGame
 
         }
 
-        private void OnExitPressed()
+        private async void OnExitPressed()
         {
-            mindManager.DisposeExecutorAsync();
+            await mindManager.DisposeExecutorAsync();
             GetTree().Quit();
         }
 

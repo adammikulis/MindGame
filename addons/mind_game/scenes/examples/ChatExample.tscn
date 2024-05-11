@@ -29,6 +29,9 @@ size = Vector3(20, 1, 20)
 [node name="ChatExample" type="Node"]
 script = ExtResource("1_skj4j")
 
+[node name="MindAgent3D" parent="." instance=ExtResource("4_8gnm3")]
+unique_name_in_owner = true
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.991736, 0.128294, 0, -0.128294, 0.991736, 0, 3.06171, 4.46291)
 
@@ -98,6 +101,3 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GroundStaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_fw3c5")
-
-[node name="MindAgent3D" parent="." instance=ExtResource("4_8gnm3")]
-unique_name_in_owner = true
