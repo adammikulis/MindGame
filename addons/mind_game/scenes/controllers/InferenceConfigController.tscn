@@ -1,0 +1,109 @@
+[gd_scene load_steps=2 format=3 uid="uid://3sy7uksi0h1a"]
+
+[ext_resource type="Script" path="res://addons/mind_game/scripts/controllers/InferenceConfigController.cs" id="1_rm55x"]
+
+[node name="InferenceConfigController" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rm55x")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InferenceConfigTitleLabel" type="Label" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Inference Configuration"
+horizontal_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 3
+
+[node name="NameTitleLabel" type="Label" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Name"
+
+[node name="NameLineEdit" type="LineEdit" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlaceholderLabel" type="Label" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="TemperatureTitleLabel" type="Label" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Temperature"
+
+[node name="TemperatureHSlider" type="HSlider" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 2.0
+step = 0.05
+value = 0.5
+tick_count = 41
+ticks_on_borders = true
+
+[node name="TemperatureLineEdit" type="LineEdit" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0.5"
+editable = false
+
+[node name="MaxTokensTitleLable" type="Label" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "MaxTokens"
+
+[node name="MaxTokensHSlider" type="HSlider" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 12.0
+value = 2.0
+tick_count = 13
+ticks_on_borders = true
+
+[node name="MaxTokensLineEdit" type="LineEdit" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "4000"
+editable = false
+
+[node name="OutputJsonCheckBox" type="CheckBox" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Output JSON"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SavedInferenceConfigsItemList" type="ItemList" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

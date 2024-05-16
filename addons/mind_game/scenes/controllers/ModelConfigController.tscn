@@ -98,7 +98,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_wpyha")
-text = "Model Manager"
+text = "Model Configuration"
 label_settings = SubResource("LabelSettings_osrau")
 horizontal_alignment = 1
 
@@ -193,6 +193,8 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+item_count = 1
+item_0/text = "phi3_4k"
 
 [node name="ModelConfigMarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
