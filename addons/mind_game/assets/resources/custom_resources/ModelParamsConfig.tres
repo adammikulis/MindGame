@@ -1,0 +1,6 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cp87mqeehfhwj"]
+
+[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ModelParamsConfigs.cs" id="1_3kg2t"]
+
+[resource]
+script = ExtResource("1_3kg2t")

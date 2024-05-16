@@ -62,22 +62,30 @@ theme_override_constants/margin_bottom = 5
 
 [node name="GridContainer" type="GridContainer" parent="ChatController/MarginContainer"]
 layout_mode = 2
+size_flags_vertical = 8
 columns = 2
 
-[node name="Label" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+[node name="SpacerLabel" type="Label" parent="ChatController/MarginContainer/GridContainer"]
 layout_mode = 2
 
-[node name="InferenceConfigController" parent="ChatController/MarginContainer/GridContainer" instance=ExtResource("3_7mwxh")]
+[node name="SpacerLabel2" type="Label" parent="ChatController/MarginContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+[node name="SpacerLabel3" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="InferenceConfigButton" type="Button" parent="ChatController/MarginContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Inference Config"
+
+[node name="SpacerLabel4" type="Label" parent="ChatController/MarginContainer/GridContainer"]
 layout_mode = 2
 
 [node name="ConfigAndLoadModelsButton" type="Button" parent="ChatController/MarginContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Config and 
-Load Models"
+text = "Model Config/Load"
 
 [node name="ModelInputLineEdit" type="LineEdit" parent="ChatController/MarginContainer/GridContainer"]
 unique_name_in_owner = true
@@ -103,4 +111,7 @@ shape = SubResource("BoxShape3D_fw3c5")
 
 [node name="ModelConfigController" parent="." instance=ExtResource("4_i4nn4")]
 unique_name_in_owner = true
+visible = false
+
+[node name="InferenceConfigController" parent="." instance=ExtResource("3_7mwxh")]
 visible = false

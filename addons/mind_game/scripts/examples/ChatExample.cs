@@ -48,7 +48,7 @@ namespace MindGame
         private async void OnModelInputTextSubmitted(string newText)
         {
             modelInputLineEdit.Text = "";
-            mindAgent3D.InferAsync(newText);
+            await mindAgent3D.InferAsync(newText);
         }
 
         private void OnChatSessionStatusUpdate(bool isLoaded)

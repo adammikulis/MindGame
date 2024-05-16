@@ -10,7 +10,7 @@ namespace MindGame
         public ConfigListResource configListResource;
         public ModelParamsConfigs modelParamsConfigs;
         public MindManager mindManager;
-        private string modelConfigListPath = "res://addons/mind_game/model_configs.tres";
+        private string modelConfigListPath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
 
         // UI elements
         private Button addNewConfigButton, deleteConfigButton, selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton, backButton, loadConfigButton, unloadConfigButton;
@@ -188,7 +188,7 @@ namespace MindGame
             chatGpuLayerCountHSlider.Value = (double)chatGpuLayerCount;
             chatGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
 
-            chatContextSizeHSlider.Value = calculateLogContextSize(chatContextSize);
+            chatContextSizeHSlider.Value = CalculateLogContextSize(chatContextSize);
             chatContextSizeLabel.Text = chatContextSize.ToString();
 
             chatRandomSeedLineEdit.Text = chatRandomSeed.ToString();
@@ -197,7 +197,7 @@ namespace MindGame
             embedderGpuLayerCountHSlider.Value = (double)embedderGpuLayerCount;
             embedderGpuLayerCountLabel.Text = embedderGpuLayerCount.ToString();
 
-            embedderContextSizeHSlider.Value = calculateLogContextSize(embedderContextSize);
+            embedderContextSizeHSlider.Value = CalculateLogContextSize(embedderContextSize);
             embedderContextSizeLabel.Text = embedderContextSize.ToString();
 
             embedderRandomSeedLineEdit.Text = embedderRandomSeed.ToString();
@@ -207,11 +207,11 @@ namespace MindGame
         {
             modelParamsConfigs = configListResource.ModelConfigurations[(int)index];
             configNameLineEdit.Text = modelParamsConfigs.ModelConfigsName;
-            chatContextSizeHSlider.Value = calculateLogContextSize(modelParamsConfigs.ChatContextSize);
+            chatContextSizeHSlider.Value = CalculateLogContextSize(modelParamsConfigs.ChatContextSize);
             chatGpuLayerCountHSlider.Value = modelParamsConfigs.ChatGpuLayerCount;
             chatRandomSeedLineEdit.Text = modelParamsConfigs.ChatRandomSeed.ToString();
             chatCurrentModelPathLabel.Text = modelParamsConfigs.ChatModelPath;
-            embedderContextSizeHSlider.Value = calculateLogContextSize(modelParamsConfigs.EmbedderContextSize);
+            embedderContextSizeHSlider.Value = CalculateLogContextSize(modelParamsConfigs.EmbedderContextSize);
             embedderGpuLayerCountHSlider.Value = modelParamsConfigs.EmbedderGpuLayerCount;
             embedderRandomSeedLineEdit.Text = modelParamsConfigs.EmbedderRandomSeed.ToString();
             embedderCurrentModelPathLabel.Text = modelParamsConfigs.EmbedderModelPath;
@@ -224,12 +224,12 @@ namespace MindGame
             var selectedIndices = savedConfigsItemList.GetSelectedItems();
 
             // Check if there is at least one selected item and the array is not empty
-            if (selectedIndices.Count() > 0 && configListResource.ModelConfigurations.Count() > 0)
+            if (selectedIndices.Length > 0 && configListResource.ModelConfigurations.Count > 0)
             {
                 int selectedIndex = selectedIndices[0];  // Get the first selected index
 
                 // Ensure the selected index is within the bounds of the array
-                if (selectedIndex >= 0 && selectedIndex < configListResource.ModelConfigurations.Count())
+                if (selectedIndex >= 0 && selectedIndex < configListResource.ModelConfigurations.Count)
                 {
                     configListResource.ModelConfigurations.RemoveAt(selectedIndex);
                     SaveConfigList();
@@ -244,7 +244,7 @@ namespace MindGame
 
         private void OnAddNewConfigPressed()
         {
-            ModelParamsConfigs newConfig = new ModelParamsConfigs
+            ModelParamsConfigs newConfig = new()
             {
                 ModelConfigsName = configName,
                 ChatContextSize = chatContextSize,
@@ -266,7 +266,7 @@ namespace MindGame
         private void UpdateConfigurationValue(Action<ModelParamsConfigs> updateAction)
         {
             var selectedIndices = savedConfigsItemList.GetSelectedItems();
-            if (selectedIndices.Count() > 0)
+            if (selectedIndices.Length > 0)
             {
                 int selectedIndex = selectedIndices[0];
                 if (selectedIndex >= 0 && selectedIndex < configListResource.ModelConfigurations.Count)
@@ -372,26 +372,26 @@ namespace MindGame
             selectEmbedderPathFileDialog.PopupCentered();
         }
 
-        private uint calculateExpContextSize(double value)
+        private static uint CalculateExpContextSize(double value)
         {
             return (uint)Math.Pow(2, value) * 1000;
         }
 
-        private double calculateLogContextSize(uint value)
+        private static double CalculateLogContextSize(uint value)
         {
             return (double)Math.Log2(value / 1000);
         }
 
         private void OnChatContextSizeHSliderValueChanged(double value)
         {
-            chatContextSize = calculateExpContextSize(value);
+            chatContextSize = CalculateExpContextSize(value);
             chatContextSizeLabel.Text = chatContextSize.ToString();
             UpdateConfigurationValue(config => config.ChatContextSize = chatContextSize);
         }
 
         private void OnEmbedderContextSizeHSliderValueChanged(double value)
         {
-            embedderContextSize = calculateExpContextSize(value);
+            embedderContextSize = CalculateExpContextSize(value);
             embedderContextSizeLabel.Text = embedderContextSize.ToString();
             UpdateConfigurationValue(config => config.EmbedderContextSize = embedderContextSize);
         }

@@ -31,7 +31,7 @@ namespace MindGame
         private void InitializeNodeRefs()
         {
             addInferenceConfigButton = GetNode<Button>("%AddInferenceConfigButton");
-            deleteInferenceConfigButton = GetNode<Button>("DeleteInferenceConfig");
+            deleteInferenceConfigButton = GetNode<Button>("%DeleteInferenceConfigButton");
             outputJsonCheckBox = GetNode<CheckBox>("%OutputJsonCheckBox");
             maxTokensHSlider = GetNode<HSlider>("%MaxTokensHSlider");
             temperatureHSlider = GetNode<HSlider>("%TemperatureHSlider");
@@ -41,12 +41,12 @@ namespace MindGame
             temperatureLineEdit = GetNode<LineEdit>("%TemperatureLineEdit");
         }
 
-        private uint calculateExpMaxTokens(double value)
+        private static uint CalculateExpMaxTokens(double value)
         {
             return (uint)Math.Pow(2, value) * 1000;
         }
 
-        private double calculateLogMaxTokens(uint value)
+        private static double CalculateLogMaxTokens(uint value)
         {
             return (double)Math.Log2(value / 1000);
         }

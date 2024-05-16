@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://bnrhipv3n8eh5"]
+
+[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ModelParamsConfigs.cs" id="1_ogvdd"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ConfigListResource.cs" id="1_q2fe5"]
+
+[sub_resource type="Resource" id="Resource_ta65v"]
+script = ExtResource("1_ogvdd")
+ModelConfigsName = "phi3_4k"
+ChatContextSize = 4000
+ChatGpuLayerCount = 33
+ChatRandomSeed = 0
+ChatModelPath = "C:\\Users\\adamm\\source\\repos\\models\\phi3\\Phi-3-mini-4k-instruct-q4.gguf"
+EmbedderContextSize = 4000
+EmbedderGpuLayerCount = 33
+EmbedderRandomSeed = 0
+EmbedderModelPath = ""
+ClipModelPath = ""
+
+[resource]
+script = ExtResource("1_q2fe5")
+ModelConfigurations = [SubResource("Resource_ta65v")]
+InferenceConfigurations = []

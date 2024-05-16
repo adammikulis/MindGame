@@ -22,7 +22,7 @@ namespace MindGame
         public int maxTokens = 4000;
 
         
-        public ChatSession chatSession { get; private set; } = null;
+        public ChatSession ChatSession { get; private set; } = null;
 
     
         public override void _EnterTree()
@@ -43,7 +43,7 @@ namespace MindGame
             }
             catch (Exception e)
             {
-                GD.PrintErr("Please ensure MindManager is enabled in Autoloads!");
+                GD.PrintErr("Please ensure MindManager is enabled in Autoloads!\n" + e);
             }
 
             mindManager.ClipModelStatusUpdate += OnClipModelStatusUpdate;
@@ -80,14 +80,14 @@ namespace MindGame
         {
             await Task.Run(() =>
             {
-                chatSession = new ChatSession(mindManager.executor);
+                ChatSession = new ChatSession(mindManager.executor);
                 CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, true);
             });
         }
 
         public async Task InferAsync(string prompt, List<string> imagePaths = null)
         {
-            if (chatSession == null)
+            if (ChatSession == null)
             {
                 GD.PrintErr("Chat session not initialized. Please check the model configuration.");
                 return;
@@ -103,7 +103,7 @@ namespace MindGame
             // Execute the chat session with the current prompt and any images
             await Task.Run(async () =>
             {
-                await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { AntiPrompts = antiPrompts, Temperature = temperature, MaxTokens = maxTokens }))
+                await foreach (var output in ChatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { AntiPrompts = antiPrompts, Temperature = temperature, MaxTokens = maxTokens }))
                 {
                     CallDeferred("emit_signal", SignalName.ChatOutputReceived, output);
                 }
@@ -114,7 +114,7 @@ namespace MindGame
         {
             await Task.Run(() =>
             {
-                chatSession = null;
+                ChatSession = null;
                 CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, false);
             });
         }

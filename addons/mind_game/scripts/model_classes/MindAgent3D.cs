@@ -1,5 +1,6 @@
- using Godot;
+using Godot;
 using System;
+using System.Threading.Tasks;
 
 namespace MindGame
 {
@@ -11,34 +12,34 @@ namespace MindGame
         [Signal]
         public delegate void ChatOutputReceivedEventHandler(string text);
 
-        public Label3D chatLabel3D { get; set; }
-        public MindGame.MindAgent mindAgent { get; set; }
-        public MindGame.MindManager mindManager { get; set; }
-        public AnimationPlayer animationPlayer { get; set; }
+        public Label3D ChatLabel3D { get; set; }
+        public MindGame.MindAgent MindAgent { get; set; }
+        public MindGame.MindManager MindManager { get; set; }
+        public AnimationPlayer AnimationPlayer { get; set; }
 
         public override void _Ready()
         {
-            mindManager = GetNode<MindGame.MindManager>("/root/MindManager");
-            mindAgent = GetNode<MindGame.MindAgent>("%MindAgent");
-            chatLabel3D = GetNode<Label3D>("%ChatLabel3D");
-            animationPlayer = GetNode<AnimationPlayer>("%AnimationPlayer");
+            MindManager = GetNode<MindGame.MindManager>("/root/MindManager");
+            MindAgent = GetNode<MindGame.MindAgent>("%MindAgent");
+            ChatLabel3D = GetNode<Label3D>("%ChatLabel3D");
+            AnimationPlayer = GetNode<AnimationPlayer>("%AnimationPlayer");
 
-            mindAgent.ChatSessionStatusUpdate += OnChatSessionStatusUpdate;
-            mindAgent.ChatOutputReceived += OnChatOutputReceived;
+            MindAgent.ChatSessionStatusUpdate += OnChatSessionStatusUpdate;
+            MindAgent.ChatOutputReceived += OnChatOutputReceived;
         }
 
-        public async void InferAsync(string prompt)
+        public async Task InferAsync(string prompt)
         {
-            chatLabel3D.Text = "";
-            await mindAgent.InferAsync(prompt);
+            ChatLabel3D.Text = "";
+            await MindAgent.InferAsync(prompt);
         }
 
         public void OnChatOutputReceived(string text)
         {
-            chatLabel3D.Text += text;
-            if (animationPlayer.GetCurrentAnimation() ==  "")
+            ChatLabel3D.Text += text;
+            if (AnimationPlayer.GetCurrentAnimation() ==  "")
             {
-                animationPlayer.SetCurrentAnimation("bobble");
+                AnimationPlayer.SetCurrentAnimation("bobble");
             }
 
         }
@@ -46,7 +47,7 @@ namespace MindGame
         public void OnChatSessionStatusUpdate(bool isLoaded)
         {
             CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, true);
-            chatLabel3D.Text = "Hey there! How can I help you?";
+            ChatLabel3D.Text = "Hey there! How can I help you?";
         }
     }
 }
