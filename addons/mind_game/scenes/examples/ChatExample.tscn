@@ -49,17 +49,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="ChatController"]
-custom_minimum_size = Vector2(0, 300)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="ChatController/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ChatController"]
 layout_mode = 2
+offset_right = 1152.0
+offset_bottom = 648.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_left = 5
@@ -67,34 +60,32 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="GridContainer" type="GridContainer" parent="ChatController/ScrollContainer/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="ChatController/MarginContainer"]
 layout_mode = 2
 columns = 2
 
-[node name="Label" type="Label" parent="ChatController/ScrollContainer/MarginContainer/GridContainer"]
+[node name="Label" type="Label" parent="ChatController/MarginContainer/GridContainer"]
 layout_mode = 2
 
-[node name="InferenceConfigController" parent="ChatController/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_7mwxh")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Label3" type="Label" parent="ChatController/ScrollContainer/MarginContainer/GridContainer"]
+[node name="InferenceConfigController" parent="ChatController/MarginContainer/GridContainer" instance=ExtResource("3_7mwxh")]
 layout_mode = 2
 
-[node name="ConfigAndLoadModelsButton" type="Button" parent="ChatController/ScrollContainer/MarginContainer/GridContainer"]
+[node name="Label3" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="ConfigAndLoadModelsButton" type="Button" parent="ChatController/MarginContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Config and 
 Load Models"
 
-[node name="ModelInputLineEdit" type="LineEdit" parent="ChatController/ScrollContainer/MarginContainer/GridContainer"]
+[node name="ModelInputLineEdit" type="LineEdit" parent="ChatController/MarginContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Type prompt and hit Enter"
 
-[node name="ExitButton" type="Button" parent="ChatController/ScrollContainer/MarginContainer/GridContainer"]
+[node name="ExitButton" type="Button" parent="ChatController/MarginContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Exit"
