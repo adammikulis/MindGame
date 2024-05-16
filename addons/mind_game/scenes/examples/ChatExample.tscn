@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/mind_game/scripts/examples/ChatExample.cs" id="1_skj4j"]
 [ext_resource type="Texture2D" uid="uid://dsewh4ptg3x16" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/door.png" id="3_k61qs"]
 [ext_resource type="PackedScene" uid="uid://c5mwm2jt53kuc" path="res://addons/mind_game/scenes/examples/MindAgent3D.tscn" id="4_8gnm3"]
-[ext_resource type="PackedScene" uid="uid://cfvr575wuu42a" path="res://addons/mind_game/scenes/controllers/MindManagerController.tscn" id="5_4tuaj"]
+[ext_resource type="PackedScene" uid="uid://vymn5e6vd5gq" path="res://addons/mind_game/scenes/controllers/ModelConfigController.tscn" id="4_i4nn4"]
 
 [sub_resource type="Gradient" id="Gradient_828g4"]
 colors = PackedColorArray(0.46316, 0.640239, 0.378701, 1, 0.818244, 0.841012, 0.679201, 1)
@@ -88,10 +88,6 @@ layout_mode = 2
 text = "Exit"
 icon = ExtResource("3_k61qs")
 
-[node name="MindManagerController" parent="." instance=ExtResource("5_4tuaj")]
-unique_name_in_owner = true
-visible = false
-
 [node name="GroundStaticBody3D" type="StaticBody3D" parent="."]
 
 [node name="GroundMesh3D" type="MeshInstance3D" parent="GroundStaticBody3D"]
@@ -101,3 +97,7 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GroundStaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_fw3c5")
+
+[node name="ModelConfigController" parent="." instance=ExtResource("4_i4nn4")]
+unique_name_in_owner = true
+visible = false

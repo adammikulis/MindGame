@@ -5,11 +5,11 @@ using System.Linq;
 namespace MindGame
 {
     [Tool]
-    public partial class MindManagerController : Control
+    public partial class ModelConfigController : Control
     {
         public ConfigListResource configListResource;
-        public ModelConfigsParams config;
-        public MindManager mm;
+        public ModelParamsConfigs modelParamsConfigs;
+        public MindManager mindManager;
         private string modelConfigListPath = "res://addons/mind_game/model_configs.tres";
 
         // UI elements
@@ -57,7 +57,7 @@ namespace MindGame
         private void UpdateUIFromLoadedConfigs()
         {
             savedConfigsItemList.Clear();
-            foreach (var config in configListResource.Configurations)
+            foreach (var config in configListResource.ModelConfigurations)
             {
                 savedConfigsItemList.AddItem(config.ModelConfigsName);
             }
@@ -83,7 +83,7 @@ namespace MindGame
 
         private void InitializeNodeRefs()
         {
-            mm = GetNode<MindManager>("/root/MindManager");
+            mindManager = GetNode<MindManager>("/root/MindManager");
 
             // Manage configs nodes
             configNameLineEdit = GetNode<LineEdit>("%ConfigNameLineEdit");
@@ -164,14 +164,14 @@ namespace MindGame
 
         private async void OnUnloadConfigPressed()
         {
-            await mm.DisposeExecutorAsync();
+            await mindManager.DisposeExecutorAsync();
         }
 
         private async void OnLoadConfigPressed()
         {
-            if (config != null)
+            if (modelParamsConfigs != null)
             {
-                await mm.InitializeAsync(config);
+                await mindManager.InitializeAsync(modelParamsConfigs);
             }
         }
 
@@ -205,17 +205,17 @@ namespace MindGame
 
         private void OnSavedConfigsItemSelected(long index)
         {
-            config = configListResource.Configurations[(int)index];
-            configNameLineEdit.Text = config.ModelConfigsName;
-            chatContextSizeHSlider.Value = calculateLogContextSize(config.ChatContextSize);
-            chatGpuLayerCountHSlider.Value = config.ChatGpuLayerCount;
-            chatRandomSeedLineEdit.Text = config.ChatRandomSeed.ToString();
-            chatCurrentModelPathLabel.Text = config.ChatModelPath;
-            embedderContextSizeHSlider.Value = calculateLogContextSize(config.EmbedderContextSize);
-            embedderGpuLayerCountHSlider.Value = config.EmbedderGpuLayerCount;
-            embedderRandomSeedLineEdit.Text = config.EmbedderRandomSeed.ToString();
-            embedderCurrentModelPathLabel.Text = config.EmbedderModelPath;
-            clipCurrentModelPathLabel.Text = config.ClipModelPath;
+            modelParamsConfigs = configListResource.ModelConfigurations[(int)index];
+            configNameLineEdit.Text = modelParamsConfigs.ModelConfigsName;
+            chatContextSizeHSlider.Value = calculateLogContextSize(modelParamsConfigs.ChatContextSize);
+            chatGpuLayerCountHSlider.Value = modelParamsConfigs.ChatGpuLayerCount;
+            chatRandomSeedLineEdit.Text = modelParamsConfigs.ChatRandomSeed.ToString();
+            chatCurrentModelPathLabel.Text = modelParamsConfigs.ChatModelPath;
+            embedderContextSizeHSlider.Value = calculateLogContextSize(modelParamsConfigs.EmbedderContextSize);
+            embedderGpuLayerCountHSlider.Value = modelParamsConfigs.EmbedderGpuLayerCount;
+            embedderRandomSeedLineEdit.Text = modelParamsConfigs.EmbedderRandomSeed.ToString();
+            embedderCurrentModelPathLabel.Text = modelParamsConfigs.EmbedderModelPath;
+            clipCurrentModelPathLabel.Text = modelParamsConfigs.ClipModelPath;
         }
 
 
@@ -224,14 +224,14 @@ namespace MindGame
             var selectedIndices = savedConfigsItemList.GetSelectedItems();
 
             // Check if there is at least one selected item and the array is not empty
-            if (selectedIndices.Count() > 0 && configListResource.Configurations.Count() > 0)
+            if (selectedIndices.Count() > 0 && configListResource.ModelConfigurations.Count() > 0)
             {
                 int selectedIndex = selectedIndices[0];  // Get the first selected index
 
                 // Ensure the selected index is within the bounds of the array
-                if (selectedIndex >= 0 && selectedIndex < configListResource.Configurations.Count())
+                if (selectedIndex >= 0 && selectedIndex < configListResource.ModelConfigurations.Count())
                 {
-                    configListResource.Configurations.RemoveAt(selectedIndex);
+                    configListResource.ModelConfigurations.RemoveAt(selectedIndex);
                     SaveConfigList();
                     UpdateUIFromLoadedConfigs();
                 }
@@ -244,7 +244,7 @@ namespace MindGame
 
         private void OnAddNewConfigPressed()
         {
-            ModelConfigsParams newConfig = new ModelConfigsParams
+            ModelParamsConfigs newConfig = new ModelParamsConfigs
             {
                 ModelConfigsName = configName,
                 ChatContextSize = chatContextSize,
@@ -258,20 +258,20 @@ namespace MindGame
                 ClipModelPath = clipModelPath
             };
 
-            configListResource.Configurations.Add(newConfig);
+            configListResource.ModelConfigurations.Add(newConfig);
             SaveConfigList();
             UpdateUIFromLoadedConfigs();
         }
 
-        private void UpdateConfigurationValue(Action<ModelConfigsParams> updateAction)
+        private void UpdateConfigurationValue(Action<ModelParamsConfigs> updateAction)
         {
             var selectedIndices = savedConfigsItemList.GetSelectedItems();
             if (selectedIndices.Count() > 0)
             {
                 int selectedIndex = selectedIndices[0];
-                if (selectedIndex >= 0 && selectedIndex < configListResource.Configurations.Count)
+                if (selectedIndex >= 0 && selectedIndex < configListResource.ModelConfigurations.Count)
                 {
-                    var config = configListResource.Configurations[selectedIndex];
+                    var config = configListResource.ModelConfigurations[selectedIndex];
                     updateAction(config);
                     SaveConfigList();
                 }

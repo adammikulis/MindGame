@@ -3,7 +3,7 @@ using Godot;
 namespace MindGame
 {
     [Tool]
-    public partial class ModelConfigsParams : Resource
+    public partial class ModelParamsConfigs : Resource
     {
         // Model configs exports
         [Export]
@@ -33,9 +33,9 @@ namespace MindGame
         [Export]
         public string ClipModelPath { get; set; }
 
-        public ModelConfigsParams() : this("", 4000, 33, 0, "", 4000, 33, 0, "", "") { }
+        public ModelParamsConfigs() : this("<default>", 4000, 33, 0, "", 4000, 33, 0, "", "") { }
 
-        public ModelConfigsParams(string modelConfigsName, uint chatContextSize, int chatGpuLayerCount, uint chatRandomSeed, string chatModelPath, uint embedderContextSize, int embedderGpuLayerCount, uint embedderRandomSeed, string embedderModelPath, string clipModelPath)
+        public ModelParamsConfigs(string modelConfigsName, uint chatContextSize, int chatGpuLayerCount, uint chatRandomSeed, string chatModelPath, uint embedderContextSize, int embedderGpuLayerCount, uint embedderRandomSeed, string embedderModelPath, string clipModelPath)
         {
             ModelConfigsName = modelConfigsName;
             ChatContextSize = chatContextSize;

@@ -8,6 +8,8 @@ namespace MindGame
     public partial class ConfigListResource : Resource
     {
         [Export]
-        public Godot.Collections.Array<ModelConfigsParams> Configurations { get; set; } = new Godot.Collections.Array<ModelConfigsParams>();
+        public Godot.Collections.Array<ModelParamsConfigs> ModelConfigurations { get; set; } = new Godot.Collections.Array<ModelParamsConfigs>();
+        [Export]
+        public Godot.Collections.Array<InferenceParamsConfigs> InferenceConfigurations { get; set; } = new Godot.Collections.Array<InferenceParamsConfigs>();
     }
 }

@@ -9,7 +9,7 @@ namespace MindGame
     {
         private MindGame.MindManager mindManager;
         private MindAgent3D mindAgent3D;
-        private MindGame.MindManagerController mindManagerController;
+        private MindGame.ModelConfigController mindManagerController;
 
         private Button configAndLoadModelsButton, exitButton;
         private LineEdit modelInputLineEdit;
@@ -19,7 +19,7 @@ namespace MindGame
         {
             mindManager = GetNode<MindGame.MindManager>("/root/MindManager");
             mindAgent3D = GetNode<MindAgent3D>("%MindAgent3D");
-            mindManagerController = GetNode<MindGame.MindManagerController>("%MindManagerController");
+            mindManagerController = GetNode<MindGame.ModelConfigController>("%ModelConfigController");
 
             modelInputLineEdit = GetNode<LineEdit>("%ModelInputLineEdit");
 
