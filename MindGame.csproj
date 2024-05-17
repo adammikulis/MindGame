@@ -1,10 +1,10 @@
-﻿<Project Sdk="Godot.NET.Sdk/4.3.0-dev.5">
+﻿<Project Sdk="Godot.NET.Sdk/4.3.0-dev.6">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
-	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	<RootNamespace>MindGame</RootNamespace>
-	<Title>MindGame</Title>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <RootNamespace>MindGame</RootNamespace>
+    <Title>MindGame</Title>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LLamaSharp" Version="0.12.0" />
@@ -12,7 +12,7 @@
     <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.12.0" />
   </ItemGroup>
   <ItemGroup>
-	<TrimmerRootAssembly Include="GodotSharp" />
+    <TrimmerRootAssembly Include="GodotSharp" />
     <TrimmerRootAssembly Include="$(TargetName)" />
   </ItemGroup>
 </Project>

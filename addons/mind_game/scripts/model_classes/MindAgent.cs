@@ -1,6 +1,8 @@
 using Godot;
 using LLama;
 using LLama.Common;
+using LLama.Grammars;
+using LLama.Native;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,50 +12,52 @@ namespace MindGame
     [Tool]
     public partial class MindAgent : Node
     {
-
-    
-        
         [Signal]
         public delegate void ChatSessionStatusUpdateEventHandler(bool isLoaded);
         [Signal]
         public delegate void ChatOutputReceivedEventHandler(string text);
 
-
-        private MindManager mm;
-        public string[] antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "User:", "USER:", "\nUser:", "\nUSER:"];
-        public float temperature = 0.5f;
+        private ConfigListResource configListResource;
+        private MindManager mindManager;
+        private Grammar grammar;
+        private SafeLLamaGrammarHandle grammarInstance;
+        public string[] antiPrompts = { "<|eot_id|>", "<|end|>",  "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}" };
+        public float temperature = 0.75f;
         public int maxTokens = 4000;
+        public bool outputJson = false;
 
-        
-        public ChatSession chatSession { get; private set; } = null;
+        public ChatSession ChatSession { get; private set; } = null;
 
-    
         public override void _EnterTree()
         {
-        
+            configListResource = GD.Load<ConfigListResource>("res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres");
         }
 
         public async override void _Ready()
         {
             try
             {
-                mm = GetNode<MindManager>("/root/MindManager");
-                if (mm.isReady == true)
+                mindManager = GetNode<MindManager>("/root/MindManager");
+                if (mindManager.executor != null)
                 {
                     await InitializeAsync();
                 }
-            
             }
             catch (Exception e)
             {
-                GD.PrintErr("Please ensure MindManager is enabled in Autoloads!");
+                GD.PrintErr("Please ensure MindManager is enabled in Autoloads!\n" + e);
             }
 
-            mm.ClipModelStatusUpdate += OnClipModelStatusUpdate;
-            mm.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
-            mm.ExecutorStatusUpdate += OnExecutorStatusUpdate;
-        
+            mindManager.ClipModelStatusUpdate += OnClipModelStatusUpdate;
+            mindManager.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
+            mindManager.ExecutorStatusUpdate += OnExecutorStatusUpdate;
+
+            // Load the grammar definition
+            using var file = FileAccess.Open("res://addons/mind_game/assets/grammar/json.gbnf", FileAccess.ModeFlags.Read);
+            string gbnf = file.GetAsText().Trim();
+            grammar = Grammar.Parse(gbnf, "root");
         }
+
 
         private async void OnExecutorStatusUpdate(bool isLoaded)
         {
@@ -63,19 +67,12 @@ namespace MindGame
             }
         }
 
-        private void OnEmbedderModelStatusUpdate(bool isLoaded)
-        {
-        
-        }
+        private void OnEmbedderModelStatusUpdate(bool isLoaded) { }
 
-        private void OnClipModelStatusUpdate(bool isLoaded)
-        {
-        
-        }
+        private void OnClipModelStatusUpdate(bool isLoaded) { }
 
         public async Task InitializeAsync()
         {
-
             await CreateChatSessionAsync();
         }
 
@@ -83,41 +80,67 @@ namespace MindGame
         {
             await Task.Run(() =>
             {
-                chatSession = new ChatSession(mm.executor);
+                ChatSession = new ChatSession(mindManager.executor);
                 CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, true);
             });
         }
 
         public async Task InferAsync(string prompt, List<string> imagePaths = null)
         {
-            if (chatSession == null)
+            if (ChatSession == null)
             {
                 GD.PrintErr("Chat session not initialized. Please check the model configuration.");
                 return;
             }
 
-            // Handle image paths by setting them in the executor
             if (imagePaths != null && imagePaths.Count > 0)
             {
-                mm.executor.ImagePaths.Clear();
-                mm.executor.ImagePaths.AddRange(imagePaths);
+                mindManager.executor.ImagePaths.Clear();
+                mindManager.executor.ImagePaths.AddRange(imagePaths);
             }
 
-            // Execute the chat session with the current prompt and any images
-            await Task.Run(async () =>
+            var activeConfig = configListResource.CurrentInferenceConfig;
+            if (activeConfig == null)
             {
-                await foreach (var output in chatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { AntiPrompts = antiPrompts, Temperature = temperature, MaxTokens = maxTokens }))
+                GD.PrintErr("No active inference configuration selected.");
+                return;
+            }
+
+            SafeLLamaGrammarHandle grammarInstance = null;
+            if (activeConfig.OutputJson)
+            {
+                grammarInstance = grammar.CreateInstance();
+            }
+
+            InferenceParams inferenceParams = new InferenceParams
+            {
+                AntiPrompts = activeConfig.AntiPrompts,
+                Temperature = activeConfig.Temperature,
+                MaxTokens = activeConfig.MaxTokens,
+                Grammar = grammarInstance
+            };
+
+            try
+            {
+                await Task.Run(async () =>
                 {
-                    CallDeferred("emit_signal", SignalName.ChatOutputReceived, output);
-                }
-            });
+                    await foreach (var output in ChatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), inferenceParams))
+                    {
+                        CallDeferred("emit_signal", SignalName.ChatOutputReceived, output);
+                    }
+                });
+            }
+            finally
+            {
+                grammarInstance?.Dispose();
+            }
         }
 
         public async Task DisposeChatSessionAsync()
         {
             await Task.Run(() =>
             {
-                chatSession = null;
+                ChatSession = null;
                 CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, false);
             });
         }
@@ -125,12 +148,8 @@ namespace MindGame
         public async Task DisposeAllAsync()
         {
             await DisposeChatSessionAsync();
-
         }
 
-        public override void _ExitTree() 
-        { 
-        
-        }
+        public override void _ExitTree() { }
     }
 }

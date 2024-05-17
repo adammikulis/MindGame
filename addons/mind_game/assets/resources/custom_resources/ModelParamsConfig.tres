@@ -1,0 +1,16 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cs8lnb4ocy45e"]
+
+[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ModelParamsConfig.cs" id="1_ux3d5"]
+
+[resource]
+script = ExtResource("1_ux3d5")
+ModelConfigName = "<default>"
+ChatContextSize = 4000
+ChatGpuLayerCount = 33
+ChatRandomSeed = 0
+ChatModelPath = ""
+EmbedderContextSize = 4000
+EmbedderGpuLayerCount = 33
+EmbedderRandomSeed = 0
+EmbedderModelPath = ""
+ClipModelPath = ""
