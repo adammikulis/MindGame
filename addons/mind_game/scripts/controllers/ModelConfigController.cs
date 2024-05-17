@@ -35,6 +35,7 @@ namespace MindGame
             InitializeConfigList();
             InitializeUiElements();
             InitializeSignals();
+            AutoloadLastGoodConfig();
         }
 
         private void InitializeConfigList()

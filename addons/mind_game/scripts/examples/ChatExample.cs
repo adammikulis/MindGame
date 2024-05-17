@@ -36,10 +36,6 @@ namespace MindGame
             inferenceConfigButton.Pressed += OnInferenceConfigPressed;
             exitButton.Pressed += OnExitPressed;
 
-            // Call the autoload methods
-            ModelConfigController.AutoloadLastGoodConfig();
-            InferenceConfigController.AutoloadLastGoodConfig();
-
         }
 
 
