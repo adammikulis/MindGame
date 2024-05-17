@@ -51,7 +51,7 @@ namespace MindGame
         {
             inferenceConfigName = "<default>";
             maxTokens = 4000;
-            antiPrompts = new[] { "", "", "", "", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}" };
+            antiPrompts = [ "<|eot_id|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}" ];
             temperature = 0.5f;
             outputJson = false;
         }

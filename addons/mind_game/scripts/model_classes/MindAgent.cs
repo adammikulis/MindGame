@@ -21,8 +21,7 @@ namespace MindGame
         private MindManager mindManager;
         private Grammar grammar;
         private SafeLLamaGrammarHandle grammarInstance;
-        private InferenceParams inferenceParams;
-        public string[] antiPrompts = { "", "", "", "", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}" };
+        public string[] antiPrompts = { "<|eot_id|>", "<|end|>",  "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}" };
         public float temperature = 0.75f;
         public int maxTokens = 4000;
         public bool outputJson = false;
@@ -59,10 +58,6 @@ namespace MindGame
             grammar = Grammar.Parse(gbnf, "root");
         }
 
-        private SafeLLamaGrammarHandle CreateGrammarInstance()
-        {
-            return grammar.CreateInstance();
-        }
 
         private async void OnExecutorStatusUpdate(bool isLoaded)
         {
@@ -111,33 +106,34 @@ namespace MindGame
                 return;
             }
 
+            SafeLLamaGrammarHandle grammarInstance = null;
             if (activeConfig.OutputJson)
             {
-                grammarInstance = CreateGrammarInstance();
-                inferenceParams = new InferenceParams
-                {
-                    AntiPrompts = activeConfig.AntiPrompts,
-                    Temperature = activeConfig.Temperature,
-                    MaxTokens = activeConfig.MaxTokens,
-                    Grammar = grammarInstance
-                };
+                grammarInstance = grammar.CreateInstance();
             }
 
-            inferenceParams = new InferenceParams
+            InferenceParams inferenceParams = new InferenceParams
             {
                 AntiPrompts = activeConfig.AntiPrompts,
                 Temperature = activeConfig.Temperature,
                 MaxTokens = activeConfig.MaxTokens,
+                Grammar = grammarInstance
             };
 
-            await Task.Run(async () =>
+            try
             {
-                await foreach (var output in ChatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), inferenceParams))
+                await Task.Run(async () =>
                 {
-                    CallDeferred("emit_signal", SignalName.ChatOutputReceived, output);
-                }
-            });
-
+                    await foreach (var output in ChatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), inferenceParams))
+                    {
+                        CallDeferred("emit_signal", SignalName.ChatOutputReceived, output);
+                    }
+                });
+            }
+            finally
+            {
+                grammarInstance?.Dispose();
+            }
         }
 
         public async Task DisposeChatSessionAsync()
