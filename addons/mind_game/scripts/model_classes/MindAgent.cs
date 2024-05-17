@@ -20,21 +20,22 @@ namespace MindGame
 
         private ConfigListResource configListResource;
         private MindManager mindManager;
+        private Grammar grammar;
         private SafeLLamaGrammarHandle grammarInstance;
-        public string[] antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}"];
+        public string[] antiPrompts = ["", "", "", "", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}"];
         public float temperature = 0.75f;
         public int maxTokens = 4000;
         public bool outputJson = false;
 
-        
+
         public ChatSession ChatSession { get; private set; } = null;
 
-    
+
         public override void _EnterTree()
         {
             configListResource = GD.Load<ConfigListResource>("res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres");
         }
-    
+
 
         public async override void _Ready()
         {
@@ -45,7 +46,6 @@ namespace MindGame
                 {
                     await InitializeAsync();
                 }
-            
             }
             catch (Exception e)
             {
@@ -56,9 +56,16 @@ namespace MindGame
             mindManager.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
             mindManager.ExecutorStatusUpdate += OnExecutorStatusUpdate;
 
+            // Initialize the grammar instance
             using var file = FileAccess.Open("res://addons/mind_game/assets/grammar/json.gbnf", FileAccess.ModeFlags.Read);
             string gbnf = file.GetAsText();
-            var grammar = Grammar.Parse(gbnf, "root");
+            grammar = Grammar.Parse(gbnf, "root");
+            CreateGrammarInstance();
+        }
+
+        private void CreateGrammarInstance()
+        {
+            
             grammarInstance = grammar.CreateInstance();
         }
 
@@ -70,19 +77,12 @@ namespace MindGame
             }
         }
 
-        private void OnEmbedderModelStatusUpdate(bool isLoaded)
-        {
-        
-        }
+        private void OnEmbedderModelStatusUpdate(bool isLoaded) { }
 
-        private void OnClipModelStatusUpdate(bool isLoaded)
-        {
-        
-        }
+        private void OnClipModelStatusUpdate(bool isLoaded) { }
 
         public async Task InitializeAsync()
         {
-
             await CreateChatSessionAsync();
         }
 
@@ -116,6 +116,11 @@ namespace MindGame
                 return;
             }
 
+            if (outputJson == true)
+            {
+                CreateGrammarInstance();
+            }
+
             InferenceParams inferenceParams = new InferenceParams
             {
                 AntiPrompts = activeConfig.AntiPrompts,
@@ -145,12 +150,8 @@ namespace MindGame
         public async Task DisposeAllAsync()
         {
             await DisposeChatSessionAsync();
-
         }
 
-        public override void _ExitTree() 
-        { 
-        
-        }
+        public override void _ExitTree() { }
     }
 }

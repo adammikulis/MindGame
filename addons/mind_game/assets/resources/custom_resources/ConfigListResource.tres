@@ -8,7 +8,7 @@
 script = ExtResource("1_b25hm")
 InferenceConfigName = "4k_low_temp_json"
 AntiPrompts = PackedStringArray("<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}")
-Temperature = 0.25
+Temperature = 0.5
 MaxTokens = 4000
 OutputJson = true
 
