@@ -9,9 +9,10 @@ namespace MindGame
     {
         private MindGame.MindManager mindManager;
         private MindAgent3D mindAgent3D;
-        private MindGame.ModelConfigController mindManagerController;
+        private MindGame.ModelConfigController ModelConfigController;
+        private MindGame.InferenceConfigController InferenceConfigController;
 
-        private Button configAndLoadModelsButton, exitButton;
+        private Button configAndLoadModelsButton, inferenceConfigButton, exitButton;
         private LineEdit modelInputLineEdit;
 
 
@@ -19,19 +20,27 @@ namespace MindGame
         {
             mindManager = GetNode<MindGame.MindManager>("/root/MindManager");
             mindAgent3D = GetNode<MindAgent3D>("%MindAgent3D");
-            mindManagerController = GetNode<MindGame.ModelConfigController>("%ModelConfigController");
+            ModelConfigController = GetNode<MindGame.ModelConfigController>("%ModelConfigController");
+            InferenceConfigController = GetNode<MindGame.InferenceConfigController>("%InferenceConfigController");
 
             modelInputLineEdit = GetNode<LineEdit>("%ModelInputLineEdit");
 
             configAndLoadModelsButton = GetNode<Button>("%ConfigAndLoadModelsButton");
+            inferenceConfigButton = GetNode<Button>("%InferenceConfigButton");
             exitButton = GetNode<Button>("%ExitButton");
 
             modelInputLineEdit.TextSubmitted += OnModelInputTextSubmitted;
             mindAgent3D.ChatSessionStatusUpdate += OnChatSessionStatusUpdate;
             
             configAndLoadModelsButton.Pressed += OnConfigAndLoadModelsPressed;
+            inferenceConfigButton.Pressed += OnInferenceConfigPressed;
             exitButton.Pressed += OnExitPressed;
 
+        }
+
+        private void OnInferenceConfigPressed()
+        {
+            InferenceConfigController.Visible = true;
         }
 
         private async void OnExitPressed()
@@ -42,7 +51,7 @@ namespace MindGame
 
         private void OnConfigAndLoadModelsPressed()
         {
-            mindManagerController.Visible = true;
+            ModelConfigController.Visible = true;
         }
 
         private async void OnModelInputTextSubmitted(string newText)

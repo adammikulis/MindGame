@@ -114,4 +114,5 @@ unique_name_in_owner = true
 visible = false
 
 [node name="InferenceConfigController" parent="." instance=ExtResource("3_7mwxh")]
+unique_name_in_owner = true
 visible = false

@@ -134,6 +134,13 @@ theme_override_constants/separation = 10
 [node name="AddDeleteConfigHBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
 layout_mode = 2
 
+[node name="BackButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/AddDeleteConfigHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Back"
+icon_alignment = 1
+
 [node name="AddNewConfigButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/AddDeleteConfigHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -150,13 +157,6 @@ icon_alignment = 1
 
 [node name="BackLoadUnloadBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
 layout_mode = 2
-
-[node name="BackButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/BackLoadUnloadBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Back"
-icon_alignment = 1
 
 [node name="LoadConfigButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/BackLoadUnloadBoxContainer"]
 unique_name_in_owner = true

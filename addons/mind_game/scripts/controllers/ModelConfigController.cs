@@ -10,7 +10,7 @@ namespace MindGame
         public ConfigListResource configListResource;
         public ModelParamsConfig modelParamsConfig;
         public MindManager mindManager;
-        private string modelConfigListPath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
+        private string configListResourcePath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
 
         // UI elements
         private Button addNewConfigButton, deleteConfigButton, selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton, backButton, loadConfigButton, unloadConfigButton;
@@ -43,7 +43,7 @@ namespace MindGame
 
         private void InitializeConfigList()
         {
-            configListResource = GD.Load<ConfigListResource>(modelConfigListPath);
+            configListResource = GD.Load<ConfigListResource>(configListResourcePath);
             if (configListResource != null)
             {
                 UpdateUIFromLoadedConfigs();
@@ -281,7 +281,7 @@ namespace MindGame
 
         private void SaveConfigList()
         {
-            Error saveError = ResourceSaver.Save(configListResource, modelConfigListPath);
+            Error saveError = ResourceSaver.Save(configListResource, configListResourcePath);
             if (saveError != Error.Ok)
             {
                 GD.PrintErr("Failed to save configuration list: ", saveError);
