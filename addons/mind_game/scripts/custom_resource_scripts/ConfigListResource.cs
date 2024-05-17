@@ -20,8 +20,8 @@ namespace MindGame
         [Export]
         public ModelParamsConfig LastGoodModelConfig { get; set; }
         [Export]
-        public bool UseLastGoodModelConfig { get; set; }
+        public bool AutoloadLastGoodModelConfig { get; set; } = false;
         [Export]
-        public bool UseLastGoodInferenceConfig { get; set; }
+        public bool AutoloadLastGoodInferenceConfig { get; set; } = false;
     }
 }

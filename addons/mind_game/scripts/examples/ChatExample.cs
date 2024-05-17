@@ -31,12 +31,17 @@ namespace MindGame
 
             modelInputLineEdit.TextSubmitted += OnModelInputTextSubmitted;
             mindAgent3D.ChatSessionStatusUpdate += OnChatSessionStatusUpdate;
-            
+
             configAndLoadModelsButton.Pressed += OnConfigAndLoadModelsPressed;
             inferenceConfigButton.Pressed += OnInferenceConfigPressed;
             exitButton.Pressed += OnExitPressed;
 
+            // Call the autoload methods
+            ModelConfigController.AutoloadLastGoodConfig();
+            InferenceConfigController.AutoloadLastGoodConfig();
+
         }
+
 
         private void OnInferenceConfigPressed()
         {

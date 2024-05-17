@@ -1,27 +1,27 @@
 [gd_resource type="Resource" load_steps=7 format=3]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/InferenceParamsConfig.cs" id="1_b25hm"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/InferenceParamsConfig.cs" id="1_euwpb"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ConfigListResource.cs" id="1_q2fe5"]
-[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ModelParamsConfig.cs" id="2_nndva"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ModelParamsConfig.cs" id="2_inpeu"]
 
-[sub_resource type="Resource" id="Resource_lst23"]
-script = ExtResource("1_b25hm")
-InferenceConfigName = "4k_low_temp_json"
+[sub_resource type="Resource" id="Resource_63sjc"]
+script = ExtResource("1_euwpb")
+InferenceConfigName = "4k_high_temp"
+AntiPrompts = PackedStringArray("<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}")
+Temperature = 1.25
+MaxTokens = 4000
+OutputJson = false
+
+[sub_resource type="Resource" id="Resource_4tk36"]
+script = ExtResource("1_euwpb")
+InferenceConfigName = "4k_json"
 AntiPrompts = PackedStringArray("<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}")
 Temperature = 0.5
 MaxTokens = 4000
 OutputJson = true
 
-[sub_resource type="Resource" id="Resource_vjl38"]
-script = ExtResource("1_b25hm")
-InferenceConfigName = "4k_high_temp"
-AntiPrompts = PackedStringArray("<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}")
-Temperature = 1.0
-MaxTokens = 4000
-OutputJson = false
-
-[sub_resource type="Resource" id="Resource_m05pv"]
-script = ExtResource("2_nndva")
+[sub_resource type="Resource" id="Resource_m2syr"]
+script = ExtResource("2_inpeu")
 ModelConfigName = "phi3_4k"
 ChatContextSize = 4000
 ChatGpuLayerCount = 33
@@ -35,8 +35,10 @@ ClipModelPath = ""
 
 [resource]
 script = ExtResource("1_q2fe5")
-ModelConfigurations = [SubResource("Resource_m05pv")]
-InferenceConfigurations = [SubResource("Resource_lst23"), SubResource("Resource_vjl38")]
-CurrentInferenceConfig = SubResource("Resource_lst23")
-UseLastGoodModelConfig = false
-UseLastGoodInferenceConfig = false
+ModelConfigurations = [SubResource("Resource_m2syr")]
+InferenceConfigurations = [SubResource("Resource_4tk36"), SubResource("Resource_63sjc")]
+CurrentInferenceConfig = SubResource("Resource_63sjc")
+LastGoodInferenceConfig = SubResource("Resource_4tk36")
+LastGoodModelConfig = SubResource("Resource_m2syr")
+AutoloadLastGoodModelConfig = true
+AutoloadLastGoodInferenceConfig = true

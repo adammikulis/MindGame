@@ -7,7 +7,7 @@ namespace MindGame
     public partial class InferenceConfigController : Control
     {
         public Button addInferenceConfigButton, deleteInferenceConfigButton, backButton;
-        public CheckBox outputJsonCheckBox;
+        public CheckBox autoloadLastGoodConfigCheckBox, outputJsonCheckBox;
         public HSlider maxTokensHSlider, temperatureHSlider;
         public LineEdit inferenceConfigNameLineEdit, maxTokensLineEdit, temperatureLineEdit;
         private ConfigListResource ConfigListResource;
@@ -26,9 +26,10 @@ namespace MindGame
         {
             InitializeDefaultValues();
             InitializeNodeRefs();
+            InitializeConfigList();
             InitializeUiElements();
             InitializeSignals();
-            InitializeConfigList();
+            AutoloadLastGoodConfig();
 
         }
 
@@ -40,6 +41,7 @@ namespace MindGame
             temperatureHSlider.Value = (double)temperature;
             temperatureLineEdit.Text = temperature.ToString();
             outputJsonCheckBox.ButtonPressed = outputJson;
+            autoloadLastGoodConfigCheckBox.ButtonPressed = ConfigListResource.AutoloadLastGoodInferenceConfig;
         }
 
         private void InitializeConfigList()
@@ -71,12 +73,38 @@ namespace MindGame
             addInferenceConfigButton.Pressed += OnAddInferenceConfigPressed;
             deleteInferenceConfigButton.Pressed += OnDeleteInferenceConfigPressed;
             backButton.Pressed += OnBackPressed;
+            autoloadLastGoodConfigCheckBox.Toggled += OnAutoloadLastGoodConfigToggled;
 
             // Inference config parameters
             inferenceConfigNameLineEdit.TextChanged += OnInferenceConfigNameTextChanged; 
             maxTokensHSlider.ValueChanged += OnMaxTokensValueChanged;
             temperatureHSlider.ValueChanged += OnTemperatureValueChanged;
             outputJsonCheckBox.Toggled += OnOutputJsonToggled;
+        }
+
+        private void OnAutoloadLastGoodConfigToggled(bool toggledOn)
+        {
+            ConfigListResource.AutoloadLastGoodInferenceConfig = toggledOn;
+            SaveConfigList();
+        }
+
+        public void AutoloadLastGoodConfig()
+        {
+            if (ConfigListResource.AutoloadLastGoodInferenceConfig && ConfigListResource.LastGoodInferenceConfig != null)
+            {
+                InferenceParamsConfig = ConfigListResource.LastGoodInferenceConfig;
+                LoadConfig(InferenceParamsConfig);
+            }
+        }
+
+        private void LoadConfig(InferenceParamsConfig config)
+        {
+            inferenceConfigNameLineEdit.Text = config.InferenceConfigName;
+            temperatureHSlider.Value = (double)config.Temperature;
+            temperatureLineEdit.Text = config.Temperature.ToString();
+            maxTokensHSlider.Value = CalculateLogMaxTokens((uint)config.MaxTokens);
+            maxTokensLineEdit.Text = config.MaxTokens.ToString();
+            outputJsonCheckBox.ButtonPressed = config.OutputJson;
         }
 
         private void OnSavedInferenceConfigSelected(long index)
@@ -220,6 +248,7 @@ namespace MindGame
             addInferenceConfigButton = GetNode<Button>("%AddInferenceConfigButton");
             deleteInferenceConfigButton = GetNode<Button>("%DeleteInferenceConfigButton");
             backButton = GetNode<Button>("%BackButton");
+            autoloadLastGoodConfigCheckBox = GetNode<CheckBox>("%AutoloadLastGoodConfigCheckBox");
 
             outputJsonCheckBox = GetNode<CheckBox>("%OutputJsonCheckBox");
             maxTokensHSlider = GetNode<HSlider>("%MaxTokensHSlider");

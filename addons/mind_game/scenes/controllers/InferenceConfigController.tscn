@@ -74,6 +74,12 @@ unique_name_in_owner = true
 layout_mode = 2
 icon = ExtResource("3_ga7yw")
 
+[node name="AutoloadLastGoodConfigCheckBox" type="CheckBox" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Autoload Last
+Good Config"
+
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3

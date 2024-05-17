@@ -172,6 +172,12 @@ size_flags_horizontal = 3
 text = "Unload
 "
 
+[node name="AutoloadLastGoodConfigCheckBox" type="CheckBox" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/BackLoadUnloadBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Autoload Last
+Good Config"
+
 [node name="SavedConfigsMarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
