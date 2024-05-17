@@ -36,7 +36,7 @@ namespace MindGame
         {
             InitializeDefaultValues();
             InitializeNodeRefs();
-            InitializeUIElements();
+            InitializeUiElements();
             InitializeConfigList();
             InitializeSignals();
         }
@@ -180,7 +180,7 @@ namespace MindGame
             Visible = false;
         }
 
-        private void InitializeUIElements()
+        private void InitializeUiElements()
         {
             configNameLineEdit.Text = configName;
 
@@ -223,12 +223,10 @@ namespace MindGame
         {
             var selectedIndices = savedConfigsItemList.GetSelectedItems();
 
-            // Check if there is at least one selected item and the array is not empty
             if (selectedIndices.Length > 0 && configListResource.ModelConfigurations.Count > 0)
             {
-                int selectedIndex = selectedIndices[0];  // Get the first selected index
+                int selectedIndex = selectedIndices[0];
 
-                // Ensure the selected index is within the bounds of the array
                 if (selectedIndex >= 0 && selectedIndex < configListResource.ModelConfigurations.Count)
                 {
                     configListResource.ModelConfigurations.RemoveAt(selectedIndex);

@@ -26,9 +26,20 @@ namespace MindGame
         {
             InitializeDefaultValues();
             InitializeNodeRefs();
+            InitializeUiElements();
             InitializeSignals();
             InitializeConfigList();
 
+        }
+
+        private void InitializeUiElements()
+        {
+            inferenceConfigNameLineEdit.Text = inferenceConfigName;
+            maxTokensHSlider.Value = CalculateLogMaxTokens((uint)maxTokens);
+            maxTokensLineEdit.Text = maxTokens.ToString();
+            temperatureHSlider.Value = (double)temperature;
+            temperatureLineEdit.Text = temperature.ToString();
+            outputJsonCheckBox.ButtonPressed = outputJson;
         }
 
         private void InitializeConfigList()
@@ -36,7 +47,7 @@ namespace MindGame
             ConfigListResource = GD.Load<ConfigListResource>(configListResourcePath);
             if (ConfigListResource != null)
             {
-                UpdateUIFromLoadedConfigs();
+                UpdateUiFromLoadedConfigs();
             }
             else
             {
@@ -55,15 +66,78 @@ namespace MindGame
 
         private void InitializeSignals()
         {
-            outputJsonCheckBox.Toggled += OnOutputJsonToggled;
+            // Config management and UI navigation
+            savedInferenceConfigsItemList.ItemSelected += OnSavedInferenceConfigSelected;
             addInferenceConfigButton.Pressed += OnAddInferenceConfigPressed;
             deleteInferenceConfigButton.Pressed += OnDeleteInferenceConfigPressed;
             backButton.Pressed += OnBackPressed;
+
+            // Inference config parameters
+            inferenceConfigNameLineEdit.TextChanged += OnInferenceConfigNameTextChanged; 
+            maxTokensHSlider.ValueChanged += OnMaxTokensValueChanged;
+            temperatureHSlider.ValueChanged += OnTemperatureValueChanged;
+            outputJsonCheckBox.Toggled += OnOutputJsonToggled;
+        }
+
+        private void OnSavedInferenceConfigSelected(long index)
+        {
+            if (index >= 0 && index < ConfigListResource.InferenceConfigurations.Count)
+            {
+                InferenceParamsConfig = ConfigListResource.InferenceConfigurations[(int)index];
+                inferenceConfigNameLineEdit.Text = InferenceParamsConfig.InferenceConfigName;
+                temperatureHSlider.Value = (double)InferenceParamsConfig.Temperature;
+                temperatureLineEdit.Text = InferenceParamsConfig.Temperature.ToString();
+                maxTokensHSlider.Value = CalculateLogMaxTokens((uint)InferenceParamsConfig.MaxTokens);
+                maxTokensLineEdit.Text = InferenceParamsConfig.MaxTokens.ToString();
+                outputJsonCheckBox.ButtonPressed = InferenceParamsConfig.OutputJson;
+            }
+        }
+
+
+        private void OnTemperatureValueChanged(double value)
+        {
+            temperature = (float)value;
+            temperatureLineEdit.Text = temperature.ToString();
+            UpdateConfigurationValue(config => config.Temperature = temperature);
+        }
+
+        private void OnMaxTokensValueChanged(double value)
+        {
+            maxTokens = (int)CalculateExpMaxTokens(value);
+            maxTokensLineEdit.Text = maxTokens.ToString();
+            UpdateConfigurationValue(config => config.MaxTokens = maxTokens);
+
+        }
+
+        private void OnInferenceConfigNameTextChanged(string newText)
+        {
+            inferenceConfigName = newText;
+            UpdateConfigurationValue(config =>
+            {
+                config.InferenceConfigName = inferenceConfigName;
+                savedInferenceConfigsItemList.SetItemText(savedInferenceConfigsItemList.GetSelectedItems()[0], inferenceConfigName);
+            });
         }
 
         private void OnDeleteInferenceConfigPressed()
         {
-            throw new NotImplementedException();
+            var selectedIndices = savedInferenceConfigsItemList.GetSelectedItems();
+
+            if (selectedIndices.Length > 0 && ConfigListResource.InferenceConfigurations.Count > 0)
+            {
+                int selectedIndex = selectedIndices[0];
+
+                if (selectedIndex >= 0 && selectedIndex < ConfigListResource.InferenceConfigurations.Count)
+                {
+                    ConfigListResource.InferenceConfigurations.RemoveAt(selectedIndex);
+                    SaveConfigList();
+                    UpdateUiFromLoadedConfigs();
+                }
+            }
+            else
+            {
+                GD.Print("No configuration selected or list is empty.");
+            }
         }
 
         private void OnAddInferenceConfigPressed()
@@ -79,12 +153,10 @@ namespace MindGame
 
             ConfigListResource.InferenceConfigurations.Add(newConfig);
             SaveConfigList();
-            UpdateUIFromLoadedConfigs();
-
-
+            UpdateUiFromLoadedConfigs();
         }
 
-        private void UpdateUIFromLoadedConfigs()
+        private void UpdateUiFromLoadedConfigs()
         {
             savedInferenceConfigsItemList.Clear();
             foreach (var config in ConfigListResource.InferenceConfigurations)
@@ -129,6 +201,7 @@ namespace MindGame
         private void OnOutputJsonToggled(bool toggledOn)
         {
             outputJson = toggledOn;
+            UpdateConfigurationValue(config => config.OutputJson = outputJson);
         }
 
         private void OnSavedConfigsItemSelected(long index)

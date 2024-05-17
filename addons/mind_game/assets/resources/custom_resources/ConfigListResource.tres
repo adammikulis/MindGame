@@ -1,19 +1,27 @@
-[gd_resource type="Resource" load_steps=6 format=3 uid="uid://cf455n52h3mci"]
+[gd_resource type="Resource" load_steps=7 format=3 uid="uid://cf455n52h3mci"]
 
 [ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/InferenceParamsConfig.cs" id="1_b25hm"]
-[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ModelParamsConfig.cs" id="1_pprv4"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ConfigListResource.cs" id="1_q2fe5"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ModelParamsConfig.cs" id="2_nndva"]
 
 [sub_resource type="Resource" id="Resource_lst23"]
 script = ExtResource("1_b25hm")
-InferenceConfigName = "<default>"
+InferenceConfigName = "4k_low_temp_json"
 AntiPrompts = PackedStringArray("<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}")
-Temperature = 0.5
+Temperature = 0.25
 MaxTokens = 4000
 OutputJson = true
 
-[sub_resource type="Resource" id="Resource_8gx03"]
-script = ExtResource("1_pprv4")
+[sub_resource type="Resource" id="Resource_vjl38"]
+script = ExtResource("1_b25hm")
+InferenceConfigName = "4k_high_temp"
+AntiPrompts = PackedStringArray("<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}")
+Temperature = 1.0
+MaxTokens = 4000
+OutputJson = false
+
+[sub_resource type="Resource" id="Resource_m05pv"]
+script = ExtResource("2_nndva")
 ModelConfigName = "phi3_4k"
 ChatContextSize = 4000
 ChatGpuLayerCount = 33
@@ -27,5 +35,5 @@ ClipModelPath = ""
 
 [resource]
 script = ExtResource("1_q2fe5")
-ModelConfigurations = [SubResource("Resource_8gx03")]
-InferenceConfigurations = [SubResource("Resource_lst23")]
+ModelConfigurations = [SubResource("Resource_m05pv")]
+InferenceConfigurations = [SubResource("Resource_lst23"), SubResource("Resource_vjl38")]
