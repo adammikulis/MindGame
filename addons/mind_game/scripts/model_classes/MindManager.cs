@@ -15,7 +15,7 @@ namespace MindGame
     public partial class MindManager : Node
     {
 
-        public ModelConfigsParams CurrentModelConfigs { get; set; }
+        public ModelParamsConfig CurrentModelConfigs { get; set; }
 
 
         [Signal]
@@ -47,7 +47,7 @@ namespace MindGame
 
         }
 
-        public async Task InitializeAsync(ModelConfigsParams config)
+        public async Task InitializeAsync(ModelParamsConfig config)
         {
             CurrentModelConfigs = config;
             await LoadModelsAsync();
@@ -104,7 +104,7 @@ namespace MindGame
                     using var chatWeights = LLamaWeights.LoadFromFile(parameters);
                     context = chatWeights.CreateContext(parameters);
                     
-                    executor = new InteractiveExecutor(context); // Make another loader with context and clip weights for llava
+                    executor = new InteractiveExecutor(context);
                     CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, true);
                 });
             }

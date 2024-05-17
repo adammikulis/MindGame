@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://dut8m0d0ukohs"]
+[gd_scene load_steps=12 format=3 uid="uid://dut8m0d0ukohs"]
 
 [ext_resource type="Script" path="res://addons/mind_game/scripts/examples/ChatExample.cs" id="1_skj4j"]
+[ext_resource type="PackedScene" uid="uid://3sy7uksi0h1a" path="res://addons/mind_game/scenes/controllers/InferenceConfigController.tscn" id="3_7mwxh"]
 [ext_resource type="Texture2D" uid="uid://dsewh4ptg3x16" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/door.png" id="3_k61qs"]
 [ext_resource type="PackedScene" uid="uid://c5mwm2jt53kuc" path="res://addons/mind_game/scenes/examples/MindAgent3D.tscn" id="4_8gnm3"]
-[ext_resource type="PackedScene" uid="uid://cfvr575wuu42a" path="res://addons/mind_game/scenes/controllers/MindManagerController.tscn" id="5_4tuaj"]
+[ext_resource type="PackedScene" uid="uid://vymn5e6vd5gq" path="res://addons/mind_game/scenes/controllers/ModelConfigController.tscn" id="4_i4nn4"]
 
 [sub_resource type="Gradient" id="Gradient_828g4"]
 colors = PackedColorArray(0.46316, 0.640239, 0.378701, 1, 0.818244, 0.841012, 0.679201, 1)
@@ -48,17 +49,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="ChatController"]
-custom_minimum_size = Vector2(0, 300)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="ChatController/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ChatController"]
 layout_mode = 2
+offset_right = 1152.0
+offset_bottom = 648.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_left = 5
@@ -66,31 +60,44 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ChatController/ScrollContainer/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="ChatController/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 8
+columns = 2
 
-[node name="ModelInputLineEdit" type="LineEdit" parent="ChatController/ScrollContainer/MarginContainer/HBoxContainer"]
+[node name="SpacerLabel" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="SpacerLabel2" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="SpacerLabel3" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="InferenceConfigButton" type="Button" parent="ChatController/MarginContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Inference Config"
+
+[node name="SpacerLabel4" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="ConfigAndLoadModelsButton" type="Button" parent="ChatController/MarginContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Model Config/Load"
+
+[node name="ModelInputLineEdit" type="LineEdit" parent="ChatController/MarginContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Type prompt and hit Enter"
 
-[node name="ConfigAndLoadModelsButton" type="Button" parent="ChatController/ScrollContainer/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Config and 
-Load Models"
-
-[node name="ExitButton" type="Button" parent="ChatController/ScrollContainer/MarginContainer/HBoxContainer"]
+[node name="ExitButton" type="Button" parent="ChatController/MarginContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Exit"
 icon = ExtResource("3_k61qs")
-
-[node name="MindManagerController" parent="." instance=ExtResource("5_4tuaj")]
-unique_name_in_owner = true
-visible = false
 
 [node name="GroundStaticBody3D" type="StaticBody3D" parent="."]
 
@@ -101,3 +108,11 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GroundStaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_fw3c5")
+
+[node name="ModelConfigController" parent="." instance=ExtResource("4_i4nn4")]
+unique_name_in_owner = true
+visible = false
+
+[node name="InferenceConfigController" parent="." instance=ExtResource("3_7mwxh")]
+unique_name_in_owner = true
+visible = false

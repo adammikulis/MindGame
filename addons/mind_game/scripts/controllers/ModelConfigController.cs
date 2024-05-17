@@ -1,16 +1,15 @@
 using Godot;
 using System;
-using System.Linq;
 
 namespace MindGame
 {
     [Tool]
-    public partial class MindManagerController : Control
+    public partial class ModelConfigController : Control
     {
-        public ConfigListResource configListResource;
-        public ModelConfigsParams config;
-        public MindManager mm;
-        private string modelConfigListPath = "res://addons/mind_game/model_configs.tres";
+        public ConfigListResource ConfigListResource;
+        public ModelParamsConfig ModelParamsConfig;
+        public MindManager mindManager;
+        private readonly string configListResourcePath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
 
         // UI elements
         private Button addNewConfigButton, deleteConfigButton, selectChatPathButton, clearChatPathButton, selectEmbedderPathButton, clearEmbedderPathButton, selectClipPathButton, clearClipPathButton, backButton, loadConfigButton, unloadConfigButton;
@@ -19,71 +18,58 @@ namespace MindGame
         private HSlider chatContextSizeHSlider, chatGpuLayerCountHSlider, embedderContextSizeHSlider, embedderGpuLayerCountHSlider;
         private LineEdit configNameLineEdit, chatRandomSeedLineEdit, embedderRandomSeedLineEdit;
         private ItemList savedConfigsItemList;
+        private CheckBox autoloadLastGoodConfigCheckBox;
 
         // Model params
         private string configName;
         private int chatGpuLayerCount, embedderGpuLayerCount;
-        private double chatContextSizeSliderValue, embedderContextSizeSliderValue;
         private uint chatContextSize, embedderContextSize, chatRandomSeed, embedderRandomSeed;
         private string chatModelPath, clipModelPath, embedderModelPath;
 
-        public override void _EnterTree()
-        {
-
-        }
+        public override void _EnterTree() { }
 
         public override void _Ready()
         {
             InitializeDefaultValues();
             InitializeNodeRefs();
-            InitializeUIElements();
             InitializeConfigList();
+            InitializeUiElements();
             InitializeSignals();
+            AutoloadLastGoodConfig();
         }
 
         private void InitializeConfigList()
         {
-            configListResource = GD.Load<ConfigListResource>(modelConfigListPath);
-            if (configListResource != null)
-            {
-                UpdateUIFromLoadedConfigs();
-            }
-            else
-            {
-                configListResource = new ConfigListResource();
-            }
+            ConfigListResource = GD.Load<ConfigListResource>(configListResourcePath) ?? new ConfigListResource();
+            UpdateUIFromLoadedConfigs();
         }
 
         private void UpdateUIFromLoadedConfigs()
         {
             savedConfigsItemList.Clear();
-            foreach (var config in configListResource.Configurations)
+            foreach (var config in ConfigListResource.ModelConfigurations)
             {
-                savedConfigsItemList.AddItem(config.ModelConfigsName);
+                savedConfigsItemList.AddItem(config.ModelConfigName);
             }
         }
 
         private void InitializeDefaultValues()
         {
             configName = "<default>";
-
             chatContextSize = 4000;
             chatGpuLayerCount = 33;
             chatRandomSeed = 0;
             chatModelPath = "";
-
             embedderContextSize = 4000;
             embedderGpuLayerCount = 33;
             embedderRandomSeed = 0;
             embedderModelPath = "";
-
             clipModelPath = "";
-
         }
 
         private void InitializeNodeRefs()
         {
-            mm = GetNode<MindManager>("/root/MindManager");
+            mindManager = GetNode<MindManager>("/root/MindManager");
 
             // Manage configs nodes
             configNameLineEdit = GetNode<LineEdit>("%ConfigNameLineEdit");
@@ -93,14 +79,13 @@ namespace MindGame
             backButton = GetNode<Button>("%BackButton");
             loadConfigButton = GetNode<Button>("%LoadConfigButton");
             unloadConfigButton = GetNode<Button>("%UnloadConfigButton");
+            autoloadLastGoodConfigCheckBox = GetNode<CheckBox>("%AutoloadLastGoodConfigCheckBox");
 
             // Chat param nodes
             chatContextSizeHSlider = GetNode<HSlider>("%ChatContextSizeHSlider");
             chatContextSizeLabel = GetNode<Label>("%ChatContextSizeLabel");
-
             chatGpuLayerCountHSlider = GetNode<HSlider>("%ChatModelGpuLayerCountHSlider");
             chatGpuLayerCountLabel = GetNode<Label>("%ChatModelGpuLayerCountLabel");
-
             chatRandomSeedLineEdit = GetNode<LineEdit>("%ChatRandomSeedLineEdit");
 
             // Chat path nodes
@@ -112,10 +97,8 @@ namespace MindGame
             // Embedder param nodes
             embedderContextSizeHSlider = GetNode<HSlider>("%EmbedderContextSizeHSlider");
             embedderContextSizeLabel = GetNode<Label>("%EmbedderContextSizeLabel");
-
             embedderGpuLayerCountHSlider = GetNode<HSlider>("%EmbedderGpuLayerCountHSlider");
             embedderGpuLayerCountLabel = GetNode<Label>("%EmbedderGpuLayerCountLabel");
-
             embedderRandomSeedLineEdit = GetNode<LineEdit>("%EmbedderRandomSeedLineEdit");
 
             // Embedder path nodes
@@ -139,6 +122,7 @@ namespace MindGame
             backButton.Pressed += OnBackPressed;
             loadConfigButton.Pressed += OnLoadConfigPressed;
             unloadConfigButton.Pressed += OnUnloadConfigPressed;
+            autoloadLastGoodConfigCheckBox.Toggled += OnAutoloadLastGoodConfigToggled;
 
             clearChatPathButton.Pressed += OnClearChatPathPressed;
             clearClipPathButton.Pressed += OnClearClipPathPressed;
@@ -159,19 +143,53 @@ namespace MindGame
 
             configNameLineEdit.TextChanged += OnConfigNameTextChanged;
             savedConfigsItemList.ItemSelected += OnSavedConfigsItemSelected;
+        }
 
+        private void OnAutoloadLastGoodConfigToggled(bool toggledOn)
+        {
+            if (ConfigListResource != null)
+            {
+                ConfigListResource.AutoloadLastGoodModelConfig = toggledOn;
+                SaveConfigList();
+            }
+        }
+
+        public void AutoloadLastGoodConfig()
+        {
+            if (ConfigListResource != null && ConfigListResource.AutoloadLastGoodModelConfig && ConfigListResource.LastGoodModelConfig != null)
+            {
+                ModelParamsConfig = ConfigListResource.LastGoodModelConfig;
+                LoadConfig(ModelParamsConfig);
+                OnLoadConfigPressed();
+            }
+        }
+
+        private void LoadConfig(ModelParamsConfig config)
+        {
+            configNameLineEdit.Text = config.ModelConfigName;
+            chatContextSizeHSlider.Value = CalculateLogContextSize(config.ChatContextSize);
+            chatGpuLayerCountHSlider.Value = config.ChatGpuLayerCount;
+            chatRandomSeedLineEdit.Text = config.ChatRandomSeed.ToString();
+            chatCurrentModelPathLabel.Text = config.ChatModelPath;
+            embedderContextSizeHSlider.Value = CalculateLogContextSize(config.EmbedderContextSize);
+            embedderGpuLayerCountHSlider.Value = config.EmbedderGpuLayerCount;
+            embedderRandomSeedLineEdit.Text = config.EmbedderRandomSeed.ToString();
+            embedderCurrentModelPathLabel.Text = config.EmbedderModelPath;
+            clipCurrentModelPathLabel.Text = config.ClipModelPath;
         }
 
         private async void OnUnloadConfigPressed()
         {
-            await mm.DisposeExecutorAsync();
+            await mindManager.DisposeExecutorAsync();
         }
 
         private async void OnLoadConfigPressed()
         {
-            if (config != null)
+            if (ModelParamsConfig != null)
             {
-                await mm.InitializeAsync(config);
+                await mindManager.InitializeAsync(ModelParamsConfig);
+                ConfigListResource.LastGoodModelConfig = ModelParamsConfig;
+                SaveConfigList();
             }
         }
 
@@ -180,58 +198,57 @@ namespace MindGame
             Visible = false;
         }
 
-        private void InitializeUIElements()
+        private void InitializeUiElements()
         {
             configNameLineEdit.Text = configName;
 
             // Initialize chat sliders and labels
-            chatGpuLayerCountHSlider.Value = (double)chatGpuLayerCount;
-            chatGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
-
-            chatContextSizeHSlider.Value = calculateLogContextSize(chatContextSize);
-            chatContextSizeLabel.Text = chatContextSize.ToString();
+            InitializeSliderAndLabel(chatGpuLayerCountHSlider, chatGpuLayerCountLabel, chatGpuLayerCount);
+            InitializeSliderAndLabel(chatContextSizeHSlider, chatContextSizeLabel, chatContextSize, CalculateLogContextSize);
 
             chatRandomSeedLineEdit.Text = chatRandomSeed.ToString();
 
             // Initialize embedder sliders and labels
-            embedderGpuLayerCountHSlider.Value = (double)embedderGpuLayerCount;
-            embedderGpuLayerCountLabel.Text = embedderGpuLayerCount.ToString();
-
-            embedderContextSizeHSlider.Value = calculateLogContextSize(embedderContextSize);
-            embedderContextSizeLabel.Text = embedderContextSize.ToString();
+            InitializeSliderAndLabel(embedderGpuLayerCountHSlider, embedderGpuLayerCountLabel, embedderGpuLayerCount);
+            InitializeSliderAndLabel(embedderContextSizeHSlider, embedderContextSizeLabel, embedderContextSize, CalculateLogContextSize);
 
             embedderRandomSeedLineEdit.Text = embedderRandomSeed.ToString();
+
+            // Initialize autoload checkbox
+            if (ConfigListResource != null)
+            {
+                autoloadLastGoodConfigCheckBox.ButtonPressed = ConfigListResource.AutoloadLastGoodModelConfig;
+            }
+        }
+
+        private void InitializeSliderAndLabel(HSlider slider, Label label, int value)
+        {
+            slider.Value = value;
+            label.Text = value.ToString();
+        }
+
+        private void InitializeSliderAndLabel(HSlider slider, Label label, uint value, Func<uint, double> conversionFunc)
+        {
+            slider.Value = conversionFunc(value);
+            label.Text = value.ToString();
         }
 
         private void OnSavedConfigsItemSelected(long index)
         {
-            config = configListResource.Configurations[(int)index];
-            configNameLineEdit.Text = config.ModelConfigsName;
-            chatContextSizeHSlider.Value = calculateLogContextSize(config.ChatContextSize);
-            chatGpuLayerCountHSlider.Value = config.ChatGpuLayerCount;
-            chatRandomSeedLineEdit.Text = config.ChatRandomSeed.ToString();
-            chatCurrentModelPathLabel.Text = config.ChatModelPath;
-            embedderContextSizeHSlider.Value = calculateLogContextSize(config.EmbedderContextSize);
-            embedderGpuLayerCountHSlider.Value = config.EmbedderGpuLayerCount;
-            embedderRandomSeedLineEdit.Text = config.EmbedderRandomSeed.ToString();
-            embedderCurrentModelPathLabel.Text = config.EmbedderModelPath;
-            clipCurrentModelPathLabel.Text = config.ClipModelPath;
+            ModelParamsConfig = ConfigListResource.ModelConfigurations[(int)index];
+            LoadConfig(ModelParamsConfig);
         }
-
 
         private void OnDeleteConfigPressed()
         {
             var selectedIndices = savedConfigsItemList.GetSelectedItems();
 
-            // Check if there is at least one selected item and the array is not empty
-            if (selectedIndices.Count() > 0 && configListResource.Configurations.Count() > 0)
+            if (selectedIndices.Length > 0 && ConfigListResource.ModelConfigurations.Count > 0)
             {
-                int selectedIndex = selectedIndices[0];  // Get the first selected index
-
-                // Ensure the selected index is within the bounds of the array
-                if (selectedIndex >= 0 && selectedIndex < configListResource.Configurations.Count())
+                int selectedIndex = selectedIndices[0];
+                if (selectedIndex >= 0 && selectedIndex < ConfigListResource.ModelConfigurations.Count)
                 {
-                    configListResource.Configurations.RemoveAt(selectedIndex);
+                    ConfigListResource.ModelConfigurations.RemoveAt(selectedIndex);
                     SaveConfigList();
                     UpdateUIFromLoadedConfigs();
                 }
@@ -244,9 +261,9 @@ namespace MindGame
 
         private void OnAddNewConfigPressed()
         {
-            ModelConfigsParams newConfig = new ModelConfigsParams
+            ModelParamsConfig newConfig = new()
             {
-                ModelConfigsName = configName,
+                ModelConfigName = configName,
                 ChatContextSize = chatContextSize,
                 ChatGpuLayerCount = chatGpuLayerCount,
                 ChatRandomSeed = chatRandomSeed,
@@ -258,174 +275,85 @@ namespace MindGame
                 ClipModelPath = clipModelPath
             };
 
-            configListResource.Configurations.Add(newConfig);
+            ConfigListResource.ModelConfigurations.Add(newConfig);
             SaveConfigList();
             UpdateUIFromLoadedConfigs();
         }
 
-        private void UpdateConfigurationValue(Action<ModelConfigsParams> updateAction)
+        private void UpdateConfigurationValue(Action<ModelParamsConfig> updateAction)
         {
             var selectedIndices = savedConfigsItemList.GetSelectedItems();
-            if (selectedIndices.Count() > 0)
+            if (selectedIndices.Length > 0)
             {
                 int selectedIndex = selectedIndices[0];
-                if (selectedIndex >= 0 && selectedIndex < configListResource.Configurations.Count)
+                if (selectedIndex >= 0 && selectedIndex < ConfigListResource.ModelConfigurations.Count)
                 {
-                    var config = configListResource.Configurations[selectedIndex];
+                    var config = ConfigListResource.ModelConfigurations[selectedIndex];
                     updateAction(config);
                     SaveConfigList();
                 }
             }
         }
 
-
         private void SaveConfigList()
         {
-            Error saveError = ResourceSaver.Save(configListResource, modelConfigListPath);
+            Error saveError = ResourceSaver.Save(ConfigListResource, configListResourcePath);
             if (saveError != Error.Ok)
             {
                 GD.PrintErr("Failed to save configuration list: ", saveError);
             }
-            else
-            {
-                // GD.Print("Configuration saved successfully.");
-            }
         }
 
-
-        private void OnClearEmbedderPathPressed()
+        private void ClearPath(Action updatePathAction, Label pathLabel, Action<ModelParamsConfig, string> updateAction)
         {
-            embedderModelPath = "";
-            embedderCurrentModelPathLabel.Text = embedderModelPath;
-            UpdateConfigurationValue(config => config.EmbedderModelPath = embedderModelPath);
+            updatePathAction();
+            pathLabel.Text = "";
+            UpdateConfigurationValue(config => updateAction(config, ""));
         }
 
-        private void OnClearClipPathPressed()
-        {
-            clipModelPath = "";
-            clipCurrentModelPathLabel.Text = clipModelPath;
-            UpdateConfigurationValue(config => config.ClipModelPath = clipModelPath);
-        }
-
-        private void OnClearChatPathPressed()
-        {
-            chatModelPath = "";
-            chatCurrentModelPathLabel.Text = chatModelPath;
-            UpdateConfigurationValue(config => config.ChatModelPath = chatModelPath);
-        }
+        private void OnClearEmbedderPathPressed() => ClearPath(() => embedderModelPath = "", embedderCurrentModelPathLabel, (config, path) => config.EmbedderModelPath = path);
+        private void OnClearClipPathPressed() => ClearPath(() => clipModelPath = "", clipCurrentModelPathLabel, (config, path) => config.ClipModelPath = path);
+        private void OnClearChatPathPressed() => ClearPath(() => chatModelPath = "", chatCurrentModelPathLabel, (config, path) => config.ChatModelPath = path);
 
         private void OnConfigNameTextChanged(string newText)
         {
             configName = newText;
             UpdateConfigurationValue(config =>
             {
-                config.ModelConfigsName = configName;
+                config.ModelConfigName = configName;
                 savedConfigsItemList.SetItemText(savedConfigsItemList.GetSelectedItems()[0], configName);
             });
         }
 
+        private void OnChatGpuLayerCountHSliderValueChanged(double value) => UpdateSliderValue((int)value, chatGpuLayerCountLabel, v => chatGpuLayerCount = v, config => config.ChatGpuLayerCount = chatGpuLayerCount);
+        private void OnEmbedderGpuLayerCountHSliderValueChanged(double value) => UpdateSliderValue((int)value, embedderGpuLayerCountLabel, v => embedderGpuLayerCount = v, config => config.EmbedderGpuLayerCount = embedderGpuLayerCount);
+        private void OnChatContextSizeHSliderValueChanged(double value) => UpdateSliderValue(CalculateExpContextSize(value), chatContextSizeLabel, v => chatContextSize = v, config => config.ChatContextSize = chatContextSize);
+        private void OnEmbedderContextSizeHSliderValueChanged(double value) => UpdateSliderValue(CalculateExpContextSize(value), embedderContextSizeLabel, v => embedderContextSize = v, config => config.EmbedderContextSize = embedderContextSize);
 
-        private void OnChatGpuLayerCountHSliderValueChanged(double value)
+        private void UpdateSliderValue<T>(T value, Label label, Action<T> setValue, Action<ModelParamsConfig> updateConfig)
         {
-            chatGpuLayerCount = (int)value;
-            chatGpuLayerCountLabel.Text = chatGpuLayerCount.ToString();
-            UpdateConfigurationValue(config => config.ChatGpuLayerCount = chatGpuLayerCount);
-        }
- 
-
-        private void OnSelectChatPathPressed()
-        {
-            selectChatPathFileDialog.PopupCentered();
+            setValue(value);
+            label.Text = value.ToString();
+            UpdateConfigurationValue(updateConfig);
         }
 
-        private void OnChatPathSelected(string path)
+        private void OnSelectChatPathPressed() => selectChatPathFileDialog.PopupCentered();
+        private void OnChatPathSelected(string path) => UpdatePath(() => chatModelPath = path, chatCurrentModelPathLabel, config => config.ChatModelPath = chatModelPath);
+        private void OnSelectClipPathPressed() => selectClipPathFileDialog.PopupCentered();
+        private void OnClipPathSelected(string path) => UpdatePath(() => clipModelPath = path, clipCurrentModelPathLabel, config => config.ClipModelPath = clipModelPath);
+        private void OnSelectEmbedderPathPressed() => selectEmbedderPathFileDialog.PopupCentered();
+        private void OnEmbedderPathSelected(string path) => UpdatePath(() => embedderModelPath = path, embedderCurrentModelPathLabel, config => config.EmbedderModelPath = embedderModelPath);
+
+        private void UpdatePath(Action updatePathAction, Label pathLabel, Action<ModelParamsConfig> updateConfig)
         {
-            chatModelPath = path;
-            chatCurrentModelPathLabel.Text = $"{path}";
-            UpdateConfigurationValue(config => config.ChatModelPath = chatModelPath);
+            updatePathAction();
+            pathLabel.Text = pathLabel.Text;
+            UpdateConfigurationValue(updateConfig);
         }
 
+        private static uint CalculateExpContextSize(double value) => (uint)Math.Pow(2, value) * 1000;
+        private static double CalculateLogContextSize(uint value) => Math.Log2(value / 1000.0);
 
-        private void OnEmbedderGpuLayerCountHSliderValueChanged(double value)
-        {
-            embedderGpuLayerCount = (int)value;
-            embedderGpuLayerCountLabel.Text = embedderGpuLayerCount.ToString();
-            UpdateConfigurationValue(config => config.EmbedderGpuLayerCount = embedderGpuLayerCount);
-        }
-
-        private void OnClipPathSelected(string path)
-        {
-            clipModelPath = path;
-            clipCurrentModelPathLabel.Text = $"{path}";
-            UpdateConfigurationValue(config => config.ClipModelPath = clipModelPath);
-        }
-
-        private void OnEmbedderPathSelected(string path)
-        {
-            embedderModelPath = path;
-            embedderCurrentModelPathLabel.Text = $"{path}";
-            UpdateConfigurationValue(config => config.EmbedderModelPath = embedderModelPath);
-        }
-
-        private void OnSelectEmbedderPathPressed()
-        {
-            selectEmbedderPathFileDialog.PopupCentered();
-        }
-
-        private uint calculateExpContextSize(double value)
-        {
-            return (uint)Math.Pow(2, value) * 1000;
-        }
-
-        private double calculateLogContextSize(uint value)
-        {
-            return (double)Math.Log2(value / 1000);
-        }
-
-        private void OnChatContextSizeHSliderValueChanged(double value)
-        {
-            chatContextSize = calculateExpContextSize(value);
-            chatContextSizeLabel.Text = chatContextSize.ToString();
-            UpdateConfigurationValue(config => config.ChatContextSize = chatContextSize);
-        }
-
-        private void OnEmbedderContextSizeHSliderValueChanged(double value)
-        {
-            embedderContextSize = calculateExpContextSize(value);
-            embedderContextSizeLabel.Text = embedderContextSize.ToString();
-            UpdateConfigurationValue(config => config.EmbedderContextSize = embedderContextSize);
-        }
-
-        private void OnSelectClipPathPressed()
-        {
-            selectClipPathFileDialog.PopupCentered();
-        }
-
-        public override void _ExitTree()
-        {
-            //addNewConfigButton.Pressed -= OnAddNewConfigPressed;
-            //deleteConfigButton.Pressed -= OnDeleteConfigPressed;
-
-            //clearChatPathButton.Pressed -= OnClearChatPathPressed;
-            //clearClipPathButton.Pressed -= OnClearClipPathPressed;
-            //clearEmbedderPathButton.Pressed -= OnClearEmbedderPathPressed;
-
-            //selectChatPathButton.Pressed -= OnSelectChatPathPressed;
-            //selectClipPathButton.Pressed -= OnSelectClipPathPressed;
-            //selectEmbedderPathButton.Pressed -= OnSelectEmbedderPathPressed;
-
-            //chatContextSizeHSlider.ValueChanged -= OnChatContextSizeHSliderValueChanged;
-            //chatGpuLayerCountHSlider.ValueChanged -= OnChatGpuLayerCountHSliderValueChanged;
-            //embedderContextSizeHSlider.ValueChanged -= OnEmbedderContextSizeHSliderValueChanged;
-            //embedderGpuLayerCountHSlider.ValueChanged -= OnEmbedderGpuLayerCountHSliderValueChanged;
-
-            //selectChatPathFileDialog.FileSelected -= OnChatPathSelected;
-            //selectClipPathFileDialog.FileSelected -= OnClipPathSelected;
-            //selectEmbedderPathFileDialog.FileSelected -= OnEmbedderPathSelected;
-
-            //configNameLineEdit.TextChanged -= OnConfigNameTextChanged;
-            //savedConfigsItemList.ItemSelected -= OnSavedConfigsItemSelected;
-        }
+        public override void _ExitTree() { }
     }
-
 }
