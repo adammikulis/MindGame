@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=7 format=3 uid="uid://cf455n52h3mci"]
+[gd_resource type="Resource" load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/InferenceParamsConfig.cs" id="1_b25hm"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ConfigListResource.cs" id="1_q2fe5"]
@@ -37,3 +37,6 @@ ClipModelPath = ""
 script = ExtResource("1_q2fe5")
 ModelConfigurations = [SubResource("Resource_m05pv")]
 InferenceConfigurations = [SubResource("Resource_lst23"), SubResource("Resource_vjl38")]
+CurrentInferenceConfig = SubResource("Resource_lst23")
+UseLastGoodModelConfig = false
+UseLastGoodInferenceConfig = false

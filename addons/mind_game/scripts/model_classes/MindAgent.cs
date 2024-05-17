@@ -1,6 +1,8 @@
 using Godot;
 using LLama;
 using LLama.Common;
+using LLama.Grammars;
+using LLama.Native;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,10 +18,13 @@ namespace MindGame
         [Signal]
         public delegate void ChatOutputReceivedEventHandler(string text);
 
+        private ConfigListResource configListResource;
         private MindManager mindManager;
+        private SafeLLamaGrammarHandle grammarInstance;
         public string[] antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}"];
         public float temperature = 0.75f;
         public int maxTokens = 4000;
+        public bool outputJson = false;
 
         
         public ChatSession ChatSession { get; private set; } = null;
@@ -27,8 +32,9 @@ namespace MindGame
     
         public override void _EnterTree()
         {
-        
+            configListResource = GD.Load<ConfigListResource>("res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres");
         }
+    
 
         public async override void _Ready()
         {
@@ -49,7 +55,11 @@ namespace MindGame
             mindManager.ClipModelStatusUpdate += OnClipModelStatusUpdate;
             mindManager.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
             mindManager.ExecutorStatusUpdate += OnExecutorStatusUpdate;
-        
+
+            using var file = FileAccess.Open("res://addons/mind_game/assets/grammar/json.gbnf", FileAccess.ModeFlags.Read);
+            string gbnf = file.GetAsText();
+            var grammar = Grammar.Parse(gbnf, "root");
+            grammarInstance = grammar.CreateInstance();
         }
 
         private async void OnExecutorStatusUpdate(bool isLoaded)
@@ -93,17 +103,30 @@ namespace MindGame
                 return;
             }
 
-            // Handle image paths by setting them in the executor
             if (imagePaths != null && imagePaths.Count > 0)
             {
                 mindManager.executor.ImagePaths.Clear();
                 mindManager.executor.ImagePaths.AddRange(imagePaths);
             }
 
-            // Execute the chat session with the current prompt and any images
+            var activeConfig = configListResource.CurrentInferenceConfig;
+            if (activeConfig == null)
+            {
+                GD.PrintErr("No active inference configuration selected.");
+                return;
+            }
+
+            InferenceParams inferenceParams = new InferenceParams
+            {
+                AntiPrompts = activeConfig.AntiPrompts,
+                Temperature = activeConfig.Temperature,
+                MaxTokens = activeConfig.MaxTokens,
+                Grammar = activeConfig.OutputJson ? grammarInstance : null
+            };
+
             await Task.Run(async () =>
             {
-                await foreach (var output in ChatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), new InferenceParams { AntiPrompts = antiPrompts, Temperature = temperature, MaxTokens = maxTokens }))
+                await foreach (var output in ChatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), inferenceParams))
                 {
                     CallDeferred("emit_signal", SignalName.ChatOutputReceived, output);
                 }

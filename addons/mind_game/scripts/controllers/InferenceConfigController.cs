@@ -84,6 +84,7 @@ namespace MindGame
             if (index >= 0 && index < ConfigListResource.InferenceConfigurations.Count)
             {
                 InferenceParamsConfig = ConfigListResource.InferenceConfigurations[(int)index];
+                ConfigListResource.CurrentInferenceConfig = InferenceParamsConfig;  // Update the current config
                 inferenceConfigNameLineEdit.Text = InferenceParamsConfig.InferenceConfigName;
                 temperatureHSlider.Value = (double)InferenceParamsConfig.Temperature;
                 temperatureLineEdit.Text = InferenceParamsConfig.Temperature.ToString();
@@ -142,7 +143,7 @@ namespace MindGame
 
         private void OnAddInferenceConfigPressed()
         {
-            InferenceParamsConfig newConfig = new()
+            InferenceParamsConfig newConfig = new InferenceParamsConfig
             {
                 InferenceConfigName = inferenceConfigName,
                 MaxTokens = maxTokens,
@@ -152,6 +153,7 @@ namespace MindGame
             };
 
             ConfigListResource.InferenceConfigurations.Add(newConfig);
+            ConfigListResource.CurrentInferenceConfig = newConfig;
             SaveConfigList();
             UpdateUiFromLoadedConfigs();
         }

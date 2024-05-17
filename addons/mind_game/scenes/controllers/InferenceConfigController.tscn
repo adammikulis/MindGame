@@ -172,7 +172,7 @@ ticks_on_borders = true
 [node name="TemperatureLineEdit" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2/Panel/MarginContainer2/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "0.5"
+text = "0.75"
 editable = false
 
 [node name="OutputJsonCheckBox" type="CheckBox" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2/Panel/MarginContainer2/GridContainer"]
