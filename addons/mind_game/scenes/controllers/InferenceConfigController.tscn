@@ -77,6 +77,7 @@ icon = ExtResource("3_ga7yw")
 [node name="AutoloadLastGoodConfigCheckBox" type="CheckBox" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+button_pressed = true
 text = "Autoload Last
 Good Config"
 
@@ -102,8 +103,9 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-item_count = 1
-item_0/text = "<default>"
+item_count = 2
+item_0/text = "4k_json"
+item_1/text = "4k_high_temp"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -140,6 +142,7 @@ text = "Name"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+text = "4k_json"
 
 [node name="PlaceholderLabel" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2/Panel/MarginContainer2/GridContainer"]
 layout_mode = 2
@@ -171,17 +174,18 @@ unique_name_in_owner = true
 layout_mode = 2
 max_value = 1.5
 step = 0.05
-value = 0.75
+value = 0.5
 tick_count = 31
 ticks_on_borders = true
 
 [node name="TemperatureLineEdit" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2/Panel/MarginContainer2/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "0.75"
+text = "0.5"
 editable = false
 
 [node name="OutputJsonCheckBox" type="CheckBox" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2/Panel/MarginContainer2/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+button_pressed = true
 text = "Output JSON"

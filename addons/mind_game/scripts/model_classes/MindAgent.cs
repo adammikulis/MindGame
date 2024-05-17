@@ -12,7 +12,6 @@ namespace MindGame
     [Tool]
     public partial class MindAgent : Node
     {
-
         [Signal]
         public delegate void ChatSessionStatusUpdateEventHandler(bool isLoaded);
         [Signal]
@@ -22,20 +21,18 @@ namespace MindGame
         private MindManager mindManager;
         private Grammar grammar;
         private SafeLLamaGrammarHandle grammarInstance;
-        public string[] antiPrompts = ["", "", "", "", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}"];
+        private InferenceParams inferenceParams;
+        public string[] antiPrompts = { "", "", "", "", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}" };
         public float temperature = 0.75f;
         public int maxTokens = 4000;
         public bool outputJson = false;
 
-
         public ChatSession ChatSession { get; private set; } = null;
-
 
         public override void _EnterTree()
         {
             configListResource = GD.Load<ConfigListResource>("res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres");
         }
-
 
         public async override void _Ready()
         {
@@ -114,18 +111,23 @@ namespace MindGame
                 return;
             }
 
-            SafeLLamaGrammarHandle grammarInstance = null;
             if (activeConfig.OutputJson)
             {
                 grammarInstance = CreateGrammarInstance();
+                inferenceParams = new InferenceParams
+                {
+                    AntiPrompts = activeConfig.AntiPrompts,
+                    Temperature = activeConfig.Temperature,
+                    MaxTokens = activeConfig.MaxTokens,
+                    Grammar = grammarInstance
+                };
             }
 
-            InferenceParams inferenceParams = new InferenceParams
+            inferenceParams = new InferenceParams
             {
                 AntiPrompts = activeConfig.AntiPrompts,
                 Temperature = activeConfig.Temperature,
                 MaxTokens = activeConfig.MaxTokens,
-                Grammar = grammarInstance
             };
 
             await Task.Run(async () =>
@@ -135,6 +137,7 @@ namespace MindGame
                     CallDeferred("emit_signal", SignalName.ChatOutputReceived, output);
                 }
             });
+
         }
 
         public async Task DisposeChatSessionAsync()

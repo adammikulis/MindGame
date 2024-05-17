@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=7 format=3]
+[gd_resource type="Resource" load_steps=7 format=3 uid="uid://bvjf3ylvif4bs"]
 
 [ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/InferenceParamsConfig.cs" id="1_euwpb"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ConfigListResource.cs" id="1_q2fe5"]

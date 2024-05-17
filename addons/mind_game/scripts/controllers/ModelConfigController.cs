@@ -6,8 +6,8 @@ namespace MindGame
     [Tool]
     public partial class ModelConfigController : Control
     {
-        public ConfigListResource configListResource;
-        public ModelParamsConfig modelParamsConfig;
+        public ConfigListResource ConfigListResource;
+        public ModelParamsConfig ModelParamsConfig;
         public MindManager mindManager;
         private readonly string configListResourcePath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
 
@@ -35,19 +35,18 @@ namespace MindGame
             InitializeConfigList();
             InitializeUiElements();
             InitializeSignals();
-            AutoloadLastGoodConfig();
         }
 
         private void InitializeConfigList()
         {
-            configListResource = GD.Load<ConfigListResource>(configListResourcePath) ?? new ConfigListResource();
+            ConfigListResource = GD.Load<ConfigListResource>(configListResourcePath) ?? new ConfigListResource();
             UpdateUIFromLoadedConfigs();
         }
 
         private void UpdateUIFromLoadedConfigs()
         {
             savedConfigsItemList.Clear();
-            foreach (var config in configListResource.ModelConfigurations)
+            foreach (var config in ConfigListResource.ModelConfigurations)
             {
                 savedConfigsItemList.AddItem(config.ModelConfigName);
             }
@@ -147,19 +146,20 @@ namespace MindGame
 
         private void OnAutoloadLastGoodConfigToggled(bool toggledOn)
         {
-            if (configListResource != null)
+            if (ConfigListResource != null)
             {
-                configListResource.AutoloadLastGoodModelConfig = toggledOn;
+                ConfigListResource.AutoloadLastGoodModelConfig = toggledOn;
                 SaveConfigList();
             }
         }
 
         public void AutoloadLastGoodConfig()
         {
-            if (configListResource != null && configListResource.AutoloadLastGoodModelConfig && configListResource.LastGoodModelConfig != null)
+            if (ConfigListResource != null && ConfigListResource.AutoloadLastGoodModelConfig && ConfigListResource.LastGoodModelConfig != null)
             {
-                modelParamsConfig = configListResource.LastGoodModelConfig;
-                LoadConfig(modelParamsConfig);
+                ModelParamsConfig = ConfigListResource.LastGoodModelConfig;
+                LoadConfig(ModelParamsConfig);
+                OnLoadConfigPressed();
             }
         }
 
@@ -184,10 +184,10 @@ namespace MindGame
 
         private async void OnLoadConfigPressed()
         {
-            if (modelParamsConfig != null)
+            if (ModelParamsConfig != null)
             {
-                await mindManager.InitializeAsync(modelParamsConfig);
-                configListResource.LastGoodModelConfig = modelParamsConfig;
+                await mindManager.InitializeAsync(ModelParamsConfig);
+                ConfigListResource.LastGoodModelConfig = ModelParamsConfig;
                 SaveConfigList();
             }
         }
@@ -214,9 +214,9 @@ namespace MindGame
             embedderRandomSeedLineEdit.Text = embedderRandomSeed.ToString();
 
             // Initialize autoload checkbox
-            if (configListResource != null)
+            if (ConfigListResource != null)
             {
-                autoloadLastGoodConfigCheckBox.ButtonPressed = configListResource.AutoloadLastGoodModelConfig;
+                autoloadLastGoodConfigCheckBox.ButtonPressed = ConfigListResource.AutoloadLastGoodModelConfig;
             }
         }
 
@@ -234,20 +234,20 @@ namespace MindGame
 
         private void OnSavedConfigsItemSelected(long index)
         {
-            modelParamsConfig = configListResource.ModelConfigurations[(int)index];
-            LoadConfig(modelParamsConfig);
+            ModelParamsConfig = ConfigListResource.ModelConfigurations[(int)index];
+            LoadConfig(ModelParamsConfig);
         }
 
         private void OnDeleteConfigPressed()
         {
             var selectedIndices = savedConfigsItemList.GetSelectedItems();
 
-            if (selectedIndices.Length > 0 && configListResource.ModelConfigurations.Count > 0)
+            if (selectedIndices.Length > 0 && ConfigListResource.ModelConfigurations.Count > 0)
             {
                 int selectedIndex = selectedIndices[0];
-                if (selectedIndex >= 0 && selectedIndex < configListResource.ModelConfigurations.Count)
+                if (selectedIndex >= 0 && selectedIndex < ConfigListResource.ModelConfigurations.Count)
                 {
-                    configListResource.ModelConfigurations.RemoveAt(selectedIndex);
+                    ConfigListResource.ModelConfigurations.RemoveAt(selectedIndex);
                     SaveConfigList();
                     UpdateUIFromLoadedConfigs();
                 }
@@ -274,7 +274,7 @@ namespace MindGame
                 ClipModelPath = clipModelPath
             };
 
-            configListResource.ModelConfigurations.Add(newConfig);
+            ConfigListResource.ModelConfigurations.Add(newConfig);
             SaveConfigList();
             UpdateUIFromLoadedConfigs();
         }
@@ -285,9 +285,9 @@ namespace MindGame
             if (selectedIndices.Length > 0)
             {
                 int selectedIndex = selectedIndices[0];
-                if (selectedIndex >= 0 && selectedIndex < configListResource.ModelConfigurations.Count)
+                if (selectedIndex >= 0 && selectedIndex < ConfigListResource.ModelConfigurations.Count)
                 {
-                    var config = configListResource.ModelConfigurations[selectedIndex];
+                    var config = ConfigListResource.ModelConfigurations[selectedIndex];
                     updateAction(config);
                     SaveConfigList();
                 }
@@ -296,7 +296,7 @@ namespace MindGame
 
         private void SaveConfigList()
         {
-            Error saveError = ResourceSaver.Save(configListResource, configListResourcePath);
+            Error saveError = ResourceSaver.Save(ConfigListResource, configListResourcePath);
             if (saveError != Error.Ok)
             {
                 GD.PrintErr("Failed to save configuration list: ", saveError);
