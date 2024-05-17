@@ -56,17 +56,15 @@ namespace MindGame
             mindManager.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
             mindManager.ExecutorStatusUpdate += OnExecutorStatusUpdate;
 
-            // Initialize the grammar instance
+            // Load the grammar definition
             using var file = FileAccess.Open("res://addons/mind_game/assets/grammar/json.gbnf", FileAccess.ModeFlags.Read);
-            string gbnf = file.GetAsText();
+            string gbnf = file.GetAsText().Trim();
             grammar = Grammar.Parse(gbnf, "root");
-            CreateGrammarInstance();
         }
 
-        private void CreateGrammarInstance()
+        private SafeLLamaGrammarHandle CreateGrammarInstance()
         {
-            
-            grammarInstance = grammar.CreateInstance();
+            return grammar.CreateInstance();
         }
 
         private async void OnExecutorStatusUpdate(bool isLoaded)
@@ -116,9 +114,10 @@ namespace MindGame
                 return;
             }
 
-            if (outputJson == true)
+            SafeLLamaGrammarHandle grammarInstance = null;
+            if (activeConfig.OutputJson)
             {
-                CreateGrammarInstance();
+                grammarInstance = CreateGrammarInstance();
             }
 
             InferenceParams inferenceParams = new InferenceParams
@@ -126,7 +125,7 @@ namespace MindGame
                 AntiPrompts = activeConfig.AntiPrompts,
                 Temperature = activeConfig.Temperature,
                 MaxTokens = activeConfig.MaxTokens,
-                Grammar = activeConfig.OutputJson ? grammarInstance : null
+                Grammar = grammarInstance
             };
 
             await Task.Run(async () =>
