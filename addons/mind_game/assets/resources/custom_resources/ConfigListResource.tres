@@ -1,11 +1,11 @@
-[gd_resource type="Resource" load_steps=4 format=3 uid="uid://bnrhipv3n8eh5"]
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://cf455n52h3mci"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ModelParamsConfigs.cs" id="1_ogvdd"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ModelParamsConfig.cs" id="1_pprv4"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ConfigListResource.cs" id="1_q2fe5"]
 
-[sub_resource type="Resource" id="Resource_ta65v"]
-script = ExtResource("1_ogvdd")
-ModelConfigsName = "phi3_4k"
+[sub_resource type="Resource" id="Resource_8gx03"]
+script = ExtResource("1_pprv4")
+ModelConfigName = "phi3_4k"
 ChatContextSize = 4000
 ChatGpuLayerCount = 33
 ChatRandomSeed = 0
@@ -18,5 +18,5 @@ ClipModelPath = ""
 
 [resource]
 script = ExtResource("1_q2fe5")
-ModelConfigurations = [SubResource("Resource_ta65v")]
+ModelConfigurations = [SubResource("Resource_8gx03")]
 InferenceConfigurations = []

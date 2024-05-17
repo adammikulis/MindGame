@@ -15,7 +15,7 @@ namespace MindGame
     public partial class MindManager : Node
     {
 
-        public ModelParamsConfigs CurrentModelConfigs { get; set; }
+        public ModelParamsConfig CurrentModelConfigs { get; set; }
 
 
         [Signal]
@@ -47,7 +47,7 @@ namespace MindGame
 
         }
 
-        public async Task InitializeAsync(ModelParamsConfigs config)
+        public async Task InitializeAsync(ModelParamsConfig config)
         {
             CurrentModelConfigs = config;
             await LoadModelsAsync();

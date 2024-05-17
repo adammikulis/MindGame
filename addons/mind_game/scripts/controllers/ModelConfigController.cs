@@ -8,7 +8,7 @@ namespace MindGame
     public partial class ModelConfigController : Control
     {
         public ConfigListResource configListResource;
-        public ModelParamsConfigs modelParamsConfigs;
+        public ModelParamsConfig modelParamsConfig;
         public MindManager mindManager;
         private string modelConfigListPath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
 
@@ -59,7 +59,7 @@ namespace MindGame
             savedConfigsItemList.Clear();
             foreach (var config in configListResource.ModelConfigurations)
             {
-                savedConfigsItemList.AddItem(config.ModelConfigsName);
+                savedConfigsItemList.AddItem(config.ModelConfigName);
             }
         }
 
@@ -169,9 +169,9 @@ namespace MindGame
 
         private async void OnLoadConfigPressed()
         {
-            if (modelParamsConfigs != null)
+            if (modelParamsConfig != null)
             {
-                await mindManager.InitializeAsync(modelParamsConfigs);
+                await mindManager.InitializeAsync(modelParamsConfig);
             }
         }
 
@@ -205,17 +205,17 @@ namespace MindGame
 
         private void OnSavedConfigsItemSelected(long index)
         {
-            modelParamsConfigs = configListResource.ModelConfigurations[(int)index];
-            configNameLineEdit.Text = modelParamsConfigs.ModelConfigsName;
-            chatContextSizeHSlider.Value = CalculateLogContextSize(modelParamsConfigs.ChatContextSize);
-            chatGpuLayerCountHSlider.Value = modelParamsConfigs.ChatGpuLayerCount;
-            chatRandomSeedLineEdit.Text = modelParamsConfigs.ChatRandomSeed.ToString();
-            chatCurrentModelPathLabel.Text = modelParamsConfigs.ChatModelPath;
-            embedderContextSizeHSlider.Value = CalculateLogContextSize(modelParamsConfigs.EmbedderContextSize);
-            embedderGpuLayerCountHSlider.Value = modelParamsConfigs.EmbedderGpuLayerCount;
-            embedderRandomSeedLineEdit.Text = modelParamsConfigs.EmbedderRandomSeed.ToString();
-            embedderCurrentModelPathLabel.Text = modelParamsConfigs.EmbedderModelPath;
-            clipCurrentModelPathLabel.Text = modelParamsConfigs.ClipModelPath;
+            modelParamsConfig = configListResource.ModelConfigurations[(int)index];
+            configNameLineEdit.Text = modelParamsConfig.ModelConfigName;
+            chatContextSizeHSlider.Value = CalculateLogContextSize(modelParamsConfig.ChatContextSize);
+            chatGpuLayerCountHSlider.Value = modelParamsConfig.ChatGpuLayerCount;
+            chatRandomSeedLineEdit.Text = modelParamsConfig.ChatRandomSeed.ToString();
+            chatCurrentModelPathLabel.Text = modelParamsConfig.ChatModelPath;
+            embedderContextSizeHSlider.Value = CalculateLogContextSize(modelParamsConfig.EmbedderContextSize);
+            embedderGpuLayerCountHSlider.Value = modelParamsConfig.EmbedderGpuLayerCount;
+            embedderRandomSeedLineEdit.Text = modelParamsConfig.EmbedderRandomSeed.ToString();
+            embedderCurrentModelPathLabel.Text = modelParamsConfig.EmbedderModelPath;
+            clipCurrentModelPathLabel.Text = modelParamsConfig.ClipModelPath;
         }
 
 
@@ -244,9 +244,9 @@ namespace MindGame
 
         private void OnAddNewConfigPressed()
         {
-            ModelParamsConfigs newConfig = new()
+            ModelParamsConfig newConfig = new()
             {
-                ModelConfigsName = configName,
+                ModelConfigName = configName,
                 ChatContextSize = chatContextSize,
                 ChatGpuLayerCount = chatGpuLayerCount,
                 ChatRandomSeed = chatRandomSeed,
@@ -263,7 +263,7 @@ namespace MindGame
             UpdateUIFromLoadedConfigs();
         }
 
-        private void UpdateConfigurationValue(Action<ModelParamsConfigs> updateAction)
+        private void UpdateConfigurationValue(Action<ModelParamsConfig> updateAction)
         {
             var selectedIndices = savedConfigsItemList.GetSelectedItems();
             if (selectedIndices.Length > 0)
@@ -319,7 +319,7 @@ namespace MindGame
             configName = newText;
             UpdateConfigurationValue(config =>
             {
-                config.ModelConfigsName = configName;
+                config.ModelConfigName = configName;
                 savedConfigsItemList.SetItemText(savedConfigsItemList.GetSelectedItems()[0], configName);
             });
         }

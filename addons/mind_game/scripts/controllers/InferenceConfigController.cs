@@ -11,11 +11,27 @@ namespace MindGame
         public HSlider maxTokensHSlider, temperatureHSlider;
         public LineEdit nameLineEdit, maxTokensLineEdit, temperatureLineEdit;
 
+        private string inferenceParamsName;
+        private string[] antiPrompts;
+        private int maxTokens;
+        private float temperature;
+        private bool outputJson;
+
         public override void _Ready()
         {
+            InitializeDefaultValues();
             InitializeNodeRefs();
             InitializeSignals();
 
+        }
+
+        private void InitializeDefaultValues()
+        {
+            inferenceParamsName = "<default>";
+            maxTokens = 4000;
+            antiPrompts = ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}"];
+            temperature = 0.5f;
+            outputJson = false;
         }
 
         private void InitializeSignals()

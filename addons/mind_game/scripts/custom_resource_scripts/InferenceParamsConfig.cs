@@ -4,10 +4,10 @@ using LLama.Grammars;
 namespace MindGame
 {
     [Tool]
-    public partial class InferenceParamsConfigs : Resource
+    public partial class InferenceParamsConfig : Resource
     {
         [Export]
-        public string InferenceParamsName { get; set; }
+        public string InferenceConfigName { get; set; }
         [Export]
         public string[] AntiPrompts { get; set; }
         [Export]
@@ -17,10 +17,10 @@ namespace MindGame
         [Export]
         public bool OutputJson { get; set; }
 
-        public InferenceParamsConfigs() : this("<default>", ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}"], 0.5f, 4000, false) { }
-        public InferenceParamsConfigs(string inferenceParamsName, string[] antiPrompts, float temperature, int maxTokens, bool outputJson)
+        public InferenceParamsConfig() : this("<default>", ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}"], 0.5f, 4000, false) { }
+        public InferenceParamsConfig(string inferenceParamsName, string[] antiPrompts, float temperature, int maxTokens, bool outputJson)
         {
-            InferenceParamsName = inferenceParamsName;
+            InferenceConfigName = inferenceParamsName;
             AntiPrompts = antiPrompts;
             Temperature = temperature;
             MaxTokens = maxTokens;
