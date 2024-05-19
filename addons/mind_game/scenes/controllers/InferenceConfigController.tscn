@@ -103,9 +103,8 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-item_count = 2
-item_0/text = "4k_json"
-item_1/text = "4k_high_temp"
+item_count = 1
+item_0/text = "json_4k"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2

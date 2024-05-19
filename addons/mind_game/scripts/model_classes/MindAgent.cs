@@ -93,12 +93,6 @@ namespace MindGame
                 return;
             }
 
-            if (imagePaths != null && imagePaths.Count > 0)
-            {
-                mindManager.executor.ImagePaths.Clear();
-                mindManager.executor.ImagePaths.AddRange(imagePaths);
-            }
-
             var activeConfig = configListResource.CurrentInferenceConfig;
             if (activeConfig == null)
             {

@@ -7,6 +7,7 @@ using LLama;
 using LLama.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LLama.Native;
 
 
 namespace MindGame
@@ -39,12 +40,12 @@ namespace MindGame
 
         public override void _EnterTree()
         {
-
+            //NativeLibraryConfig.Instance.WithCuda(true);
         }
 
         public override void _Ready()
         {
-
+            
         }
 
         public async Task InitializeAsync(ModelParamsConfig config)
@@ -71,7 +72,7 @@ namespace MindGame
                     ContextSize = CurrentModelConfigs.EmbedderContextSize,
                     Seed = CurrentModelConfigs.EmbedderRandomSeed,
                     GpuLayerCount = CurrentModelConfigs.EmbedderGpuLayerCount,
-                    EmbeddingMode = true
+                    Embeddings = true
                 };
 
                 using var embedderWeights = LLamaWeights.LoadFromFile(parameters);
@@ -79,7 +80,7 @@ namespace MindGame
             });
         }
 
-        public async void UnloadEmbedderModelAsync()
+        public void UnloadEmbedderModel()
         {
 
             if (embedder != null) { embedder.Dispose(); }
@@ -96,7 +97,7 @@ namespace MindGame
                     ContextSize = CurrentModelConfigs.ChatContextSize,
                     Seed = CurrentModelConfigs.ChatRandomSeed,
                     GpuLayerCount = CurrentModelConfigs.ChatGpuLayerCount,
-                    EmbeddingMode = false
+                    Embeddings = false
                 };
 
                 await Task.Run(() =>

@@ -1,15 +1,23 @@
-[gd_resource type="Resource" load_steps=7 format=3]
+[gd_resource type="Resource" load_steps=8 format=3 uid="uid://dwbkwva6l70o5"]
 
 [ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/InferenceParamsConfig.cs" id="1_euwpb"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ConfigListResource.cs" id="1_q2fe5"]
 [ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/ModelParamsConfig.cs" id="2_inpeu"]
 
+[sub_resource type="Resource" id="Resource_lkdmp"]
+script = ExtResource("1_euwpb")
+InferenceConfigName = "4k_high_temp"
+AntiPrompts = PackedStringArray("<|eot_id|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}")
+Temperature = 1.2
+MaxTokens = 4000
+OutputJson = false
+
 [sub_resource type="Resource" id="Resource_01mh4"]
 script = ExtResource("1_euwpb")
-InferenceConfigName = "json_4k"
+InferenceConfigName = "1k_json"
 AntiPrompts = PackedStringArray("<|eot_id|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}")
 Temperature = 0.5
-MaxTokens = 4000
+MaxTokens = 1000
 OutputJson = true
 
 [sub_resource type="Resource" id="Resource_4tk36"]
@@ -36,8 +44,8 @@ ClipModelPath = ""
 [resource]
 script = ExtResource("1_q2fe5")
 ModelConfigurations = [SubResource("Resource_m2syr")]
-InferenceConfigurations = [SubResource("Resource_01mh4")]
-CurrentInferenceConfig = SubResource("Resource_01mh4")
+InferenceConfigurations = [SubResource("Resource_01mh4"), SubResource("Resource_lkdmp")]
+CurrentInferenceConfig = SubResource("Resource_lkdmp")
 LastGoodInferenceConfig = SubResource("Resource_4tk36")
 LastGoodModelConfig = SubResource("Resource_m2syr")
 AutoloadLastGoodModelConfig = true
