@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using System;
 
 namespace MindGame
 {
@@ -13,12 +14,13 @@ namespace MindGame
         public Array<MindEdge> Edges { get; private set; } = new Array<MindEdge>();
 
         private int nextNodeId = 0;
+        private int nextEdgeId = 0;
 
         public MindGraph() { }
 
-        public MindNode AddNode(Dictionary<string, Variant> data)
+        public MindNode AddNode(string name = "", Dictionary<string, Variant> data = null)
         {
-            var node = new MindNode(nextNodeId, data);
+            var node = new MindNode(nextNodeId, name, data);
             Nodes.Add(node);
             nextNodeId++;
             return node;
@@ -46,39 +48,35 @@ namespace MindGame
             return true;
         }
 
-        public MindEdge AddEdge(int sourceId, int targetId, float weight = 1.0f, bool isBidirectional = false)
+        public MindEdge AddEdge(int sourceId, int targetId, string name = "", float weight = 1.0f, Dictionary<string, Variant> data = null, bool isBidirectional = false)
         {
             var sourceNode = GetNode(sourceId);
             var targetNode = GetNode(targetId);
 
             if (sourceNode == null || targetNode == null)
-                throw new System.ArgumentException("Source or target node does not exist");
+                throw new ArgumentException("Source or target node does not exist");
 
-            var edge = new MindEdge(sourceId, targetId, weight);
+            var edge = new MindEdge(nextEdgeId, sourceId, targetId, name, weight, data);
             Edges.Add(edge);
+            nextEdgeId++;
 
             if (isBidirectional)
             {
-                var reverseEdge = new MindEdge(targetId, sourceId, weight);
+                var reverseEdge = new MindEdge(nextEdgeId, targetId, sourceId, name, weight, data);
                 Edges.Add(reverseEdge);
+                nextEdgeId++;
             }
 
             return edge;
         }
 
-        public bool RemoveEdge(int sourceId, int targetId)
+        public bool RemoveEdge(int edgeId)
         {
-            var edge = GetEdge(sourceId, targetId);
+            var edge = GetEdge(edgeId);
             if (edge == null)
                 return false;
 
             Edges.Remove(edge);
-
-            var reverseEdge = GetEdge(targetId, sourceId);
-            if (reverseEdge != null)
-            {
-                Edges.Remove(reverseEdge);
-            }
 
             return true;
         }
@@ -95,11 +93,11 @@ namespace MindGame
             return null;
         }
 
-        public MindEdge GetEdge(int sourceId, int targetId)
+        public MindEdge GetEdge(int edgeId)
         {
             foreach (var edge in Edges)
             {
-                if (edge.SourceId == sourceId && edge.TargetId == targetId)
+                if (edge.Id == edgeId)
                 {
                     return edge;
                 }
@@ -112,25 +110,44 @@ namespace MindGame
             return Edges;
         }
 
-        public void UpdateEdgeWeights(float increaseAmount)
+        public void UpdateEdgeWeight(int edgeId, float amount)
         {
-            foreach (var edge in Edges)
+            var edge = GetEdge(edgeId);
+            if (edge != null)
             {
-                edge.IncreaseWeight(increaseAmount);
+                edge.UpdateWeight(amount);
             }
         }
 
-        public void UseEdge(int sourceId, int targetId, float decreaseAmount)
+        public void UpdateAllEdgeWeights(float amount)
         {
-            var edge = GetEdge(sourceId, targetId);
-            if (edge != null)
+            foreach (var edge in Edges)
             {
-                edge.DecreaseWeight(decreaseAmount);
+                edge.UpdateWeight(amount);
+            }
+        }
 
-                var reverseEdge = GetEdge(targetId, sourceId);
-                if (reverseEdge != null)
+        public void ExecuteRules(int sourceId, int targetId, string variable, float delta, Dictionary<string, MindRule> rules)
+        {
+            foreach (var rule in rules)
+            {
+                var (edgeType, isBidirectional) = rule.Value.Evaluate(variable, delta);
+                if (!string.IsNullOrEmpty(edgeType))
                 {
-                    reverseEdge.DecreaseWeight(decreaseAmount);
+                    var edge = AddEdge(sourceId, targetId, edgeType, 1.0f, null, isBidirectional);
+
+                    if (Math.Abs(delta) > rule.Value.MemoryThreshold)
+                    {
+                        // Create a memory node
+                        var memoryData = new Dictionary<string, Variant> { { "description", $"{variable} change: {delta}" } };
+                        var memoryNode = AddNode("Memory", memoryData);
+
+                        // Connect the memory node to the relevant nodes and edge
+                        AddEdge(memoryNode.Id, sourceId, "related_to", 0.5f, null);
+                        AddEdge(memoryNode.Id, targetId, "related_to", 0.5f, null);
+                    }
+
+                    break;
                 }
             }
         }
