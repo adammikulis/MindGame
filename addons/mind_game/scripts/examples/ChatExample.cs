@@ -4,7 +4,6 @@ using System;
 
 namespace MindGame
 {
-    [Tool]
     public partial class ChatExample : Node
     {
         private MindGame.MindManager mindManager;

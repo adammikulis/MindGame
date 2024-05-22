@@ -3,7 +3,6 @@ using System;
 
 namespace MindGame
 {
-    [Tool]
     public partial class InferenceConfigController : Control
     {
         public Button addInferenceConfigButton, deleteInferenceConfigButton, backButton;

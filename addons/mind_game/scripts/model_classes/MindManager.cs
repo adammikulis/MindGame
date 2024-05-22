@@ -1,23 +1,15 @@
-// This script is autoloaded and referenced by all MindAgent nodes
-// Not seeing your .gguf files? Editor > Editor Settings > Docks > FilesSystem > add gguf to TextFile Extensions
-
 using Godot;
-using System;
 using LLama;
 using LLama.Common;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using LLama.Native;
-
 
 namespace MindGame
 {
     [Tool]
     public partial class MindManager : Node
     {
-
         public ModelParamsConfig CurrentModelConfigs { get; set; }
-
 
         [Signal]
         public delegate void ClipModelStatusUpdateEventHandler(bool isLoaded);
@@ -33,19 +25,39 @@ namespace MindGame
         // Clip model vars
         public LLavaWeights clipWeights { get; private set; }
 
-
         // Embedder model vars
         public LLamaEmbedder embedder { get; private set; }
 
+        public ConfigListResource ConfigListResource;
+        private readonly string configListResourcePath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
 
         public override void _EnterTree()
         {
-            //NativeLibraryConfig.Instance.WithCuda(true);
+            NativeLibraryConfig.Instance.WithCuda(true);
         }
 
         public override void _Ready()
         {
-            
+            EnsureConfigListResourceExists();
+        }
+
+        private void EnsureConfigListResourceExists()
+        {
+            ConfigListResource = GD.Load<ConfigListResource>(configListResourcePath);
+            if (ConfigListResource == null)
+            {
+                ConfigListResource = new ConfigListResource();
+                SaveConfigList();
+            }
+        }
+
+        private void SaveConfigList()
+        {
+            Error saveError = ResourceSaver.Save(ConfigListResource, configListResourcePath);
+            if (saveError != Error.Ok)
+            {
+                GD.PrintErr("Failed to save configuration list: ", saveError);
+            }
         }
 
         public async Task InitializeAsync(ModelParamsConfig config)
@@ -61,12 +73,10 @@ namespace MindGame
             await InitializeChatExecutorAsync();
         }
 
-
         private async Task LoadEmbedderAsync()
         {
             await Task.Run(() =>
             {
-
                 var parameters = new ModelParams(CurrentModelConfigs.EmbedderModelPath)
                 {
                     ContextSize = CurrentModelConfigs.EmbedderContextSize,
@@ -82,11 +92,8 @@ namespace MindGame
 
         public void UnloadEmbedderModel()
         {
-
-            if (embedder != null) { embedder.Dispose(); }
-
+            embedder?.Dispose();
         }
-
 
         public async Task InitializeChatExecutorAsync()
         {
@@ -104,22 +111,19 @@ namespace MindGame
                 {
                     using var chatWeights = LLamaWeights.LoadFromFile(parameters);
                     context = chatWeights.CreateContext(parameters);
-                    
+
                     executor = new InteractiveExecutor(context);
                     CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, true);
                 });
             }
-    
         }
-
-
 
         public async Task LoadClipModelAsync(string modelPath)
         {
             if (!string.IsNullOrEmpty(modelPath))
             {
-                await Task.Run(() => 
-                { 
+                await Task.Run(() =>
+                {
                     clipWeights = LLavaWeights.LoadFromFile(modelPath);
                     CallDeferred("emit_signal", SignalName.ClipModelStatusUpdate, true);
                 });
@@ -134,10 +138,9 @@ namespace MindGame
         {
             await Task.Run(() =>
             {
-                // clipWeights?.Dispose();
+                clipWeights = null;
                 CallDeferred("emit_signal", SignalName.ClipModelStatusUpdate, false);
             });
-        
         }
 
         public async Task DisposeExecutorAsync()
@@ -149,17 +152,14 @@ namespace MindGame
             });
         }
 
-
         public async Task DisposeAll()
         {
-            // await DisposeClipWeightsAsync();
+            await DisposeClipWeightsAsync();
             await DisposeExecutorAsync();
         }
 
-
         public override void _ExitTree()
         {
-        
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace MindGame
 {
+    [Tool]
     public partial class MindRule : Resource
     {
         [Export]

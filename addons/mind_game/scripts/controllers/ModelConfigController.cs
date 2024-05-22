@@ -3,7 +3,6 @@ using System;
 
 namespace MindGame
 {
-    [Tool]
     public partial class ModelConfigController : Control
     {
         public ConfigListResource ConfigListResource;

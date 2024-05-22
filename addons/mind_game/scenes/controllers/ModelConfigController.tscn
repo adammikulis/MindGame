@@ -174,8 +174,8 @@ text = "Unload
 
 [node name="AutoloadLastGoodConfigCheckBox" type="CheckBox" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/BackLoadUnloadBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
-button_pressed = true
 text = "Autoload Last
 Good Config"
 
@@ -200,8 +200,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-item_count = 1
-item_0/text = "phi3_4k"
 
 [node name="ModelConfigMarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -226,7 +224,7 @@ text = "Configuration Name:"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "phi3_4k"
+text = "<default>"
 
 [node name="ChatModelPanelContainer" type="PanelContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
 layout_mode = 2
@@ -353,9 +351,9 @@ text = "Clear Selected"
 [node name="ChatCurrentModelPathLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "C:\\Users\\adamm\\source\\repos\\models\\phi3\\Phi-3-mini-4k-instruct-q4.gguf"
 
 [node name="EmbedderModelPanelContainer" type="PanelContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_xsa3w")
@@ -477,6 +475,7 @@ auto_translate_mode = 1
 layout_mode = 2
 
 [node name="ClipModelPanelContainer" type="PanelContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_4l5yd")

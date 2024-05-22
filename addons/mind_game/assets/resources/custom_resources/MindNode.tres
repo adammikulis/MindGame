@@ -1,6 +1,9 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://dia7oo5cd3428"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/MindNode.cs" id="1_wk1g0"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/mind_graph/MindNode.cs" id="1_yo0il"]
 
 [resource]
-script = ExtResource("1_wk1g0")
+script = ExtResource("1_yo0il")
+Id = 0
+Name = ""
+Data = {}

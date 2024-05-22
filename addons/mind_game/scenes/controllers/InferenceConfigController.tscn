@@ -76,8 +76,8 @@ icon = ExtResource("3_ga7yw")
 
 [node name="AutoloadLastGoodConfigCheckBox" type="CheckBox" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
-button_pressed = true
 text = "Autoload Last
 Good Config"
 
@@ -104,7 +104,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 item_count = 1
-item_0/text = "json_4k"
+item_0/text = "<default>"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -141,7 +141,7 @@ text = "Name"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "4k_json"
+text = "<default>"
 
 [node name="PlaceholderLabel" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2/Panel/MarginContainer2/GridContainer"]
 layout_mode = 2
@@ -186,5 +186,4 @@ editable = false
 [node name="OutputJsonCheckBox" type="CheckBox" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2/Panel/MarginContainer2/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-button_pressed = true
 text = "Output JSON"

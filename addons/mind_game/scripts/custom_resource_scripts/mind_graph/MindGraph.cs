@@ -126,30 +126,5 @@ namespace MindGame
                 edge.UpdateWeight(amount);
             }
         }
-
-        public void ExecuteRules(int sourceId, int targetId, string variable, float delta, Dictionary<string, MindRule> rules)
-        {
-            foreach (var rule in rules)
-            {
-                var (edgeType, isBidirectional) = rule.Value.Evaluate(variable, delta);
-                if (!string.IsNullOrEmpty(edgeType))
-                {
-                    var edge = AddEdge(sourceId, targetId, edgeType, 1.0f, null, isBidirectional);
-
-                    if (Math.Abs(delta) > rule.Value.MemoryThreshold)
-                    {
-                        // Create a memory node
-                        var memoryData = new Dictionary<string, Variant> { { "description", $"{variable} change: {delta}" } };
-                        var memoryNode = AddNode("Memory", memoryData);
-
-                        // Connect the memory node to the relevant nodes and edge
-                        AddEdge(memoryNode.Id, sourceId, "related_to", 0.5f, null);
-                        AddEdge(memoryNode.Id, targetId, "related_to", 0.5f, null);
-                    }
-
-                    break;
-                }
-            }
-        }
     }
 }

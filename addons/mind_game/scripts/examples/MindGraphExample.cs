@@ -36,8 +36,8 @@ namespace MindGame
                 };
 
                 // Execute rules to set edge types based on the variable change
-                mindGraph.ExecuteRules(appleNode.Id, foodNode.Id, "health", 10, rules);
-                mindGraph.ExecuteRules(oozingBerryNode.Id, poisonNode.Id, "health", -10, rules);
+                //mindGraph.ExecuteRules(appleNode.Id, foodNode.Id, "health", 10, rules);
+                //mindGraph.ExecuteRules(oozingBerryNode.Id, poisonNode.Id, "health", -10, rules);
 
                 PrintNodeDetails(foodNode);
                 PrintNodeDetails(poisonNode);
