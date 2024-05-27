@@ -8,14 +8,14 @@ This is a plugin for the Godot game engine that allows the user to load and run 
 
 # Run Mind Game stand-alone
 
-1) Install [CUDA Toolkit 12.x](https://developer.nvidia.com/cuda-12-1-0-download-archive) if you haven't already (CPU inference support coming soon)
+1) Install [CUDA Toolkit 12.1](https://developer.nvidia.com/cuda-12-1-0-download-archive) if you haven't already (12.1 recommended for compatibility with other projects like [Unsloth](https://github.com/unslothai/unsloth)).
 2) Download the [latest Mind Game release](https://github.com/adammikulis/MindGame/releases) for your platform and run the executable
 3) Download a .gguf model of the Llama, Phi, or Mistral families
 4) Load your model and have fun!
 
-Recommended model: [Llama3-8B-Instruct](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF/tree/main)
+Smallest well-performing model: [Phi-3](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/tree/main)
 
-Smaller model for those with less VRAM: [Phi-3](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/tree/main)
+Larger, high-quality model: [Llama3-8B-Instruct](https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF/tree/main)
 
 Another 7B model: [Mistral-7B-Instruct-v0.2](https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/tree/main)
 
@@ -23,14 +23,14 @@ Another 7B model: [Mistral-7B-Instruct-v0.2](https://huggingface.co/TheBloke/Mis
 
 # Run Mind Game as a Godot plug-in
 
-1) Install [CUDA Toolkit 12.x](https://developer.nvidia.com/cuda-12-1-0-download-archive) if you haven't already (CPU inference support coming soon)
+1) Install [CUDA Toolkit 12.1](https://developer.nvidia.com/cuda-12-1-0-download-archive) if you haven't already (12.1 recommended for compatibility with other projects like [Unsloth](https://github.com/unslothai/unsloth)).
 2) Download and extract [Godot 4.3 dev6 (.NET version)](https://godotengine.org/download/archive/4.3-dev6/)
 3) Download/install [.NET8](https://dotnet.microsoft.com/en-us/download)
 4) Clone/download this repo (or the most recent dev branch to have the most current features), open it with Godot 4.3 .NET, click Project > Project Settings > Plugins > Enabled (Mind Game).
-5) Load a .gguf file of the Llama, Mistral, Mixtral, or Phi families to get going!
+5) Load a .gguf file of the Llama, Mistral, Mixtral, or [Phi](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/resolve/main/Phi-3-mini-4k-instruct-q4.gguf) families to get going!
 
 
-The lower quantization (q), the smaller the model is to run but at the cost of accuracy. Llama-3-8B-Instruct.Q4_K_M is a great middle-ground for those with 8GB of VRAM. The absolute smallest model [Phi-3-mini-128k-instruct.IQ1_S.gguf](https://huggingface.co/PrunaAI/Phi-3-mini-128k-instruct-GGUF-Imatrix-smashed/blob/main/Phi-3-mini-128k-instruct.IQ1_S.gguf) can run on less than 1GB of VRAM.
+The lower quantization (q), the smaller the model is to run but at the cost of accuracy. Llama-3-8B-Instruct.Q4_K_M is a great middle-ground for those with 8GB of VRAM. The absolute smallest model [Phi-3-mini-4k-instruct.IQ1_S.gguf](https://huggingface.co/bartowski/Phi-3-mini-4k-instruct-GGUF/blob/main/Phi-3-mini-4k-instruct-IQ1_S.gguf) can run on less than 1GB of VRAM.
 
 # Future steps
 - Implement LLaVa support (including viewport analysis)
