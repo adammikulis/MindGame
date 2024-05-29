@@ -34,6 +34,7 @@ namespace MindGame
         /// </summary>
         public override void _Ready()
         {
+            EnsureConfigListResourceExists();
             InitializeDefaultValues();
             InitializeNodeRefs();
             InitializeConfigList();
@@ -42,6 +43,15 @@ namespace MindGame
             AutoloadLastGoodConfig();
         }
 
+        private void EnsureConfigListResourceExists()
+        {
+            _configListResource = GD.Load<ConfigListResource>(_configListResourcePath);
+            if (_configListResource == null)
+            {
+                _configListResource = new ConfigListResource();
+                SaveConfigList();
+            }
+        }
 
         private void InitializeUiElements()
         {
