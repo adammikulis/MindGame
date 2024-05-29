@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dut8m0d0ukohs"]
+[gd_scene load_steps=15 format=3 uid="uid://dut8m0d0ukohs"]
 
 [ext_resource type="Script" path="res://addons/mind_game/scripts/examples/ChatExample.cs" id="1_skj4j"]
 [ext_resource type="PackedScene" uid="uid://3sy7uksi0h1a" path="res://addons/mind_game/scenes/controllers/InferenceConfigController.tscn" id="3_7mwxh"]
@@ -26,6 +26,16 @@ size = Vector2(20, 20)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fw3c5"]
 size = Vector3(20, 1, 20)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_b0nw6"]
+
+[sub_resource type="Sky" id="Sky_5suqb"]
+sky_material = SubResource("ProceduralSkyMaterial_b0nw6")
+
+[sub_resource type="Environment" id="Environment_onv1p"]
+background_mode = 2
+sky = SubResource("Sky_5suqb")
+tonemap_mode = 3
 
 [node name="ChatExample" type="Node"]
 script = ExtResource("1_skj4j")
@@ -116,3 +126,6 @@ visible = false
 [node name="InferenceConfigController" parent="." instance=ExtResource("3_7mwxh")]
 unique_name_in_owner = true
 visible = false
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_onv1p")

@@ -31,11 +31,11 @@ namespace MindGame
         public ConfigListResource ConfigListResource;
         private readonly string configListResourcePath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
 
-        public override void _EnterTree()
-        {
-            NativeLibraryConfig.Instance.WithCuda(true);
-        }
+  
 
+        /// <summary>
+        /// Function that is called when node and all children are initialized
+        /// </summary>
         public override void _Ready()
         {
             EnsureConfigListResourceExists();

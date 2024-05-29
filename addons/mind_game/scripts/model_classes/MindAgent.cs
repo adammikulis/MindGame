@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace MindGame
 {
-    [Tool]
     public partial class MindAgent : Node
     {
         [Signal]
@@ -33,6 +32,9 @@ namespace MindGame
             configListResource = GD.Load<ConfigListResource>("res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres");
         }
 
+        /// <summary>
+        /// Function that is called when node and all children are initialized
+        /// </summary>
         public async override void _Ready()
         {
             try
