@@ -12,7 +12,7 @@ namespace MindGame
         /// <summary>
         /// Godot node variables
         /// </summary>
-        private Button _addInferenceConfigButton, _deleteInferenceConfigButton, _backButton;
+        private Button _addInferenceConfigButton, _deleteInferenceConfigButton, _backButton, _loadInferenceConfigButton, _unloadInferenceConfigButton;
         private CheckBox _autoloadLastGoodConfigCheckBox, _outputJsonCheckBox;
         private HSlider _maxTokensHSlider, _temperatureHSlider;
         private LineEdit _inferenceConfigNameLineEdit, _maxTokensLineEdit, _temperatureLineEdit;
@@ -38,9 +38,9 @@ namespace MindGame
             InitializeDefaultValues();
             InitializeNodeRefs();
             InitializeConfigList();
-            InitializeUiElements();
             InitializeSignals();
             AutoloadLastGoodConfig();
+            InitializeUiElements();
         }
 
         private void EnsureConfigListResourceExists()
@@ -52,6 +52,33 @@ namespace MindGame
                 SaveConfigList();
             }
         }
+
+        private void InitializeDefaultValues()
+        {
+            _inferenceConfigName = "<default>";
+            _maxTokens = 4000;
+            _antiPrompts = ["<|eot_id|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}"];
+            _temperature = 0.75f;
+            _outputJson = false;
+        }
+
+        private void InitializeNodeRefs()
+        {
+            _addInferenceConfigButton = GetNode<Button>("%AddInferenceConfigButton");
+            _deleteInferenceConfigButton = GetNode<Button>("%DeleteInferenceConfigButton");
+            _backButton = GetNode<Button>("%BackButton");
+            _autoloadLastGoodConfigCheckBox = GetNode<CheckBox>("%AutoloadLastGoodConfigCheckBox");
+
+            _outputJsonCheckBox = GetNode<CheckBox>("%OutputJsonCheckBox");
+            _maxTokensHSlider = GetNode<HSlider>("%MaxTokensHSlider");
+            _temperatureHSlider = GetNode<HSlider>("%TemperatureHSlider");
+            _savedInferenceConfigsItemList = GetNode<ItemList>("%SavedInferenceConfigsItemList");
+
+            _inferenceConfigNameLineEdit = GetNode<LineEdit>("%NameLineEdit");
+            _maxTokensLineEdit = GetNode<LineEdit>("%MaxTokensLineEdit");
+            _temperatureLineEdit = GetNode<LineEdit>("%TemperatureLineEdit");
+        }
+
 
         private void InitializeUiElements()
         {
@@ -67,18 +94,13 @@ namespace MindGame
         private void InitializeConfigList()
         {
             _configListResource = GD.Load<ConfigListResource>(_configListResourcePath) ?? new ConfigListResource();
-            UpdateUiFromLoadedConfigs();
+            UpdateConfigItemList();
         }
 
-        private void InitializeDefaultValues()
-        {
-            _inferenceConfigName = "<default>";
-            _maxTokens = 4000;
-            _antiPrompts = [ "<|eot_id|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}" ];
-            _temperature = 0.5f;
-            _outputJson = false;
-        }
 
+        /// <summary>
+        /// Function that is called to connect signals to callbacks
+        /// </summary>
         private void InitializeSignals()
         {
             // Config management and UI navigation
@@ -97,8 +119,11 @@ namespace MindGame
 
         private void OnAutoloadLastGoodConfigToggled(bool toggledOn)
         {
-            _configListResource.AutoloadLastGoodInferenceConfig = toggledOn;
-            SaveConfigList();
+            if (_configListResource != null)
+            {
+                _configListResource.AutoloadLastGoodInferenceConfig = toggledOn;
+                SaveConfigList();
+            }
         }
 
         public void AutoloadLastGoodConfig()
@@ -106,18 +131,18 @@ namespace MindGame
             if (_configListResource != null && _configListResource.AutoloadLastGoodInferenceConfig && _configListResource.LastGoodInferenceConfig != null)
             {
                 _inferenceParamsConfig = _configListResource.LastGoodInferenceConfig;
-                LoadConfig(_inferenceParamsConfig);
+                UpdateInferenceConfigUi();
             }
         }
 
-        private void LoadConfig(InferenceParamsConfig config)
+        private void UpdateInferenceConfigUi()
         {
-            _inferenceConfigNameLineEdit.Text = config.InferenceConfigName;
-            _temperatureHSlider.Value = (double)config.Temperature;
-            _temperatureLineEdit.Text = config.Temperature.ToString();
-            _maxTokensHSlider.Value = CalculateLogMaxTokens((uint)config.MaxTokens);
-            _maxTokensLineEdit.Text = config.MaxTokens.ToString();
-            _outputJsonCheckBox.ButtonPressed = config.OutputJson;
+            _inferenceConfigNameLineEdit.Text = _inferenceParamsConfig.InferenceConfigName;
+            _temperatureHSlider.Value = (double)_inferenceParamsConfig.Temperature;
+            _temperatureLineEdit.Text = _inferenceParamsConfig.Temperature.ToString();
+            _maxTokensHSlider.Value = CalculateLogMaxTokens((uint)_inferenceParamsConfig.MaxTokens);
+            _maxTokensLineEdit.Text = _inferenceParamsConfig.MaxTokens.ToString();
+            _outputJsonCheckBox.ButtonPressed = _inferenceParamsConfig.OutputJson;
         }
 
         private void OnSavedInferenceConfigSelected(long index)
@@ -125,7 +150,7 @@ namespace MindGame
             if (index >= 0 && index < _configListResource.InferenceConfigurations.Count)
             {
                 _inferenceParamsConfig = _configListResource.InferenceConfigurations[(int)index];
-                LoadConfig(_inferenceParamsConfig);
+                UpdateInferenceConfigUi();
             }
         }
 
@@ -160,7 +185,7 @@ namespace MindGame
                 {
                     _configListResource.InferenceConfigurations.RemoveAt(selectedIndex);
                     SaveConfigList();
-                    UpdateUiFromLoadedConfigs();
+                    UpdateConfigItemList();
                 }
             }
             else
@@ -183,10 +208,10 @@ namespace MindGame
             _configListResource.InferenceConfigurations.Add(newConfig);
             _configListResource.CurrentInferenceConfig = newConfig;
             SaveConfigList();
-            UpdateUiFromLoadedConfigs();
+            UpdateConfigItemList();
         }
 
-        private void UpdateUiFromLoadedConfigs()
+        private void UpdateConfigItemList()
         {
             _savedInferenceConfigsItemList.Clear();
             foreach (var config in _configListResource.InferenceConfigurations)
@@ -230,22 +255,7 @@ namespace MindGame
             UpdateConfigurationValue(config => config.OutputJson = _outputJson);
         }
 
-        private void InitializeNodeRefs()
-        {
-            _addInferenceConfigButton = GetNode<Button>("%AddInferenceConfigButton");
-            _deleteInferenceConfigButton = GetNode<Button>("%DeleteInferenceConfigButton");
-            _backButton = GetNode<Button>("%BackButton");
-            _autoloadLastGoodConfigCheckBox = GetNode<CheckBox>("%AutoloadLastGoodConfigCheckBox");
-
-            _outputJsonCheckBox = GetNode<CheckBox>("%OutputJsonCheckBox");
-            _maxTokensHSlider = GetNode<HSlider>("%MaxTokensHSlider");
-            _temperatureHSlider = GetNode<HSlider>("%TemperatureHSlider");
-            _savedInferenceConfigsItemList = GetNode<ItemList>("%SavedInferenceConfigsItemList");
-
-            _inferenceConfigNameLineEdit = GetNode<LineEdit>("%NameLineEdit");
-            _maxTokensLineEdit = GetNode<LineEdit>("%MaxTokensLineEdit");
-            _temperatureLineEdit = GetNode<LineEdit>("%TemperatureLineEdit");
-        }
+        
 
         private static uint CalculateExpMaxTokens(double value) => (uint)Math.Pow(2, value) * 1000;
         private static double CalculateLogMaxTokens(uint value) => Math.Log2(value / 1000.0);

@@ -34,9 +34,9 @@ namespace MindGame
             InitializeDefaultValues();
             InitializeNodeRefs();
             InitializeConfigList();
-            InitializeUiElements();
             InitializeSignals();
             AutoloadLastGoodConfig();
+            InitializeUiElements();
         }
 
 
@@ -80,7 +80,9 @@ namespace MindGame
             }
         }
 
-
+        /// <summary>
+        /// Function that is called to iniatialize default model config values
+        /// </summary>
         private void InitializeDefaultValues()
         {
             _configName = "<default>";
@@ -95,6 +97,9 @@ namespace MindGame
             _clipModelPath = "";
         }
 
+        /// <summary>
+        /// Function that is called to assign scene tree nodes to script variables
+        /// </summary>
         private void InitializeNodeRefs()
         {
             _mindManager = GetNode<MindManager>("/root/MindManager");
@@ -142,14 +147,17 @@ namespace MindGame
             _clipCurrentModelPathLabel = GetNode<Label>("%ClipCurrentModelPathLabel");
         }
 
+        /// <summary>
+        /// Function that is called to connect signals to callbacks
+        /// </summary>
         private void InitializeSignals()
         {
             // Chat signals
             _addNewConfigButton.Pressed += OnAddNewConfigPressed;
             _deleteConfigButton.Pressed += OnDeleteConfigPressed;
             _backButton.Pressed += OnBackPressed;
-            _loadConfigButton.Pressed += OnLoadConfigPressed;
-            _unloadConfigButton.Pressed += OnUnloadConfigPressed;
+            _loadConfigButton.Pressed += OnLoadModelConfigPressed;
+            _unloadConfigButton.Pressed += OnUnloadModelConfigPressed;
             _autoloadLastGoodConfigCheckBox.Toggled += OnAutoloadLastGoodConfigToggled;
 
             _clearChatPathButton.Pressed += OnClearChatPathPressed;
@@ -188,7 +196,7 @@ namespace MindGame
             {
                 _modelParamsConfig = _configListResource.LastGoodModelConfig;
                 LoadConfig(_modelParamsConfig);
-                OnLoadConfigPressed();
+                OnLoadModelConfigPressed();
             }
         }
 
@@ -206,12 +214,12 @@ namespace MindGame
             _clipCurrentModelPathLabel.Text = config.ClipModelPath;
         }
 
-        private async void OnUnloadConfigPressed()
+        private async void OnUnloadModelConfigPressed()
         {
             await _mindManager.DisposeExecutorAsync();
         }
 
-        private async void OnLoadConfigPressed()
+        private async void OnLoadModelConfigPressed()
         {
             if (_modelParamsConfig != null)
             {

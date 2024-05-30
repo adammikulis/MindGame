@@ -1,11 +1,11 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bq0luwg34lt6j"]
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cpcyl5y4jompu"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/configuration/InferenceParamsConfig.cs" id="1_h26kr"]
+[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/configuration/InferenceParamsConfig.cs" id="1_4r2ok"]
 
 [resource]
-script = ExtResource("1_h26kr")
-InferenceConfigName = "<default>"
-AntiPrompts = PackedStringArray("<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}")
-Temperature = 0.5
-MaxTokens = 4000
+script = ExtResource("1_4r2ok")
+InferenceConfigName = ""
+AntiPrompts = PackedStringArray()
+Temperature = 0.0
+MaxTokens = 0
 OutputJson = false

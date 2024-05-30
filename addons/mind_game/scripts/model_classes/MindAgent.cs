@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MindGame
 {
+    [Tool]
     public partial class MindAgent : Node
     {
         [Signal]

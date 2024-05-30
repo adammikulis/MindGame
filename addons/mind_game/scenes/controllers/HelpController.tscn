@@ -57,10 +57,11 @@ https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/tree/mai
 
 
 ---FUTURE IMPROVEMENTS---
-- Refine support for Llama3 and Phi3
 - Implement LLaVa support (both uploading images and live Viewport)
 - Build vector DB and RAG system
 - Create a GraphRAG
 - Integrate Stable Diffusion
-- Make a functional Download Manager"
+- Make a functional Download Manager
+
+https://github.com/adammikulis/MindGame"
 selection_enabled = true

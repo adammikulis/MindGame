@@ -104,17 +104,6 @@ icon_alignment = 1
 [node name="LoadUnloadHBoxContainer" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/PanelContainer/SavedInferenceConfigsVBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 
-[node name="LoadInferenceConfigButton" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/PanelContainer/SavedInferenceConfigsVBoxContainer/MarginContainer2/VBoxContainer/LoadUnloadHBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Load"
-
-[node name="UnloadInferenceConfigButton" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/PanelContainer/SavedInferenceConfigsVBoxContainer/MarginContainer2/VBoxContainer/LoadUnloadHBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Unload
-"
-
 [node name="AutoloadLastGoodConfigCheckBox" type="CheckBox" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/PanelContainer/SavedInferenceConfigsVBoxContainer/MarginContainer2/VBoxContainer/LoadUnloadHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
