@@ -4,18 +4,15 @@
 [ext_resource type="Theme" uid="uid://brptib3mp8h1o" path="res://addons/mind_game/assets/themes/config_header_theme.tres" id="2_wpyha"]
 [ext_resource type="Texture2D" uid="uid://dnp0lvxevsc4m" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/plus.png" id="3_nrb42"]
 [ext_resource type="Texture2D" uid="uid://5ga0x3yawju4" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/trashcan.png" id="4_uh0ls"]
+[ext_resource type="StyleBox" uid="uid://cwdmye7sfom5a" path="res://addons/mind_game/assets/themes/param_config_theme.tres" id="5_0vyer"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5gu4u"]
-bg_color = Color(0.318487, 0.312277, 0.317023, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hsbi1"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_osrau"]
 font_size = 24
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pcrja"]
 bg_color = Color(0.419813, 0.419813, 0.419813, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tivu8"]
-bg_color = Color(0.272874, 0.418358, 0.436817, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xsa3w"]
 bg_color = Color(0.453305, 0.439765, 0.391286, 1)
@@ -81,20 +78,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hsbi1")
 
-[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_5gu4u")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="ConfigHeadingPanelContainer" type="PanelContainer" parent="ScrollContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="ConfigTitleLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/ConfigHeadingPanelContainer"]
+[node name="ConfigTitleLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_wpyha")
@@ -102,84 +93,83 @@ text = "Model Configuration"
 label_settings = SubResource("LabelSettings_osrau")
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SavedConfigsMarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="SavedConfigsMarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 5
 
-[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pcrja")
 
-[node name="SavedConfigsVBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer"]
+[node name="SavedConfigsVBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="NewSaveDeleteMarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
+[node name="NewSaveDeleteMarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="AddDeleteConfigHBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
+[node name="AddDeleteConfigHBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/AddDeleteConfigHBoxContainer"]
+[node name="BackButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/AddDeleteConfigHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Back"
 icon_alignment = 1
 
-[node name="AddNewConfigButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/AddDeleteConfigHBoxContainer"]
+[node name="AddNewConfigButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/AddDeleteConfigHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 icon = ExtResource("3_nrb42")
 icon_alignment = 1
 
-[node name="DeleteConfigButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/AddDeleteConfigHBoxContainer"]
+[node name="DeleteConfigButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/AddDeleteConfigHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 icon = ExtResource("4_uh0ls")
 icon_alignment = 1
 
-[node name="BackLoadUnloadBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
+[node name="LoadUnloadBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="LoadConfigButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/BackLoadUnloadBoxContainer"]
+[node name="LoadConfigButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/LoadUnloadBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Load
 "
 
-[node name="UnloadConfigButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/BackLoadUnloadBoxContainer"]
+[node name="UnloadConfigButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/LoadUnloadBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Unload
 "
 
-[node name="AutoloadLastGoodConfigCheckBox" type="CheckBox" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/BackLoadUnloadBoxContainer"]
+[node name="AutoloadLastGoodConfigCheckBox" type="CheckBox" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/NewSaveDeleteMarginContainer/VBoxContainer/LoadUnloadBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-button_pressed = true
 text = "Autoload Last
 Good Config"
 
-[node name="SavedConfigsMarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
+[node name="SavedConfigsMarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 5
@@ -187,23 +177,17 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer/PanelContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer"]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="SavedConfigsItemList" type="ItemList" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer/PanelContainer/ScrollContainer"]
+[node name="SavedConfigsItemList" type="ItemList" parent="ScrollContainer/VBoxContainer/HBoxContainer/SavedConfigsMarginContainer/PanelContainer/SavedConfigsVBoxContainer/SavedConfigsMarginContainer/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-item_count = 1
-item_0/text = "phi3_4k"
 
-[node name="ModelConfigMarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="ModelConfigMarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 5
@@ -211,64 +195,54 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="ModelConfigVBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer"]
+[node name="ModelConfigVBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 
-[node name="ConfigNameHBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ConfigNameHBoxContainer"]
-layout_mode = 2
-text = "Configuration Name:"
-
-[node name="ConfigNameLineEdit" type="LineEdit" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ConfigNameHBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "phi3_4k"
-
-[node name="ChatModelPanelContainer" type="PanelContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
+[node name="ChatModelPanelContainer" type="PanelContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_tivu8")
+theme_override_styles/panel = ExtResource("5_0vyer")
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="ChatModelVBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer"]
+[node name="ChatModelVBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 
-[node name="HeadingLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
+[node name="ConfigNameHBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 0
-tooltip_text = "Chat model required for proper functionality (Llama/Mistral/Mixtral/Phi)"
-mouse_filter = 1
-mouse_default_cursor_shape = 16
-theme = ExtResource("2_wpyha")
-text = "Chat Model"
-horizontal_alignment = 1
 
-[node name="ChatGridContainer" type="GridContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ConfigNameHBoxContainer"]
+layout_mode = 2
+text = "Config Name"
+
+[node name="ConfigNameLineEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ConfigNameHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "<default>"
+
+[node name="ChatGridContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
 columns = 3
 
-[node name="ChatContextSizeTitleLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
+[node name="ChatContextSizeTitleLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Context Size:"
+text = "Context Size"
 
-[node name="ChatContextSizeHSlider" type="HSlider" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
+[node name="ChatContextSizeHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
@@ -279,7 +253,7 @@ value = 2.0
 tick_count = 13
 ticks_on_borders = true
 
-[node name="ChatContextSizeLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
+[node name="ChatContextSizeLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(75, 0)
@@ -287,13 +261,13 @@ layout_mode = 2
 text = "4000"
 horizontal_alignment = 1
 
-[node name="GpuLayerCountTitleLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
+[node name="GpuLayerCountTitleLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
-text = "Num GPU Layers:"
+text = "Num GPU Layers"
 
-[node name="ChatModelGpuLayerCountHSlider" type="HSlider" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
+[node name="ChatModelGpuLayerCountHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
@@ -304,7 +278,7 @@ value = 33.0
 tick_count = 34
 ticks_on_borders = true
 
-[node name="ChatModelGpuLayerCountLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
+[node name="ChatModelGpuLayerCountLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(25, 0)
@@ -312,30 +286,24 @@ layout_mode = 2
 text = "33"
 horizontal_alignment = 1
 
-[node name="GpuLayerHBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
-auto_translate_mode = 1
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_constants/separation = 10
-
-[node name="ChatRandomSeedHBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
+[node name="ChatRandomSeedHBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 layout_mode = 2
 
-[node name="ChatRandomSeedLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatRandomSeedHBoxContainer"]
+[node name="ChatRandomSeedLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatRandomSeedHBoxContainer"]
 layout_mode = 2
-text = "Random Seed:"
+text = "Random Seed"
 
-[node name="ChatRandomSeedLineEdit" type="LineEdit" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatRandomSeedHBoxContainer"]
+[node name="ChatRandomSeedLineEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/ChatRandomSeedHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 
-[node name="SelectChatModelHBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
+[node name="SelectChatModelHBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SelectChatPathButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/SelectChatModelHBoxContainer"]
+[node name="SelectChatPathButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/SelectChatModelHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
@@ -344,36 +312,36 @@ size_flags_vertical = 2
 text = "Select Model (.gguf)
 "
 
-[node name="ClearChatPathButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/SelectChatModelHBoxContainer"]
+[node name="ClearChatPathButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer/SelectChatModelHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear Selected"
 
-[node name="ChatCurrentModelPathLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
+[node name="ChatCurrentModelPathLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ChatModelPanelContainer/MarginContainer/ChatModelVBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "C:\\Users\\adamm\\source\\repos\\models\\phi3\\Phi-3-mini-4k-instruct-q4.gguf"
 
-[node name="EmbedderModelPanelContainer" type="PanelContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
+[node name="EmbedderModelPanelContainer" type="PanelContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_xsa3w")
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="EmbeddingModelVBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer"]
+[node name="EmbeddingModelVBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 
-[node name="Label" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 tooltip_text = "Embedder model is optional (all-MiniLM-L12-v2)"
@@ -383,19 +351,19 @@ theme = ExtResource("2_wpyha")
 text = "Embedder Model"
 horizontal_alignment = 1
 
-[node name="EmbedderGridContainer" type="GridContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+[node name="EmbedderGridContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
 columns = 3
 
-[node name="EmbedderContextSizeTitleLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
+[node name="EmbedderContextSizeTitleLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
 text = "Context Size:"
 
-[node name="EmbedderContextSizeHSlider" type="HSlider" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
+[node name="EmbedderContextSizeHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
@@ -406,7 +374,7 @@ value = 2.0
 tick_count = 13
 ticks_on_borders = true
 
-[node name="EmbedderContextSizeLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
+[node name="EmbedderContextSizeLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(75, 0)
@@ -414,13 +382,13 @@ layout_mode = 2
 text = "4000"
 horizontal_alignment = 1
 
-[node name="GpuLayerCountTitleLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
+[node name="GpuLayerCountTitleLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 8
 text = "Num GPU Layers:"
 
-[node name="EmbedderGpuLayerCountHSlider" type="HSlider" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
+[node name="EmbedderGpuLayerCountHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(400, 0)
@@ -431,7 +399,7 @@ value = 33.0
 tick_count = 34
 ticks_on_borders = true
 
-[node name="EmbedderGpuLayerCountLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
+[node name="EmbedderGpuLayerCountLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderGridContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(25, 0)
@@ -439,59 +407,60 @@ layout_mode = 2
 text = "33"
 horizontal_alignment = 1
 
-[node name="EmbedderRandomSeedHBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+[node name="EmbedderRandomSeedHBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 
-[node name="EmbedderRandomSeedLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderRandomSeedHBoxContainer"]
+[node name="EmbedderRandomSeedLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderRandomSeedHBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 text = "Random Seed:"
 
-[node name="EmbedderRandomSeedLineEdit" type="LineEdit" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderRandomSeedHBoxContainer"]
+[node name="EmbedderRandomSeedLineEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/EmbedderRandomSeedHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 
-[node name="SelectEmbedderModelHBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+[node name="SelectEmbedderModelHBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 layout_mode = 2
 
-[node name="SelectEmbedderPathButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/SelectEmbedderModelHBoxContainer"]
+[node name="SelectEmbedderPathButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/SelectEmbedderModelHBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Select Model (.gguf)"
 
-[node name="ClearEmbedderPathButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/SelectEmbedderModelHBoxContainer"]
+[node name="ClearEmbedderPathButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer/SelectEmbedderModelHBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear Selected"
 
-[node name="EmbedderCurrentModelPathLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
+[node name="EmbedderCurrentModelPathLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/EmbedderModelPanelContainer/MarginContainer/EmbeddingModelVBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 
-[node name="ClipModelPanelContainer" type="PanelContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
+[node name="ClipModelPanelContainer" type="PanelContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_4l5yd")
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="ClipModelVBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer"]
+[node name="ClipModelVBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
 layout_mode = 2
 tooltip_text = "Clip model is optional (mmproj)"
 mouse_filter = 1
@@ -500,10 +469,10 @@ theme = ExtResource("2_wpyha")
 text = "Clip/LLaVa Model"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
 layout_mode = 2
 
-[node name="SelectClipPathButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer/HBoxContainer"]
+[node name="SelectClipPathButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
@@ -511,13 +480,13 @@ size_flags_horizontal = 3
 text = "Select Model (.gguf)
 "
 
-[node name="ClearClipPathButton" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer/HBoxContainer"]
+[node name="ClearClipPathButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Clear Selected"
 
-[node name="ClipCurrentModelPathLabel" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
+[node name="ClipCurrentModelPathLabel" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer/ModelConfigMarginContainer/ModelConfigVBoxContainer/ClipModelPanelContainer/MarginContainer/ClipModelVBoxContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2

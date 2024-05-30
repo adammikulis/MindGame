@@ -33,6 +33,9 @@ namespace MindGame
             configListResource = GD.Load<ConfigListResource>("res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres");
         }
 
+        /// <summary>
+        /// Function that is called when node and all children are initialized
+        /// </summary>
         public async override void _Ready()
         {
             try
@@ -91,12 +94,6 @@ namespace MindGame
             {
                 GD.PrintErr("Chat session not initialized. Please check the model configuration.");
                 return;
-            }
-
-            if (imagePaths != null && imagePaths.Count > 0)
-            {
-                mindManager.executor.ImagePaths.Clear();
-                mindManager.executor.ImagePaths.AddRange(imagePaths);
             }
 
             var activeConfig = configListResource.CurrentInferenceConfig;

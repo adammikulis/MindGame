@@ -17,6 +17,10 @@ namespace MindGame
         public MindGame.MindManager MindManager { get; set; }
         public AnimationPlayer AnimationPlayer { get; set; }
 
+
+        /// <summary>
+        /// Function that is called when node and all children are initialized
+        /// </summary>
         public override void _Ready()
         {
             MindManager = GetNode<MindGame.MindManager>("/root/MindManager");

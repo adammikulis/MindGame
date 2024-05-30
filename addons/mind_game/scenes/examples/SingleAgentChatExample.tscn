@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ch5cpcwih8o7r"]
+[gd_scene load_steps=7 format=3 uid="uid://beic1p4suduju"]
 
 [ext_resource type="Script" path="res://addons/mind_game/scripts/model_classes/MindAgent.cs" id="2_nep3t"]
 [ext_resource type="PackedScene" uid="uid://jfi3klrb0cdp" path="res://addons/mind_game/scenes/controllers/ChatController.tscn" id="3_sxg6n"]

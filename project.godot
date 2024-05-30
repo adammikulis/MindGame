@@ -17,7 +17,7 @@ config/icon="res://addons/mind_game/assets/logos/mind_game_logo_01.png"
 
 [autoload]
 
-MindManager="res://addons/mind_game/scripts/model_classes/MindManager.cs"
+MindManager="*res://addons/mind_game/scripts/model_classes/MindManager.cs"
 
 [dotnet]
 
