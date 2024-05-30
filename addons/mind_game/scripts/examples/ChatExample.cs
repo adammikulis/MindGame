@@ -19,7 +19,9 @@ namespace MindGame
 
         private readonly string _configListResourcePath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
 
-
+        /// <summary>
+        /// Function that is called when node and all children are initialized
+        /// </summary>
         public override void _Ready()
         {
             InitializeNodeRefs();
@@ -54,9 +56,6 @@ namespace MindGame
         {
             _mindManager = GetNode<MindGame.MindManager>("/root/MindManager");
             _mindAgent3D = GetNode<MindAgent3D>("%MindAgent3D");
-            _modelConfigController = GetNode<MindGame.ModelConfigController>("%ModelConfigController");
-            _inferenceConfigController = GetNode<MindGame.InferenceConfigController>("%InferenceConfigController");
-
             _modelInputLineEdit = GetNode<LineEdit>("%ModelInputLineEdit");
 
             _configAndLoadModelsButton = GetNode<Button>("%ConfigAndLoadModelsButton");
@@ -66,6 +65,9 @@ namespace MindGame
             _jsonLabel = GetNode<Label>("%JsonLabel");
         }
 
+        /// <summary>
+        /// Function that is called to create a ConfigListResource if it does not exist
+        /// </summary>
         private void EnsureConfigListResourceExists()
         {
             _configListResource = GD.Load<ConfigListResource>(_configListResourcePath);
@@ -76,6 +78,9 @@ namespace MindGame
             }
         }
 
+        /// <summary>
+        /// Function to save configuration list
+        /// </summary>
         private void SaveConfigList()
         {
             Error saveError = ResourceSaver.Save(_configListResource, _configListResourcePath);

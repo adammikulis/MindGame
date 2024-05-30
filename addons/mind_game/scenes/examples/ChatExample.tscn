@@ -84,7 +84,8 @@ layout_mode = 2
 [node name="JsonLabel" type="Label" parent="ChatController/MarginContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Json:"
+text = "
+"
 
 [node name="SpacerLabel3" type="Label" parent="ChatController/MarginContainer/GridContainer"]
 layout_mode = 2
