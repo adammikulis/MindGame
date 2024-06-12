@@ -12,8 +12,7 @@ namespace MindGame
     [Tool]
     public partial class MindAgent : Node
     {
-        [Signal]
-        public delegate void ChatSessionStatusUpdateEventHandler(bool isLoaded);
+
         [Signal]
         public delegate void ChatOutputReceivedEventHandler(string text);
 
@@ -25,8 +24,6 @@ namespace MindGame
         public float temperature = 0.75f;
         public int maxTokens = 4000;
         public bool outputJson = false;
-
-        public ChatSession ChatSession { get; private set; } = null;
 
         public override void _EnterTree()
         {
@@ -41,7 +38,7 @@ namespace MindGame
             try
             {
                 mindManager = GetNode<MindManager>("/root/MindManager");
-                if (mindManager.executor != null)
+                if (mindManager.batchedExecutor != null)
                 {
                     await InitializeAsync();
                 }
@@ -76,25 +73,12 @@ namespace MindGame
 
         public async Task InitializeAsync()
         {
-            await CreateChatSessionAsync();
+            // No longer need a chat session, will likely remove this method
         }
 
-        public async Task CreateChatSessionAsync()
-        {
-            await Task.Run(() =>
-            {
-                ChatSession = new ChatSession(mindManager.executor);
-                CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, true);
-            });
-        }
 
         public async Task InferAsync(string prompt, List<string> imagePaths = null)
         {
-            if (ChatSession == null)
-            {
-                GD.PrintErr("Chat session not initialized. Please check the model configuration.");
-                return;
-            }
 
             var activeConfig = configListResource.CurrentInferenceConfig;
             if (activeConfig == null)
@@ -121,30 +105,13 @@ namespace MindGame
             {
                 await Task.Run(async () =>
                 {
-                    await foreach (var output in ChatSession.ChatAsync(new ChatHistory.Message(AuthorRole.User, prompt), inferenceParams))
-                    {
-                        CallDeferred("emit_signal", SignalName.ChatOutputReceived, output);
-                    }
+                    // Put BatchedExecutor inference here
                 });
             }
             finally
             {
                 grammarInstance?.Dispose();
             }
-        }
-
-        public async Task DisposeChatSessionAsync()
-        {
-            await Task.Run(() =>
-            {
-                ChatSession = null;
-                CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, false);
-            });
-        }
-
-        public async Task DisposeAllAsync()
-        {
-            await DisposeChatSessionAsync();
         }
 
         public override void _ExitTree() { }

@@ -4,7 +4,6 @@ using System;
 
 namespace MindGame
 {
-    [Tool]
     public partial class ChatExample : Node
     {
         private MindGame.MindManager _mindManager;
@@ -57,6 +56,8 @@ namespace MindGame
             _mindManager = GetNode<MindGame.MindManager>("/root/MindManager");
             _mindAgent3D = GetNode<MindAgent3D>("%MindAgent3D");
             _modelInputLineEdit = GetNode<LineEdit>("%ModelInputLineEdit");
+            _inferenceConfigController = GetNode<InferenceConfigController>("%InferenceConfigController");
+            _modelConfigController = GetNode<ModelConfigController>("%ModelConfigController");
 
             _configAndLoadModelsButton = GetNode<Button>("%ConfigAndLoadModelsButton");
             _inferenceConfigButton = GetNode<Button>("%InferenceConfigButton");

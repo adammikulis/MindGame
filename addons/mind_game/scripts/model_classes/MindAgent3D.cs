@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 namespace MindGame
 {
-    [Tool]
     public partial class MindAgent3D : CharacterBody3D
     {
         [Signal]

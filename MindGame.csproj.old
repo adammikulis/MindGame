@@ -1,4 +1,4 @@
-﻿<Project Sdk="Godot.NET.Sdk/4.3.0-beta.1">
+﻿<Project Sdk="Godot.NET.Sdk/4.3.0-dev.6">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -15,8 +15,5 @@
   <ItemGroup>
     <TrimmerRootAssembly Include="GodotSharp" />
     <TrimmerRootAssembly Include="$(TargetName)" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="addons\mind_game\scripts\model_classes\senses\" />
   </ItemGroup>
 </Project>
