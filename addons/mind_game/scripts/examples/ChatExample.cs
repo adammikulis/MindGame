@@ -41,7 +41,6 @@ namespace MindGame
         private void InitializeSignals()
         {
             _modelInputLineEdit.TextSubmitted += OnModelInputTextSubmitted;
-            _mindAgent3D.ChatSessionStatusUpdate += OnChatSessionStatusUpdate;
 
             _configAndLoadModelsButton.Pressed += OnConfigAndLoadModelsPressed;
             _inferenceConfigButton.Pressed += OnInferenceConfigPressed;
