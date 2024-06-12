@@ -1,23 +1,37 @@
+// Adapted from https://github.com/SciSharp/LLamaSharp/blob/master/LLama.Examples/Examples/BatchedExecutorFork.cs
+
 using Godot;
 using LLama;
+using LLama.Batched;
 using LLama.Common;
 using LLama.Grammars;
 using LLama.Native;
+using LLama.Sampling;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MindGame
 {
-    [Tool]
     public partial class MindAgent : Node
     {
+
+        /// <summary>
+        /// Set how many tokens to generate before forking
+        /// </summary>
+        private const int ForkTokenCount = 100;
+
+        /// <summary>
+        /// Set total length of the sequence to generate
+        /// </summary>
+        private const int TokenCount = 72;
+
 
         [Signal]
         public delegate void ChatOutputReceivedEventHandler(string text);
 
         private ConfigListResource configListResource;
-        private MindManager mindManager;
+        private MindManager _mindManager;
         private Grammar grammar;
         private SafeLLamaGrammarHandle grammarInstance;
         public string[] antiPrompts = { "<|eot_id|>", "<|end|>",  "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}" };
@@ -37,8 +51,8 @@ namespace MindGame
         {
             try
             {
-                mindManager = GetNode<MindManager>("/root/MindManager");
-                if (mindManager.batchedExecutor != null)
+                _mindManager = GetNode<MindManager>("/root/MindManager");
+                if (_mindManager.batchedExecutor != null)
                 {
                     await InitializeAsync();
                 }
@@ -48,9 +62,9 @@ namespace MindGame
                 GD.PrintErr("Please ensure MindManager is enabled in Autoloads!\n" + e);
             }
 
-            mindManager.ClipModelStatusUpdate += OnClipModelStatusUpdate;
-            mindManager.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
-            mindManager.ExecutorStatusUpdate += OnExecutorStatusUpdate;
+            _mindManager.ClipModelStatusUpdate += OnClipModelStatusUpdate;
+            _mindManager.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
+            _mindManager.ExecutorStatusUpdate += OnExecutorStatusUpdate;
 
             // Load the grammar definition
             using var file = FileAccess.Open("res://addons/mind_game/assets/grammar/json.gbnf", FileAccess.ModeFlags.Read);
@@ -77,43 +91,106 @@ namespace MindGame
         }
 
 
-        public async Task InferAsync(string prompt, List<string> imagePaths = null)
+        public async Task InferAsync(string prompt)
         {
-
-            var activeConfig = configListResource.CurrentInferenceConfig;
-            if (activeConfig == null)
+            if (_mindManager.batchedExecutor == null)
             {
-                GD.PrintErr("No active inference configuration selected.");
+                GD.PrintErr("BatchedExecutor not initialized. Please check the model configuration.");
                 return;
             }
 
-            SafeLLamaGrammarHandle grammarInstance = null;
-            if (activeConfig.OutputJson)
-            {
-                grammarInstance = grammar.CreateInstance();
-            }
+            // Evaluate the initial prompt to create one conversation
+            using var start = _mindManager.batchedExecutor.Create();
+            start.Prompt(_mindManager.batchedExecutor.Context.Tokenize(prompt));
+            await _mindManager.batchedExecutor.Infer();
 
-            InferenceParams inferenceParams = new InferenceParams
-            {
-                AntiPrompts = activeConfig.AntiPrompts,
-                Temperature = activeConfig.Temperature,
-                MaxTokens = activeConfig.MaxTokens,
-                Grammar = grammarInstance
-            };
+            // Create the root node of the tree
+            var root = new Node(start);
 
-            try
+            await Task.Run(async () =>
             {
-                await Task.Run(async () =>
+                for (var i = 0; i < TokenCount; i++)
                 {
-                    // Put BatchedExecutor inference here
-                });
-            }
-            finally
-            {
-                grammarInstance?.Dispose();
-            }
+                    if (i != 0)
+                        await _mindManager.batchedExecutor.Infer();
+
+                    if (i != 0 && i % ForkTokenCount == 0)
+                        root.Fork();
+
+                    root.Sample();
+                }
+            });
+
+            var result = root.Read();
+            CallDeferred("emit_signal", SignalName.ChatOutputReceived, result);
         }
 
-        public override void _ExitTree() { }
+
+
+
+        public override void _ExitTree() 
+        {
+            
+        }
+
+        private class Node
+        {
+            private readonly StreamingTokenDecoder _decoder;
+            private readonly DefaultSamplingPipeline _sampler = new();
+            private Conversation _conversation;
+
+            private Node _left;
+            private Node _right;
+
+            public int ActiveConversationCount => _conversation != null ? 1 : _left.ActiveConversationCount + _right.ActiveConversationCount;
+
+            public Node(Conversation conversation)
+            {
+                _conversation = conversation;
+                _decoder = new StreamingTokenDecoder(conversation.Executor.Context);
+            }
+
+            public void Sample()
+            {
+                if (_conversation == null)
+                {
+                    _left?.Sample();
+                    _right?.Sample();
+                    return;
+                }
+
+                if (_conversation.RequiresInference)
+                    return;
+
+                var ctx = _conversation.Executor.Context.NativeHandle;
+                var token = _sampler.Sample(ctx, _conversation.Sample(), Array.Empty<LLamaToken>());
+                _sampler.Accept(ctx, token);
+                _decoder.Add(token);
+                _conversation.Prompt(token);
+            }
+
+            public void Fork()
+            {
+                if (_conversation != null)
+                {
+                    _left = new Node(_conversation.Fork());
+                    _right = new Node(_conversation.Fork());
+
+                    _conversation.Dispose();
+                    _conversation = null;
+                }
+                else
+                {
+                    _left?.Fork();
+                    _right?.Fork();
+                }
+            }
+
+            public string Read()
+            {
+                return _decoder.Read();
+            }
+        }
     }
 }
+
