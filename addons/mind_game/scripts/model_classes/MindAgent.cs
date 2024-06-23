@@ -54,7 +54,7 @@ namespace MindGame
                 _mindManager = GetNode<MindManager>("/root/MindManager");
                 if (_mindManager.batchedExecutor != null)
                 {
-                    await InitializeAsync();
+                    
                 }
             }
             catch (Exception e)
@@ -62,8 +62,6 @@ namespace MindGame
                 GD.PrintErr("Please ensure MindManager is enabled in Autoloads!\n" + e);
             }
 
-            _mindManager.ClipModelStatusUpdate += OnClipModelStatusUpdate;
-            _mindManager.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
             _mindManager.ExecutorStatusUpdate += OnExecutorStatusUpdate;
 
             // Load the grammar definition
@@ -75,20 +73,9 @@ namespace MindGame
 
         private async void OnExecutorStatusUpdate(bool isLoaded)
         {
-            if (isLoaded)
-            {
-                await InitializeAsync();
-            }
+            
         }
 
-        private void OnEmbedderModelStatusUpdate(bool isLoaded) { }
-
-        private void OnClipModelStatusUpdate(bool isLoaded) { }
-
-        public async Task InitializeAsync()
-        {
-            // No longer need a chat session, will likely remove this method
-        }
 
 
         public async Task InferAsync(string prompt)
