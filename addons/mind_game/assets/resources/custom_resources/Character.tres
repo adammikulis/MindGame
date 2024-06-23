@@ -1,0 +1,6 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cuk1blyqe2dqe"]
+
+[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/mind_agent/Character.cs" id="1_e0bol"]
+
+[resource]
+script = ExtResource("1_e0bol")
