@@ -30,7 +30,7 @@ namespace MindGame
         [Signal]
         public delegate void ChatOutputReceivedEventHandler(string text);
 
-        private ConfigListResource configListResource;
+        private ConfigList configListResource;
         private MindManager _mindManager;
         private Grammar grammar;
         private SafeLLamaGrammarHandle grammarInstance;
@@ -41,7 +41,7 @@ namespace MindGame
 
         public override void _EnterTree()
         {
-            configListResource = GD.Load<ConfigListResource>("res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres");
+            
         }
 
         /// <summary>
@@ -49,18 +49,8 @@ namespace MindGame
         /// </summary>
         public async override void _Ready()
         {
-            try
-            {
-                _mindManager = GetNode<MindManager>("/root/MindManager");
-                if (_mindManager.batchedExecutor != null)
-                {
-                    
-                }
-            }
-            catch (Exception e)
-            {
-                GD.PrintErr("Please ensure MindManager is enabled in Autoloads!\n" + e);
-            }
+            InitializeNodeRefs();
+
 
             _mindManager.ExecutorStatusUpdate += OnExecutorStatusUpdate;
 
@@ -69,6 +59,14 @@ namespace MindGame
             string gbnf = file.GetAsText().Trim();
             grammar = Grammar.Parse(gbnf, "root");
         }
+
+        private void InitializeNodeRefs()
+        {
+            _mindManager = GetNode<MindGame.MindManager>("/root/MindManager");
+
+
+        }
+
 
 
         private async void OnExecutorStatusUpdate(bool isLoaded)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://vymn5e6vd5gq"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/controllers/ModelConfigController.cs" id="1_xsg1j"]
+[ext_resource type="Script" path="res://addons/mind_game/configuration/ModelConfig.cs" id="1_xsg1j"]
 [ext_resource type="Theme" uid="uid://brptib3mp8h1o" path="res://addons/mind_game/assets/themes/config_header_theme.tres" id="2_wpyha"]
 [ext_resource type="Texture2D" uid="uid://dnp0lvxevsc4m" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/plus.png" id="3_nrb42"]
 [ext_resource type="Texture2D" uid="uid://5ga0x3yawju4" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/trashcan.png" id="4_uh0ls"]
@@ -20,7 +20,7 @@ bg_color = Color(0.453305, 0.439765, 0.391286, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4l5yd"]
 bg_color = Color(0.520589, 0.388576, 0.290517, 1)
 
-[node name="ModelConfigController" type="Control"]
+[node name="ModelConfig" type="Control"]
 auto_translate_mode = 1
 layout_mode = 3
 anchors_preset = 15

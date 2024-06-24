@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://c5mwm2jt53kuc"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/model_classes/MindAgent3D.cs" id="1_7nfc6"]
-[ext_resource type="Script" path="res://addons/mind_game/scripts/model_classes/MindAgent.cs" id="1_ih04v"]
+[ext_resource type="Script" path="res://addons/mind_game/mind_agent/MindAgent3D.cs" id="1_7nfc6"]
+[ext_resource type="Script" path="res://addons/mind_game/mind_agent/MindAgent.cs" id="1_ih04v"]
 [ext_resource type="Texture2D" uid="uid://dk12ou3v5g3ga" path="res://icon.svg" id="2_1haiy"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gmr73"]

@@ -3,12 +3,10 @@ using System;
 
 namespace MindGame
 {
-    public partial class ModelConfigController : Control
+    public partial class ModelConfig : Control
     {
-        private ConfigListResource _configListResource;
-        private ModelParamsConfig _modelParamsConfig;
+        private ModelParams _modelParamsConfig;
         private MindManager _mindManager;
-        private readonly string _configListResourcePath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
 
         // UI elements
         private Button _addNewConfigButton, _deleteConfigButton, _selectChatPathButton, _clearChatPathButton, _selectEmbedderPathButton, _clearEmbedderPathButton, _selectClipPathButton, _clearClipPathButton, _backButton, _loadConfigButton, _unloadConfigButton;
@@ -30,29 +28,17 @@ namespace MindGame
         /// </summary>
         public override void _Ready()
         {
-            EnsureConfigListResourceExists();
             InitializeDefaultValues();
             InitializeNodeRefs();
-            InitializeConfigList();
             InitializeSignals();
             AutoloadLastGoodConfig();
             InitializeUiElements();
         }
 
 
-        private void EnsureConfigListResourceExists()
-        {
-            _configListResource = GD.Load<ConfigListResource>(_configListResourcePath);
-            if (_configListResource == null)
-            {
-                _configListResource = new ConfigListResource();
-                SaveConfigList();
-            }
-        }
-
         private void SaveConfigList()
         {
-            Error saveError = ResourceSaver.Save(_configListResource, _configListResourcePath);
+            Error saveError = ResourceSaver.Save(_mindManager.ConfigList, _mindManager.ConfigListPath);
             if (saveError != Error.Ok)
             {
                 GD.PrintErr("Failed to save configuration list: ", saveError);
@@ -64,7 +50,6 @@ namespace MindGame
         /// </summary>
         private void InitializeConfigList()
         {
-            _configListResource = GD.Load<ConfigListResource>(_configListResourcePath) ?? new ConfigListResource();
             UpdateConfigItemList();
         }
 
@@ -74,7 +59,7 @@ namespace MindGame
         private void UpdateConfigItemList()
         {
             _savedConfigsItemList.Clear();
-            foreach (var config in _configListResource.ModelConfigurations)
+            foreach (var config in _mindManager.ConfigList.ModelConfigurations)
             {
                 _savedConfigsItemList.AddItem(config.ModelConfigName);
             }
@@ -183,24 +168,24 @@ namespace MindGame
 
         private void OnAutoloadLastGoodConfigToggled(bool toggledOn)
         {
-            if (_configListResource != null)
+            if (_mindManager.ConfigList != null)
             {
-                _configListResource.AutoloadLastGoodModelConfig = toggledOn;
+                _mindManager.ConfigList.AutoloadLastGoodModelConfig = toggledOn;
                 SaveConfigList();
             }
         }
 
         public void AutoloadLastGoodConfig()
         {
-            if (_configListResource != null && _configListResource.AutoloadLastGoodModelConfig && _configListResource.LastGoodModelConfig != null)
+            if (_mindManager.ConfigList != null && _mindManager.ConfigList.AutoloadLastGoodModelConfig && _mindManager.ConfigList.LastGoodModelConfig != null)
             {
-                _modelParamsConfig = _configListResource.LastGoodModelConfig;
+                _modelParamsConfig = _mindManager.ConfigList.LastGoodModelConfig;
                 LoadConfig(_modelParamsConfig);
                 OnLoadModelConfigPressed();
             }
         }
 
-        private void LoadConfig(ModelParamsConfig config)
+        private void LoadConfig(ModelParams config)
         {
             _configNameLineEdit.Text = config.ModelConfigName;
             _chatContextSizeHSlider.Value = CalculateLogContextSize(config.ChatContextSize);
@@ -224,7 +209,7 @@ namespace MindGame
             if (_modelParamsConfig != null)
             {
                 await _mindManager.InitializeAsync(_modelParamsConfig);
-                _configListResource.LastGoodModelConfig = _modelParamsConfig;
+                _mindManager.ConfigList.LastGoodModelConfig = _modelParamsConfig;
                 SaveConfigList();
             }
         }
@@ -251,9 +236,9 @@ namespace MindGame
             _embedderRandomSeedLineEdit.Text = _embedderRandomSeed.ToString();
 
             // Initialize autoload checkbox
-            if (_configListResource != null)
+            if (_mindManager.ConfigList != null)
             {
-                _autoloadLastGoodConfigCheckBox.ButtonPressed = _configListResource.AutoloadLastGoodModelConfig;
+                _autoloadLastGoodConfigCheckBox.ButtonPressed = _mindManager.ConfigList.AutoloadLastGoodModelConfig;
             }
         }
 
@@ -271,7 +256,7 @@ namespace MindGame
 
         private void OnSavedConfigsItemSelected(long index)
         {
-            _modelParamsConfig = _configListResource.ModelConfigurations[(int)index];
+            _modelParamsConfig = _mindManager.ConfigList.ModelConfigurations[(int)index];
             LoadConfig(_modelParamsConfig);
         }
 
@@ -279,12 +264,12 @@ namespace MindGame
         {
             var selectedIndices = _savedConfigsItemList.GetSelectedItems();
 
-            if (selectedIndices.Length > 0 && _configListResource.ModelConfigurations.Count > 0)
+            if (selectedIndices.Length > 0 && _mindManager.ConfigList.ModelConfigurations.Count > 0)
             {
                 int selectedIndex = selectedIndices[0];
-                if (selectedIndex >= 0 && selectedIndex < _configListResource.ModelConfigurations.Count)
+                if (selectedIndex >= 0 && selectedIndex < _mindManager.ConfigList.ModelConfigurations.Count)
                 {
-                    _configListResource.ModelConfigurations.RemoveAt(selectedIndex);
+                    _mindManager.ConfigList.ModelConfigurations.RemoveAt(selectedIndex);
                     SaveConfigList();
                     UpdateConfigItemList();
                 }
@@ -297,7 +282,7 @@ namespace MindGame
 
         private void OnAddNewConfigPressed()
         {
-            ModelParamsConfig newConfig = new()
+            ModelParams newConfig = new()
             {
                 ModelConfigName = _configName,
                 ChatContextSize = _chatContextSize,
@@ -311,20 +296,20 @@ namespace MindGame
                 ClipModelPath = _clipModelPath
             };
 
-            _configListResource.ModelConfigurations.Add(newConfig);
+            _mindManager.ConfigList.ModelConfigurations.Add(newConfig);
             SaveConfigList();
             UpdateConfigItemList();
         }
 
-        private void UpdateConfigurationValue(Action<ModelParamsConfig> updateAction)
+        private void UpdateConfigurationValue(Action<ModelParams> updateAction)
         {
             var selectedIndices = _savedConfigsItemList.GetSelectedItems();
             if (selectedIndices.Length > 0)
             {
                 int selectedIndex = selectedIndices[0];
-                if (selectedIndex >= 0 && selectedIndex < _configListResource.ModelConfigurations.Count)
+                if (selectedIndex >= 0 && selectedIndex < _mindManager.ConfigList.ModelConfigurations.Count)
                 {
-                    var config = _configListResource.ModelConfigurations[selectedIndex];
+                    var config = _mindManager.ConfigList.ModelConfigurations[selectedIndex];
                     updateAction(config);
                     SaveConfigList();
                 }
@@ -332,7 +317,7 @@ namespace MindGame
         }
 
 
-        private void ClearPath(Action updatePathAction, Label pathLabel, Action<ModelParamsConfig, string> updateAction)
+        private void ClearPath(Action updatePathAction, Label pathLabel, Action<ModelParams, string> updateAction)
         {
             updatePathAction();
             pathLabel.Text = "";
@@ -358,7 +343,7 @@ namespace MindGame
         private void OnChatContextSizeHSliderValueChanged(double value) => UpdateSliderValue(CalculateExpContextSize(value), _chatContextSizeLabel, v => _chatContextSize = v, config => config.ChatContextSize = _chatContextSize);
         private void OnEmbedderContextSizeHSliderValueChanged(double value) => UpdateSliderValue(CalculateExpContextSize(value), _embedderContextSizeLabel, v => _embedderContextSize = v, config => config.EmbedderContextSize = _embedderContextSize);
 
-        private void UpdateSliderValue<T>(T value, Label label, Action<T> setValue, Action<ModelParamsConfig> updateConfig)
+        private void UpdateSliderValue<T>(T value, Label label, Action<T> setValue, Action<ModelParams> updateConfig)
         {
             setValue(value);
             label.Text = value.ToString();
@@ -372,7 +357,7 @@ namespace MindGame
         private void OnSelectEmbedderPathPressed() => _selectEmbedderPathFileDialog.PopupCentered();
         private void OnEmbedderPathSelected(string path) => UpdatePath(() => _embedderModelPath = path, _embedderCurrentModelPathLabel, config => config.EmbedderModelPath = _embedderModelPath);
 
-        private void UpdatePath(Action updatePathAction, Label pathLabel, Action<ModelParamsConfig> updateConfig)
+        private void UpdatePath(Action updatePathAction, Label pathLabel, Action<ModelParams> updateConfig)
         {
             updatePathAction();
             pathLabel.Text = pathLabel.Text;

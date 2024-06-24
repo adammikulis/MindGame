@@ -10,7 +10,7 @@ namespace MindGame
     [Tool]
     public partial class MindManager : Node
     {
-        public ModelParamsConfig CurrentModelConfigs { get; set; }
+        public ModelParams CurrentModelConfigs { get; set; }
 
         [Signal]
         public delegate void ClipModelStatusUpdateEventHandler(bool isLoaded);
@@ -30,8 +30,8 @@ namespace MindGame
         // Embedder model vars
         //public LLamaEmbedder embedder { get; private set; }
 
-        public ConfigListResource ConfigListResource;
-        private readonly string configListResourcePath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
+        public ConfigList ConfigList;
+        public readonly string ConfigListPath = "res://addons/mind_game/configuration/ConfigList.tres";
 
   
 
@@ -45,24 +45,24 @@ namespace MindGame
 
         private void EnsureConfigListResourceExists()
         {
-            ConfigListResource = GD.Load<ConfigListResource>(configListResourcePath);
-            if (ConfigListResource == null)
+            ConfigList = GD.Load<ConfigList>(ConfigListPath);
+            if (ConfigList == null)
             {
-                ConfigListResource = new ConfigListResource();
+                ConfigList = new ConfigList();
                 SaveConfigList();
             }
         }
 
         private void SaveConfigList()
         {
-            Error saveError = ResourceSaver.Save(ConfigListResource, configListResourcePath);
+            Error saveError = ResourceSaver.Save(ConfigList, ConfigListPath);
             if (saveError != Error.Ok)
             {
                 GD.PrintErr("Failed to save configuration list: ", saveError);
             }
         }
 
-        public async Task InitializeAsync(ModelParamsConfig config)
+        public async Task InitializeAsync(ModelParams config)
         {
             CurrentModelConfigs = config;
             await LoadModelsAsync();
@@ -101,7 +101,7 @@ namespace MindGame
         {
             if (!string.IsNullOrEmpty(CurrentModelConfigs.ChatModelPath))
             {
-                var parameters = new ModelParams(CurrentModelConfigs.ChatModelPath)
+                var parameters = new LLama.Common.ModelParams(CurrentModelConfigs.ChatModelPath)
                 {
                     ContextSize = CurrentModelConfigs.ChatContextSize,
                     Seed = CurrentModelConfigs.ChatRandomSeed,

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://chbi2t7ql1f2a"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/examples/MindGraphExample.cs" id="1_wrkdr"]
-[ext_resource type="Resource" uid="uid://dij7rm8mo7ufn" path="res://addons/mind_game/assets/resources/custom_resources/MindGraph.tres" id="2_vsos6"]
+[ext_resource type="Script" path="res://addons/mind_game/examples/MindGraphExample.cs" id="1_wrkdr"]
+[ext_resource type="Resource" uid="uid://dij7rm8mo7ufn" path="res://addons/mind_game/mind_graph/MindGraph.tres" id="2_vsos6"]
 
 [node name="Node" type="Node"]
 script = ExtResource("1_wrkdr")

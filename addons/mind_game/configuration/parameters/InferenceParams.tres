@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://cpcyl5y4jompu"]
 
-[ext_resource type="Script" path="res://addons/mind_game/scripts/custom_resource_scripts/configuration/InferenceParamsConfig.cs" id="1_4r2ok"]
+[ext_resource type="Script" path="res://addons/mind_game/configuration/parameters/InferenceParams.cs" id="1_4r2ok"]
 
 [resource]
 script = ExtResource("1_4r2ok")

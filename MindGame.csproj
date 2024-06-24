@@ -10,7 +10,6 @@
     <PackageReference Include="LLamaSharp" Version="0.13.0" />
     <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.13.0" />
     <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.13.0" />
-    <PackageReference Include="System.Speech" Version="9.0.0-preview.4.24266.19" />
   </ItemGroup>
   <ItemGroup>
     <TrimmerRootAssembly Include="GodotSharp" />
@@ -18,5 +17,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="addons\mind_game\scripts\model_classes\senses\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Godot.SourceGenerators" Version="4.3.0-beta.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="GodotSharp" Version="4.3.0-beta.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="GodotSharpEditor" Version="4.3.0-beta.2" />
   </ItemGroup>
 </Project>
