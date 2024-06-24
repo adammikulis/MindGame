@@ -52,8 +52,8 @@ namespace MindGame
             _mindManager = GetNode<MindGame.MindManager>("/root/MindManager");
             _mindAgent3D = GetNode<MindAgent3D>("%MindAgent3D");
             _modelInputLineEdit = GetNode<LineEdit>("%ModelInputLineEdit");
-            _inferenceConfig = GetNode<InferenceConfig>("%InferenceConfigController");
-            _modelConfig = GetNode<ModelConfig>("%ModelConfigController");
+            _inferenceConfig = GetNode<InferenceConfig>("%InferenceConfig");
+            _modelConfig = GetNode<ModelConfig>("%ModelConfig");
 
             _configAndLoadModelsButton = GetNode<Button>("%ConfigAndLoadModelsButton");
             _inferenceConfigButton = GetNode<Button>("%InferenceConfigButton");

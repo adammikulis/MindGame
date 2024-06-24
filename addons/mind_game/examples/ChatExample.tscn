@@ -129,11 +129,11 @@ skeleton = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_fw3c5")
 
-[node name="ModelConfigController" parent="." instance=ExtResource("4_i4nn4")]
+[node name="ModelConfig" parent="." instance=ExtResource("4_i4nn4")]
 unique_name_in_owner = true
 visible = false
 
-[node name="InferenceConfigController" parent="." instance=ExtResource("3_7mwxh")]
+[node name="InferenceConfig" parent="." instance=ExtResource("3_7mwxh")]
 unique_name_in_owner = true
 visible = false
 
