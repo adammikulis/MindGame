@@ -4,6 +4,7 @@ using LLama.Common;
 using System.Threading.Tasks;
 using LLama.Native;
 using LLama.Batched;
+using System;
 
 namespace MindGame
 {
@@ -31,7 +32,7 @@ namespace MindGame
         //public LLamaEmbedder embedder { get; private set; }
 
         public ConfigList ConfigList;
-        public readonly string ConfigListPath = "res://addons/mind_game/configuration/ConfigList.tres";
+        public readonly string ConfigListPath = "res://addons/mind_game/configuration/parameters/ConfigList.tres";
 
   
 
@@ -45,20 +46,42 @@ namespace MindGame
 
         private void EnsureConfigListResourceExists()
         {
-            ConfigList = GD.Load<ConfigList>(ConfigListPath);
-            if (ConfigList == null)
+            if (FileAccess.FileExists(ConfigListPath))
             {
-                ConfigList = new ConfigList();
-                SaveConfigList();
+                try
+                {
+                    ConfigList = GD.Load<ConfigList>(ConfigListPath);
+                    if (ConfigList == null)
+                    {
+                        GD.PrintErr($"Failed to load ConfigList from {ConfigListPath}. Creating a new one.");
+                        CreateNewConfigList();
+                    }
+                }
+                catch (Exception e)
+                {
+                    GD.PrintErr($"Error loading ConfigList: {e.Message}. Creating a new one.");
+                    CreateNewConfigList();
+                }
             }
+            else
+            {
+                GD.Print($"ConfigList file does not exist at {ConfigListPath}. Creating a new one.");
+                CreateNewConfigList();
+            }
+        }
+
+        private void CreateNewConfigList()
+        {
+            ConfigList = new ConfigList();
+            SaveConfigList();
         }
 
         private void SaveConfigList()
         {
-            Error saveError = ResourceSaver.Save(ConfigList, ConfigListPath);
-            if (saveError != Error.Ok)
+            var error = ResourceSaver.Save(ConfigList, ConfigListPath);
+            if (error != Error.Ok)
             {
-                GD.PrintErr("Failed to save configuration list: ", saveError);
+                GD.PrintErr($"Failed to save ConfigList to {ConfigListPath}. Error: {error}");
             }
         }
 

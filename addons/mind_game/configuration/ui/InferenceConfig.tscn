@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://3sy7uksi0h1a"]
 
-[ext_resource type="Script" path="res://addons/mind_game/configuration/InferenceConfig.cs" id="1_rm55x"]
+[ext_resource type="Script" path="res://addons/mind_game/configuration/ui/InferenceConfig.cs" id="1_rm55x"]
 [ext_resource type="Texture2D" uid="uid://dnp0lvxevsc4m" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/plus.png" id="2_dqa1d"]
 [ext_resource type="Theme" uid="uid://brptib3mp8h1o" path="res://addons/mind_game/assets/themes/config_header_theme.tres" id="2_jnnww"]
 [ext_resource type="Texture2D" uid="uid://5ga0x3yawju4" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/trashcan.png" id="3_ga7yw"]

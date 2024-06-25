@@ -5,7 +5,7 @@ namespace MindGame
 {
     public partial class ModelConfig : Control
     {
-        private ModelParams _modelParamsConfig;
+        
         private MindManager _mindManager;
 
         // UI elements
@@ -18,6 +18,7 @@ namespace MindGame
         private CheckBox _autoloadLastGoodConfigCheckBox;
 
         // Model params
+        private ModelParams _modelParamsConfig;
         private string _configName;
         private int _chatGpuLayerCount, _embedderGpuLayerCount;
         private uint _chatContextSize, _embedderContextSize, _chatRandomSeed, _embedderRandomSeed;
@@ -31,8 +32,8 @@ namespace MindGame
             InitializeDefaultValues();
             InitializeNodeRefs();
             InitializeSignals();
-            AutoloadLastGoodConfig();
             InitializeUiElements();
+            AutoloadLastGoodConfig();
         }
 
 
@@ -59,8 +60,10 @@ namespace MindGame
         private void UpdateConfigItemList()
         {
             _savedConfigsItemList.Clear();
+            GD.Print($"Updating config list. Config count: {_mindManager.ConfigList.ModelConfigurations.Count}");
             foreach (var config in _mindManager.ConfigList.ModelConfigurations)
             {
+                GD.Print($"Adding config: {config.ModelConfigName}");
                 _savedConfigsItemList.AddItem(config.ModelConfigName);
             }
         }
@@ -87,9 +90,10 @@ namespace MindGame
         /// </summary>
         private void InitializeNodeRefs()
         {
+            // Mind manager autoload
             _mindManager = GetNode<MindManager>("/root/MindManager");
 
-            // Manage configs nodes
+            // Manage config nodes
             _configNameLineEdit = GetNode<LineEdit>("%ConfigNameLineEdit");
             _savedConfigsItemList = GetNode<ItemList>("%SavedConfigsItemList");
             _addNewConfigButton = GetNode<Button>("%AddNewConfigButton");
@@ -145,18 +149,21 @@ namespace MindGame
             _unloadConfigButton.Pressed += OnUnloadModelConfigPressed;
             _autoloadLastGoodConfigCheckBox.Toggled += OnAutoloadLastGoodConfigToggled;
 
+
             _clearChatPathButton.Pressed += OnClearChatPathPressed;
             _clearClipPathButton.Pressed += OnClearClipPathPressed;
             _clearEmbedderPathButton.Pressed += OnClearEmbedderPathPressed;
 
-            _selectChatPathButton.Pressed += OnSelectChatPathPressed;
-            _selectClipPathButton.Pressed += OnSelectClipPathPressed;
-            _selectEmbedderPathButton.Pressed += OnSelectEmbedderPathPressed;
-
+            // HSlider signals
             _chatContextSizeHSlider.ValueChanged += OnChatContextSizeHSliderValueChanged;
             _chatGpuLayerCountHSlider.ValueChanged += OnChatGpuLayerCountHSliderValueChanged;
             _embedderContextSizeHSlider.ValueChanged += OnEmbedderContextSizeHSliderValueChanged;
             _embedderGpuLayerCountHSlider.ValueChanged += OnEmbedderGpuLayerCountHSliderValueChanged;
+
+            // File path signals
+            _selectChatPathButton.Pressed += OnSelectChatPathPressed;
+            _selectClipPathButton.Pressed += OnSelectClipPathPressed;
+            _selectEmbedderPathButton.Pressed += OnSelectEmbedderPathPressed;
 
             _selectChatPathFileDialog.FileSelected += OnChatPathSelected;
             _selectClipPathFileDialog.FileSelected += OnClipPathSelected;
@@ -240,6 +247,8 @@ namespace MindGame
             {
                 _autoloadLastGoodConfigCheckBox.ButtonPressed = _mindManager.ConfigList.AutoloadLastGoodModelConfig;
             }
+
+            InitializeConfigList();
         }
 
         private void InitializeSliderAndLabel(HSlider slider, Label label, int value)
