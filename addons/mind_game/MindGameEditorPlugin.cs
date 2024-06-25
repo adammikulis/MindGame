@@ -8,11 +8,11 @@ using LLama.Sampling;
 using LLama;
 
 [Tool]
-public partial class MindGameEditorPlugin : EditorPlugin, IDisposable
+public partial class MindGameEditorPlugin : EditorPlugin
 {
     
     
-    private Script mindAgentScript = GD.Load<CSharpScript>("res://addons/mind_game/scripts/model_classes/MindAgent.cs");
+    private Script mindAgentScript = GD.Load<CSharpScript>("res://addons/mind_game/mind_agent/MindAgent.cs");
     private Texture2D mindAgentIcon = GD.Load<Texture2D>("res://addons/mind_game/assets/logos/brain_pink.png");
 
 

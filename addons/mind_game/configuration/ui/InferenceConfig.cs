@@ -6,20 +6,19 @@ namespace MindGame
     /// <summary>
     /// The controller for configuring inference parameters
     /// </summary>
+
     public partial class InferenceConfig : Control
     {
         /// <summary>
         /// Godot node variables
         /// </summary>
+        private MindManager _mindManager { get; set; }
         private Button _addInferenceConfigButton, _deleteInferenceConfigButton, _backButton, _loadInferenceConfigButton, _unloadInferenceConfigButton;
         private CheckBox _autoloadLastGoodConfigCheckBox, _outputJsonCheckBox;
         private HSlider _maxTokensHSlider, _temperatureHSlider;
         private LineEdit _inferenceConfigNameLineEdit, _maxTokensLineEdit, _temperatureLineEdit;
-        private ConfigListResource _configListResource;
-        private InferenceParamsConfig _inferenceParamsConfig;
+        private InferenceParams _inferenceParamsConfig;
         
-
-        private readonly string _configListResourcePath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
         private string _inferenceConfigName;
         private string[] _antiPrompts;
         private int _maxTokens;
@@ -33,7 +32,6 @@ namespace MindGame
         /// </summary>
         public override void _Ready()
         {
-            EnsureConfigListResourceExists();
             InitializeDefaultValues();
             InitializeNodeRefs();
             InitializeConfigList();
@@ -42,15 +40,6 @@ namespace MindGame
             InitializeUiElements();
         }
 
-        private void EnsureConfigListResourceExists()
-        {
-            _configListResource = GD.Load<ConfigListResource>(_configListResourcePath);
-            if (_configListResource == null)
-            {
-                _configListResource = new ConfigListResource();
-                SaveConfigList();
-            }
-        }
 
         private void InitializeDefaultValues()
         {
@@ -63,6 +52,8 @@ namespace MindGame
 
         private void InitializeNodeRefs()
         {
+            _mindManager = GetNode<MindGame.MindManager>("/root/MindManager");
+
             _addInferenceConfigButton = GetNode<Button>("%AddInferenceConfigButton");
             _deleteInferenceConfigButton = GetNode<Button>("%DeleteInferenceConfigButton");
             _backButton = GetNode<Button>("%BackButton");
@@ -87,12 +78,11 @@ namespace MindGame
             _temperatureHSlider.Value = (double)_temperature;
             _temperatureLineEdit.Text = _temperature.ToString();
             _outputJsonCheckBox.ButtonPressed = _outputJson;
-            _autoloadLastGoodConfigCheckBox.ButtonPressed = _configListResource.AutoloadLastGoodInferenceConfig;
+            _autoloadLastGoodConfigCheckBox.ButtonPressed = _mindManager.ConfigList.AutoloadLastGoodInferenceConfig;
         }
 
         private void InitializeConfigList()
         {
-            _configListResource = GD.Load<ConfigListResource>(_configListResourcePath) ?? new ConfigListResource();
             UpdateConfigItemList();
         }
 
@@ -118,18 +108,18 @@ namespace MindGame
 
         private void OnAutoloadLastGoodConfigToggled(bool toggledOn)
         {
-            if (_configListResource != null)
+            if (_mindManager.ConfigList != null)
             {
-                _configListResource.AutoloadLastGoodInferenceConfig = toggledOn;
+                _mindManager.ConfigList.AutoloadLastGoodInferenceConfig = toggledOn;
                 SaveConfigList();
             }
         }
 
         public void AutoloadLastGoodConfig()
         {
-            if (_configListResource != null && _configListResource.AutoloadLastGoodInferenceConfig && _configListResource.LastGoodInferenceConfig != null)
+            if (_mindManager.ConfigList != null && _mindManager.ConfigList.AutoloadLastGoodInferenceConfig && _mindManager.ConfigList.LastGoodInferenceConfig != null)
             {
-                _inferenceParamsConfig = _configListResource.LastGoodInferenceConfig;
+                _inferenceParamsConfig = _mindManager.ConfigList.LastGoodInferenceConfig;
                 UpdateInferenceConfigUi();
             }
         }
@@ -146,9 +136,9 @@ namespace MindGame
 
         private void OnSavedInferenceConfigSelected(long index)
         {
-            if (index >= 0 && index < _configListResource.InferenceConfigurations.Count)
+            if (index >= 0 && index < _mindManager.ConfigList.InferenceConfigurations.Count)
             {
-                _inferenceParamsConfig = _configListResource.InferenceConfigurations[(int)index];
+                _inferenceParamsConfig = _mindManager.ConfigList.InferenceConfigurations[(int)index];
                 UpdateInferenceConfigUi();
             }
         }
@@ -177,12 +167,12 @@ namespace MindGame
         {
             var selectedIndices = _savedInferenceConfigsItemList.GetSelectedItems();
 
-            if (selectedIndices.Length > 0 && _configListResource.InferenceConfigurations.Count > 0)
+            if (selectedIndices.Length > 0 && _mindManager.ConfigList.InferenceConfigurations.Count > 0)
             {
                 int selectedIndex = selectedIndices[0];
-                if (selectedIndex >= 0 && selectedIndex < _configListResource.InferenceConfigurations.Count)
+                if (selectedIndex >= 0 && selectedIndex < _mindManager.ConfigList.InferenceConfigurations.Count)
                 {
-                    _configListResource.InferenceConfigurations.RemoveAt(selectedIndex);
+                    _mindManager.ConfigList.InferenceConfigurations.RemoveAt(selectedIndex);
                     SaveConfigList();
                     UpdateConfigItemList();
                 }
@@ -195,7 +185,7 @@ namespace MindGame
 
         private void OnAddInferenceConfigPressed()
         {
-            InferenceParamsConfig newConfig = new InferenceParamsConfig
+            InferenceParams newConfig = new InferenceParams
             {
                 InferenceConfigName = _inferenceConfigName,
                 MaxTokens = _maxTokens,
@@ -204,8 +194,8 @@ namespace MindGame
                 OutputJson = _outputJson
             };
 
-            _configListResource.InferenceConfigurations.Add(newConfig);
-            _configListResource.CurrentInferenceConfig = newConfig;
+            _mindManager.ConfigList.InferenceConfigurations.Add(newConfig);
+            _mindManager.ConfigList.CurrentInferenceConfig = newConfig;
             SaveConfigList();
             UpdateConfigItemList();
         }
@@ -213,21 +203,21 @@ namespace MindGame
         private void UpdateConfigItemList()
         {
             _savedInferenceConfigsItemList.Clear();
-            foreach (var config in _configListResource.InferenceConfigurations)
+            foreach (var config in _mindManager.ConfigList.InferenceConfigurations)
             {
                 _savedInferenceConfigsItemList.AddItem(config.InferenceConfigName);
             }
         }
 
-        private void UpdateConfigurationValue(Action<InferenceParamsConfig> updateAction)
+        private void UpdateConfigurationValue(Action<InferenceParams> updateAction)
         {
             var selectedIndices = _savedInferenceConfigsItemList.GetSelectedItems();
             if (selectedIndices.Length > 0)
             {
                 int selectedIndex = selectedIndices[0];
-                if (selectedIndex >= 0 && selectedIndex < _configListResource.InferenceConfigurations.Count)
+                if (selectedIndex >= 0 && selectedIndex < _mindManager.ConfigList.InferenceConfigurations.Count)
                 {
-                    var config = _configListResource.InferenceConfigurations[selectedIndex];
+                    var config = _mindManager.ConfigList.InferenceConfigurations[selectedIndex];
                     updateAction(config);
                     SaveConfigList();
                 }
@@ -241,7 +231,7 @@ namespace MindGame
 
         private void SaveConfigList()
         {
-            Error saveError = ResourceSaver.Save(_configListResource, _configListResourcePath);
+            Error saveError = ResourceSaver.Save(_mindManager.ConfigList, _mindManager.ConfigListPath);
             if (saveError != Error.Ok)
             {
                 GD.PrintErr("Failed to save configuration list: ", saveError);
@@ -257,7 +247,7 @@ namespace MindGame
         private static uint CalculateExpMaxTokens(double value) => (uint)Math.Pow(2, value) * 1000;
         private static double CalculateLogMaxTokens(uint value) => Math.Log2(value / 1000.0);
 
-        private void UpdateSliderValue<T>(T value, LineEdit lineEdit, Action<T> setValue, Action<InferenceParamsConfig> updateConfig)
+        private void UpdateSliderValue<T>(T value, LineEdit lineEdit, Action<T> setValue, Action<InferenceParams> updateConfig)
         {
             setValue(value);
             lineEdit.Text = value.ToString();

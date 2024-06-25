@@ -3,7 +3,7 @@ using Godot;
 namespace MindGame
 {
     [Tool]
-    public partial class InferenceParamsConfig : Resource
+    public partial class InferenceParams : Resource
     {
         [Export]
         public string InferenceConfigName { get; set; }
@@ -16,8 +16,8 @@ namespace MindGame
         [Export]
         public bool OutputJson { get; set; }
 
-        public InferenceParamsConfig() : this("<default>", ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}"], 0.75f, 4000, false) { }
-        public InferenceParamsConfig(string inferenceParamsName, string[] antiPrompts, float temperature, int maxTokens, bool outputJson)
+        public InferenceParams() : this("<default>", ["<|eot_id|>", "<|end_of_text|>", "<|user|>", "<|end|>", "user:", "User:", "USER:", "\nUser:", "\nUSER:", "}"], 0.75f, 4000, false) { }
+        public InferenceParams(string inferenceParamsName, string[] antiPrompts, float temperature, int maxTokens, bool outputJson)
         {
             InferenceConfigName = inferenceParamsName;
             AntiPrompts = antiPrompts;

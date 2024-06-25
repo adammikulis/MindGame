@@ -30,7 +30,7 @@ namespace MindGame
         [Signal]
         public delegate void ChatOutputReceivedEventHandler(string text);
 
-        private ConfigListResource configListResource;
+        private ConfigList configListResource;
         private MindManager _mindManager;
         private Grammar grammar;
         private SafeLLamaGrammarHandle grammarInstance;
@@ -41,7 +41,7 @@ namespace MindGame
 
         public override void _EnterTree()
         {
-            configListResource = GD.Load<ConfigListResource>("res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres");
+            
         }
 
         /// <summary>
@@ -49,21 +49,9 @@ namespace MindGame
         /// </summary>
         public async override void _Ready()
         {
-            try
-            {
-                _mindManager = GetNode<MindManager>("/root/MindManager");
-                if (_mindManager.batchedExecutor != null)
-                {
-                    await InitializeAsync();
-                }
-            }
-            catch (Exception e)
-            {
-                GD.PrintErr("Please ensure MindManager is enabled in Autoloads!\n" + e);
-            }
+            InitializeNodeRefs();
 
-            _mindManager.ClipModelStatusUpdate += OnClipModelStatusUpdate;
-            _mindManager.EmbedderModelStatusUpdate += OnEmbedderModelStatusUpdate;
+
             _mindManager.ExecutorStatusUpdate += OnExecutorStatusUpdate;
 
             // Load the grammar definition
@@ -72,23 +60,20 @@ namespace MindGame
             grammar = Grammar.Parse(gbnf, "root");
         }
 
+        private void InitializeNodeRefs()
+        {
+            _mindManager = GetNode<MindGame.MindManager>("/root/MindManager");
+
+
+        }
+
+
 
         private async void OnExecutorStatusUpdate(bool isLoaded)
         {
-            if (isLoaded)
-            {
-                await InitializeAsync();
-            }
+            
         }
 
-        private void OnEmbedderModelStatusUpdate(bool isLoaded) { }
-
-        private void OnClipModelStatusUpdate(bool isLoaded) { }
-
-        public async Task InitializeAsync()
-        {
-            // No longer need a chat session, will likely remove this method
-        }
 
 
         public async Task InferAsync(string prompt)
