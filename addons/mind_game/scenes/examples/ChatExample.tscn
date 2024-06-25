@@ -90,8 +90,12 @@ text = "
 [node name="SpacerLabel3" type="Label" parent="ChatController/MarginContainer/GridContainer"]
 layout_mode = 2
 
+[node name="SpacerLabel5" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+layout_mode = 2
+
 [node name="InferenceConfigButton" type="Button" parent="ChatController/MarginContainer/GridContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "Inference Config"
 

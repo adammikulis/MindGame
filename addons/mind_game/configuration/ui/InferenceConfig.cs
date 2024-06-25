@@ -254,8 +254,6 @@ namespace MindGame
             UpdateConfigurationValue(config => config.OutputJson = _outputJson);
         }
 
-        
-
         private static uint CalculateExpMaxTokens(double value) => (uint)Math.Pow(2, value) * 1000;
         private static double CalculateLogMaxTokens(uint value) => Math.Log2(value / 1000.0);
 

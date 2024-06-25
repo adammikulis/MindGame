@@ -3,6 +3,7 @@ using LLama;
 using LLama.Common;
 using System.Threading.Tasks;
 using LLama.Native;
+using LLama.Batched;
 
 namespace MindGame
 {
@@ -20,13 +21,14 @@ namespace MindGame
 
         // Chat Executor
         public LLamaContext context { get; set; }
-        public InteractiveExecutor executor { get; private set; }
+        public BatchedExecutor batchedExecutor { get; private set; }
+
 
         // Clip model vars
-        public LLavaWeights clipWeights { get; private set; }
+        //public LLavaWeights clipWeights { get; private set; }
 
         // Embedder model vars
-        public LLamaEmbedder embedder { get; private set; }
+        //public LLamaEmbedder embedder { get; private set; }
 
         public ConfigListResource ConfigListResource;
         private readonly string configListResourcePath = "res://addons/mind_game/assets/resources/custom_resources/ConfigListResource.tres";
@@ -73,27 +75,27 @@ namespace MindGame
             await InitializeChatExecutorAsync();
         }
 
-        private async Task LoadEmbedderAsync()
-        {
-            await Task.Run(() =>
-            {
-                var parameters = new ModelParams(CurrentModelConfigs.EmbedderModelPath)
-                {
-                    ContextSize = CurrentModelConfigs.EmbedderContextSize,
-                    Seed = CurrentModelConfigs.EmbedderRandomSeed,
-                    GpuLayerCount = CurrentModelConfigs.EmbedderGpuLayerCount,
-                    Embeddings = true
-                };
+        //private async Task LoadEmbedderAsync()
+        //{
+        //    await Task.Run(() =>
+        //    {
+        //        var parameters = new ModelParams(CurrentModelConfigs.EmbedderModelPath)
+        //        {
+        //            ContextSize = CurrentModelConfigs.EmbedderContextSize,
+        //            Seed = CurrentModelConfigs.EmbedderRandomSeed,
+        //            GpuLayerCount = CurrentModelConfigs.EmbedderGpuLayerCount,
+        //            Embeddings = true
+        //        };
 
-                using var embedderWeights = LLamaWeights.LoadFromFile(parameters);
-                embedder = new LLamaEmbedder(embedderWeights, parameters);
-            });
-        }
+        //        using var embedderWeights = LLamaWeights.LoadFromFile(parameters);
+        //        embedder = new LLamaEmbedder(embedderWeights, parameters);
+        //    });
+        //}
 
-        public void UnloadEmbedderModel()
-        {
-            embedder?.Dispose();
-        }
+        //public void UnloadEmbedderModel()
+        //{
+        //    embedder?.Dispose();
+        //}
 
         public async Task InitializeChatExecutorAsync()
         {
@@ -110,51 +112,50 @@ namespace MindGame
                 await Task.Run(() =>
                 {
                     using var chatWeights = LLamaWeights.LoadFromFile(parameters);
-                    context = chatWeights.CreateContext(parameters);
 
-                    executor = new InteractiveExecutor(context);
+                    batchedExecutor = new BatchedExecutor(chatWeights, parameters);
                     CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, true);
                 });
             }
         }
 
-        public async Task LoadClipModelAsync(string modelPath)
-        {
-            if (!string.IsNullOrEmpty(modelPath))
-            {
-                await Task.Run(() =>
-                {
-                    clipWeights = LLavaWeights.LoadFromFile(modelPath);
-                    CallDeferred("emit_signal", SignalName.ClipModelStatusUpdate, true);
-                });
-            }
-            else
-            {
-                GD.Print("Clip model path not set, no model loaded.");
-            }
-        }
+        //public async Task LoadClipModelAsync(string modelPath)
+        //{
+        //    if (!string.IsNullOrEmpty(modelPath))
+        //    {
+        //        await Task.Run(() =>
+        //        {
+        //            clipWeights = LLavaWeights.LoadFromFile(modelPath);
+        //            CallDeferred("emit_signal", SignalName.ClipModelStatusUpdate, true);
+        //        });
+        //    }
+        //    else
+        //    {
+        //        GD.Print("Clip model path not set, no model loaded.");
+        //    }
+        //}
 
-        public async Task DisposeClipWeightsAsync()
-        {
-            await Task.Run(() =>
-            {
-                clipWeights = null;
-                CallDeferred("emit_signal", SignalName.ClipModelStatusUpdate, false);
-            });
-        }
+        //public async Task DisposeClipWeightsAsync()
+        //{
+        //    await Task.Run(() =>
+        //    {
+        //        clipWeights = null;
+        //        CallDeferred("emit_signal", SignalName.ClipModelStatusUpdate, false);
+        //    });
+        //}
 
         public async Task DisposeExecutorAsync()
         {
             await Task.Run(() =>
             {
-                executor = null;
+                batchedExecutor = null;
                 CallDeferred("emit_signal", SignalName.ExecutorStatusUpdate, false);
             });
         }
 
         public async Task DisposeAll()
         {
-            await DisposeClipWeightsAsync();
+            //await DisposeClipWeightsAsync();
             await DisposeExecutorAsync();
         }
 

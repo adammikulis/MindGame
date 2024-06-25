@@ -6,8 +6,7 @@ namespace MindGame
 {
     public partial class MindAgent3D : CharacterBody3D
     {
-        [Signal]
-        public delegate void ChatSessionStatusUpdateEventHandler(bool isLoaded);
+
         [Signal]
         public delegate void ChatOutputReceivedEventHandler(string text);
 
@@ -27,7 +26,6 @@ namespace MindGame
             ChatLabel3D = GetNode<Label3D>("%ChatLabel3D");
             AnimationPlayer = GetNode<AnimationPlayer>("%AnimationPlayer");
 
-            MindAgent.ChatSessionStatusUpdate += OnChatSessionStatusUpdate;
             MindAgent.ChatOutputReceived += OnChatOutputReceived;
         }
 
@@ -45,12 +43,6 @@ namespace MindGame
                 AnimationPlayer.SetCurrentAnimation("bobble");
             }
 
-        }
-
-        public void OnChatSessionStatusUpdate(bool isLoaded)
-        {
-            CallDeferred("emit_signal", SignalName.ChatSessionStatusUpdate, true);
-            ChatLabel3D.Text = "Hey there! How can I help you?";
         }
     }
 }
