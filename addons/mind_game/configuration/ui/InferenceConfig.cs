@@ -6,7 +6,7 @@ namespace MindGame
     /// <summary>
     /// The controller for configuring inference parameters
     /// </summary>
-    public partial class InferenceConfigController : Control
+    public partial class InferenceConfig : Control
     {
         /// <summary>
         /// Godot node variables

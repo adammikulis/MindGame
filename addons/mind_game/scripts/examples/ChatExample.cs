@@ -9,7 +9,7 @@ namespace MindGame
         private MindGame.MindManager _mindManager;
         private MindAgent3D _mindAgent3D;
         private MindGame.ModelConfigController _modelConfigController;
-        private MindGame.InferenceConfigController _inferenceConfigController;
+        private MindGame.InferenceConfig _inferenceConfigController;
 
         private Button _configAndLoadModelsButton, _inferenceConfigButton, _exitButton;
         private LineEdit _modelInputLineEdit;
@@ -56,7 +56,7 @@ namespace MindGame
             _mindManager = GetNode<MindGame.MindManager>("/root/MindManager");
             _mindAgent3D = GetNode<MindAgent3D>("%MindAgent3D");
             _modelInputLineEdit = GetNode<LineEdit>("%ModelInputLineEdit");
-            _inferenceConfigController = GetNode<InferenceConfigController>("%InferenceConfigController");
+            _inferenceConfigController = GetNode<InferenceConfig>("%InferenceConfigController");
             _modelConfigController = GetNode<ModelConfigController>("%ModelConfigController");
 
             _configAndLoadModelsButton = GetNode<Button>("%ConfigAndLoadModelsButton");
