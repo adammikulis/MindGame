@@ -47,9 +47,9 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 0.991736, 0.128294, 0, -0.128294, 0.991736, 0, 3.06171, 4.46291)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866025, 0, -0.5, 0.353553, 0.707107, 0.612372, 0.353553, -0.707107, 0.612372, -3, 4, 3)
+transform = Transform3D(0.573224, 0.353554, -0.739199, -0.0634133, 0.918559, 0.390165, 0.816942, -0.176777, 0.548959, -3, 4, 3)
 light_color = Color(0.902875, 0.888929, 0.818451, 1)
-light_energy = 1.5
+light_energy = 1.25
 
 [node name="ChatController" type="Control" parent="."]
 layout_mode = 3

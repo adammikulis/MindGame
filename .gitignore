@@ -18,6 +18,6 @@ mono_crash.*.json
 android/
 .vs
 .releases
-addons/mind_game/assets/models
+addons/mind_game/assets/llms
 addons/mind_game/configuration/parameters/ConfigList.tres
 MindGame.csproj.old
