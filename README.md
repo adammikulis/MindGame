@@ -59,3 +59,7 @@ To send/receive input to the model, you add a MindAgent node to your scene, whic
   
 ## 0.1.3:
 - First release, model loading and chat enabled in engine bottom bar
+
+# Mind Game is Featured in:
+- [Godot Asset Library](https://godotengine.org/asset-library/asset/3025)
+- [Backdrop Build v4](https://backdropbuild.com/builds/v4/mind-game) mini-accelerator
