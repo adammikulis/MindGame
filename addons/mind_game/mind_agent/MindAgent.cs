@@ -24,7 +24,7 @@ namespace MindGame
         /// <summary>
         /// Set total length of the sequence to generate
         /// </summary>
-        private const int TokenCount = 72;
+        private const int TokenCount = 256;
 
 
         [Signal]

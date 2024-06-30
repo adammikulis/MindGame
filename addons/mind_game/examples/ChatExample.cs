@@ -13,8 +13,8 @@ namespace MindGame
 
         private Button _configAndLoadModelsButton, _inferenceConfigButton, _exitButton;
         private LineEdit _modelInputLineEdit;
-        private Label _jsonLabel;
-
+        private ItemList _savedConversationsItemList;
+        private RichTextLabel _modelOutputRichTextLabel;
         
 
         /// <summary>
@@ -44,6 +44,9 @@ namespace MindGame
             _modelInputLineEdit = GetNode<LineEdit>("%ModelInputLineEdit");
             _inferenceConfig = GetNode<InferenceConfig>("%InferenceConfig");
             _modelConfig = GetNode<ModelConfig>("%ModelConfig");
+            _savedConversationsItemList = GetNode<ItemList>("%SavedConversationsItemList");
+
+            _modelOutputRichTextLabel = GetNode<RichTextLabel>("%ModelOutputRichTextLabel");
 
             _configAndLoadModelsButton = GetNode<Button>("%ConfigAndLoadModelsButton");
            
@@ -60,7 +63,14 @@ namespace MindGame
 
             _configAndLoadModelsButton.Pressed += OnConfigAndLoadModelsPressed;
             // _inferenceConfigButton.Pressed += OnInferenceConfigPressed;
+            _mindAgent3D.ChatOutputReceived += OnChatOutputReceived;
+
             _exitButton.Pressed += OnExitPressed;
+        }
+
+        private void OnChatOutputReceived(string text)
+        {
+            _modelOutputRichTextLabel.Text += $"{text}\n";
         }
 
         /// <summary>
@@ -91,10 +101,11 @@ namespace MindGame
             _modelConfig.Visible = true;
         }
 
-        private async void OnModelInputTextSubmitted(string newText)
+        private async void OnModelInputTextSubmitted(string prompt)
         {
             _modelInputLineEdit.Text = "";
-            await _mindAgent3D.InferAsync(newText);
+            _modelOutputRichTextLabel.Text += $"{prompt}\n";
+            await _mindAgent3D.InferAsync(prompt);
         }
 
         private void OnChatSessionStatusUpdate(bool isLoaded)

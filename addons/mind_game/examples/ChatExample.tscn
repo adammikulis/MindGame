@@ -96,7 +96,8 @@ layout_mode = 2
 text = "Saved Conversations"
 horizontal_alignment = 1
 
-[node name="ItemList" type="ItemList" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer/MarginContainer/ChatOptionsVBoxContainer"]
+[node name="SavedConversationsItemList" type="ItemList" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer/MarginContainer/ChatOptionsVBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -146,6 +147,7 @@ size_flags_vertical = 3
 layout_mode = 2
 
 [node name="ModelOutputRichTextLabel" type="RichTextLabel" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/ChatVBoxContainer/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 scroll_following = true

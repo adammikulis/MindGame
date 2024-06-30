@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Threading.Tasks;
+using static Godot.HttpRequest;
 
 namespace MindGame
 {
@@ -42,6 +43,7 @@ namespace MindGame
             {
                 AnimationPlayer.SetCurrentAnimation("bobble");
             }
+            CallDeferred("emit_signal", SignalName.ChatOutputReceived, text);
 
         }
     }
