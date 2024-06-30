@@ -32,17 +32,7 @@ namespace MindGame
             
         }
 
-        /// <summary>
-        /// Function that is called to connect signals to callbacks
-        /// </summary>
-        private void InitializeSignals()
-        {
-            _modelInputLineEdit.TextSubmitted += OnModelInputTextSubmitted;
-
-            _configAndLoadModelsButton.Pressed += OnConfigAndLoadModelsPressed;
-            _inferenceConfigButton.Pressed += OnInferenceConfigPressed;
-            _exitButton.Pressed += OnExitPressed;
-        }
+        
 
         /// <summary>
         /// Function that is called to assign scene tree nodes to script variables
@@ -56,13 +46,22 @@ namespace MindGame
             _modelConfig = GetNode<ModelConfig>("%ModelConfig");
 
             _configAndLoadModelsButton = GetNode<Button>("%ConfigAndLoadModelsButton");
-            _inferenceConfigButton = GetNode<Button>("%InferenceConfigButton");
+           
             _exitButton = GetNode<Button>("%ExitButton");
 
-            _jsonLabel = GetNode<Label>("%JsonLabel");
         }
 
-        
+        /// <summary>
+        /// Function that is called to connect signals to callbacks
+        /// </summary>
+        private void InitializeSignals()
+        {
+            _modelInputLineEdit.TextSubmitted += OnModelInputTextSubmitted;
+
+            _configAndLoadModelsButton.Pressed += OnConfigAndLoadModelsPressed;
+            // _inferenceConfigButton.Pressed += OnInferenceConfigPressed;
+            _exitButton.Pressed += OnExitPressed;
+        }
 
         /// <summary>
         /// Function to save configuration list

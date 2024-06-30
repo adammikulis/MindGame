@@ -1,10 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://dut8m0d0ukohs"]
+[gd_scene load_steps=17 format=3 uid="uid://dut8m0d0ukohs"]
 
 [ext_resource type="Script" path="res://addons/mind_game/examples/ChatExample.cs" id="1_jmq1r"]
 [ext_resource type="PackedScene" uid="uid://3sy7uksi0h1a" path="res://addons/mind_game/configuration/ui/InferenceConfig.tscn" id="3_7mwxh"]
 [ext_resource type="Texture2D" uid="uid://dsewh4ptg3x16" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/door.png" id="3_k61qs"]
+[ext_resource type="Texture2D" uid="uid://bu0nvbcdpbmk6" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/gear.png" id="3_nypnt"]
 [ext_resource type="PackedScene" uid="uid://c5mwm2jt53kuc" path="res://addons/mind_game/mind_agent/MindAgent3D.tscn" id="4_8gnm3"]
 [ext_resource type="PackedScene" uid="uid://vymn5e6vd5gq" path="res://addons/mind_game/configuration/ui/ModelConfig.tscn" id="4_i4nn4"]
+[ext_resource type="Texture2D" uid="uid://5ga0x3yawju4" path="res://addons/mind_game/assets/game_icons/PNG/White/1x/trashcan.png" id="5_hfe74"]
 
 [sub_resource type="Gradient" id="Gradient_828g4"]
 colors = PackedColorArray(0.46316, 0.640239, 0.378701, 1, 0.818244, 0.841012, 0.679201, 1)
@@ -73,51 +75,87 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="GridContainer" type="GridContainer" parent="ChatController/MarginContainer"]
-layout_mode = 2
-size_flags_vertical = 8
-columns = 2
-
-[node name="SpacerLabel" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ChatController/MarginContainer"]
 layout_mode = 2
 
-[node name="JsonLabel" type="Label" parent="ChatController/MarginContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "
-"
-
-[node name="SpacerLabel3" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="ChatController/MarginContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="SpacerLabel5" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ChatOptionsVBoxContainer" type="VBoxContainer" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="InferenceConfigButton" type="Button" parent="ChatController/MarginContainer/GridContainer"]
-unique_name_in_owner = true
-visible = false
+[node name="Label" type="Label" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer/MarginContainer/ChatOptionsVBoxContainer"]
 layout_mode = 2
-text = "Inference Config"
+text = "Saved Conversations"
+horizontal_alignment = 1
 
-[node name="SpacerLabel4" type="Label" parent="ChatController/MarginContainer/GridContainer"]
+[node name="ItemList" type="ItemList" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer/MarginContainer/ChatOptionsVBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer/MarginContainer/ChatOptionsVBoxContainer"]
 layout_mode = 2
 
-[node name="ConfigAndLoadModelsButton" type="Button" parent="ChatController/MarginContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Model Config/Load"
-
-[node name="ModelInputLineEdit" type="LineEdit" parent="ChatController/MarginContainer/GridContainer"]
+[node name="ExitButton" type="Button" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer/MarginContainer/ChatOptionsVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Type prompt and hit Enter"
+icon = ExtResource("3_k61qs")
+icon_alignment = 1
 
-[node name="ExitButton" type="Button" parent="ChatController/MarginContainer/GridContainer"]
+[node name="ConfigAndLoadModelsButton" type="Button" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer/MarginContainer/ChatOptionsVBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Exit"
-icon = ExtResource("3_k61qs")
+size_flags_horizontal = 3
+icon = ExtResource("3_nypnt")
+icon_alignment = 1
+
+[node name="DeleteConversationButton" type="Button" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer/MarginContainer/ChatOptionsVBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+icon = ExtResource("5_hfe74")
+icon_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="ChatController/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ChatVBoxContainer" type="VBoxContainer" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer2/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/ChatVBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/ChatVBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="ModelOutputRichTextLabel" type="RichTextLabel" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/ChatVBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+scroll_following = true
+
+[node name="ModelInputLineEdit" type="LineEdit" parent="ChatController/MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/ChatVBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Type prompt and hit Enter"
 
 [node name="GroundStaticBody3D" type="StaticBody3D" parent="."]
 

@@ -9,7 +9,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D/GodotPlush:position")
+tracks/0/path = NodePath("GodotPlush:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -24,7 +24,7 @@ resource_name = "bobble"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D/GodotPlush:position")
+tracks/0/path = NodePath("GodotPlush:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -70,5 +70,5 @@ script = ExtResource("1_ih04v")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_8s5ek")
 
-[node name="GodotPlush" parent="CollisionShape3D" instance=ExtResource("3_fqf52")]
+[node name="GodotPlush" parent="." instance=ExtResource("3_fqf52")]
 transform = Transform3D(-10, 0, -1.50996e-06, 0, 10, 0, 1.50996e-06, 0, -10, 0, 0, 0)
